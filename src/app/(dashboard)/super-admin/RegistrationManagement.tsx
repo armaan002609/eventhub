@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { updateIdProofStatus } from './actions';
+import { updateIdProofStatus, deleteRegistration } from './actions';
 
 type Registration = {
   id: string;
@@ -24,6 +24,19 @@ export default function RegistrationManagement({ registrations }: { registration
       await updateIdProofStatus(id, status);
     } catch (err) {
       alert('Failed to update status');
+    } finally {
+      setLoadingId(null);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm('Are you sure you want to delete this registration?')) return;
+    setLoadingId(id);
+    try {
+      await deleteRegistration(id);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to delete registration');
     } finally {
       setLoadingId(null);
     }
@@ -135,6 +148,15 @@ export default function RegistrationManagement({ registrations }: { registration
                           )}
                         </div>
                       )}
+                      
+                      <button 
+                        onClick={() => handleDelete(reg.id)}
+                        disabled={loadingId === reg.id}
+                        className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors disabled:opacity-50 ml-1" 
+                        title="Delete Registration"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                      </button>
                     </div>
                   </td>
                 </tr>
