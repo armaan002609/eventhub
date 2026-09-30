@@ -227,6 +227,7 @@ model Hackathon {
   participants Int     @default(0)
   isPublished Boolean  @default(true)
   imagePath   String?
+  eventType   String   @default("Event")
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

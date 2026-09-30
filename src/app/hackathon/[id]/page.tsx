@@ -41,8 +41,13 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
           {hackathon.imagePath && <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>}
           
           <div className="relative z-10 p-8 md:p-12 w-full text-white">
-             <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-white/30 mb-4">
-                {badgeText}
+             <div className="flex gap-3 mb-4">
+               <div className="inline-block bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-white/30">
+                  {badgeText}
+               </div>
+               <div className="inline-block bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-white/30">
+                  {hackathon.eventType}
+               </div>
              </div>
              <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 drop-shadow-md">{hackathon.title}</h1>
              <p className="text-lg md:text-xl font-medium text-white/90 drop-shadow">by {hackathon.organizer} &middot; {hackathon.location}</p>
