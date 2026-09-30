@@ -6,7 +6,7 @@ import { updateIdProofStatus } from './actions';
 type Registration = {
   id: string;
   studentName: string;
-  phoneNumber: string;
+  phone: string;
   university: { name: string };
   hackathon: { title: string };
   teamName: string | null;
@@ -83,7 +83,7 @@ export default function RegistrationManagement({ registrations }: { registration
                     <div className="text-[11px] font-medium text-[#554093]/60">{reg.university?.name || 'Unknown'}</div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
-                    {reg.phoneNumber}
+                    {reg.phone}
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-[13px] font-bold text-[#554093]">
                     {reg.hackathon?.title}
