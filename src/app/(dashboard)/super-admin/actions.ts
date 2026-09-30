@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
+import { uploadHackathonImage } from '@/lib/storage';
 
 export async function updateUserRole(userId: string, newRole: 'SUPER_ADMIN' | 'COORDINATOR' | 'VOLUNTEER' | 'PARTICIPANT') {
   const supabase = await createClient();
@@ -68,6 +69,12 @@ export async function createHackathon(formData: FormData) {
 
   const themes = themesStr.split(',').map(t => t.trim()).filter(Boolean);
 
+  let imagePath = null;
+  const imageFile = formData.get('image') as File | null;
+  if (imageFile && imageFile.size > 0) {
+    imagePath = await uploadHackathonImage(imageFile);
+  }
+
   await prisma.hackathon.create({
     data: {
       title,
@@ -79,6 +86,7 @@ export async function createHackathon(formData: FormData) {
       endsAt: new Date(endsAtStr),
       isPublished: true,
       participants: 0,
+      imagePath,
     }
   });
 
@@ -100,3 +108,4 @@ export async function deleteHackathon(id: string) {
   revalidatePath('/');
   revalidatePath('/super-admin');
 }
+

@@ -98,8 +98,10 @@ export default async function HackathonPage() {
                 <div key={hackathon.id} className="bg-white rounded-2xl overflow-hidden border border-[#554093]/10 hover:shadow-xl hover:shadow-[#554093]/5 transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
                   {/* Cover Image / Gradient */}
                   <div className={`h-32 w-full bg-gradient-to-r relative ${
-                    isClosed ? "from-rose-500 to-orange-400" : (startsInDays <= 7 ? "from-[#554093] to-[#7B61C8]" : "from-emerald-500 to-teal-400")
-                  }`}>
+                    !hackathon.imagePath ? (isClosed ? "from-rose-500 to-orange-400" : (startsInDays <= 7 ? "from-[#554093] to-[#7B61C8]" : "from-emerald-500 to-teal-400")) : ""
+                  }`}
+                  style={hackathon.imagePath ? { backgroundImage: `url(${hackathon.imagePath})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}}
+                  >
                     <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-wider border border-white/20">
                       {badgeText}
                     </div>
