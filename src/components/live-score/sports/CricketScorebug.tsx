@@ -19,126 +19,131 @@ export interface CricketScoreData {
 export default function CricketScorebug({ data, status }: { data: Partial<CricketScoreData>, status: MatchStatus }) {
   // Safe defaults if data is missing
   const d: CricketScoreData = {
-    battingTeam: data.battingTeam || 'Team A',
-    bowlingTeam: data.bowlingTeam || 'Team B',
+    battingTeam: data.battingTeam || 'IND',
+    bowlingTeam: data.bowlingTeam || 'AUS',
     runs: data.runs || 0,
     wickets: data.wickets || 0,
     overs: data.overs || 0,
     runRate: data.runRate || 0,
     target: data.target,
     reqRunRate: data.reqRunRate,
-    batter1: data.batter1 || { name: 'Batter 1', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: true },
-    batter2: data.batter2 || { name: 'Batter 2', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: false },
-    bowler: data.bowler || { name: 'Bowler 1', overs: 0, maidens: 0, runs: 0, wickets: 0 },
+    batter1: data.batter1 || { name: 'Rohit S', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: true },
+    batter2: data.batter2 || { name: 'Virat K', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: false },
+    bowler: data.bowler || { name: 'Pat C', overs: 0, maidens: 0, runs: 0, wickets: 0 },
     thisOver: data.thisOver || [],
-    statusLine: data.statusLine || 'Match yet to begin'
+    statusLine: data.statusLine || 'MATCH YET TO BEGIN'
   };
 
   return (
-    <div className="w-full bg-[#1A1A24] text-white rounded-3xl overflow-hidden shadow-2xl font-sans border border-white/10 max-w-4xl mx-auto">
+    <div className="w-full flex items-center justify-center font-sans mt-auto pb-4">
       
-      {/* Top Bar: Team vs Team and Match Status */}
-      <div className="bg-[#12121A] px-6 py-3 flex justify-between items-center border-b border-white/5">
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-bold tracking-widest uppercase text-white/50">{d.battingTeam} vs {d.bowlingTeam}</span>
-        </div>
-        <div className="text-xs font-bold text-[#F43F5E] bg-[#F43F5E]/10 px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">
-          {status}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3">
-        {/* Left Column: Main Score */}
-        <div className="p-8 flex flex-col justify-center items-center md:items-start border-r border-white/5 bg-gradient-to-br from-[#554093]/20 to-transparent">
-          <h2 className="text-xl font-black text-white/80 uppercase tracking-widest mb-1">{d.battingTeam}</h2>
-          <div className="flex items-baseline gap-2">
-            <span className="text-7xl font-black tabular-nums tracking-tighter leading-none">{d.runs}</span>
-            <span className="text-4xl font-bold text-white/50">/{d.wickets}</span>
+      <div className="w-full max-w-[1000px] flex flex-col drop-shadow-2xl">
+        
+        {/* Status / Target Bar (Top thin bar) */}
+        <div className="bg-[#1A1A24] h-8 flex items-center justify-between px-4 rounded-t-xl border-t border-l border-r border-white/10 text-[11px] font-bold text-white/80 uppercase tracking-widest relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-2">
+              <span className={`w-2 h-2 rounded-full ${status === 'LIVE' ? 'bg-rose-500 animate-pulse' : 'bg-gray-500'}`}></span>
+              {status === 'LIVE' ? 'LIVE' : status}
+            </span>
+            <span className="text-white/30">|</span>
+            <span className="text-amber-400">{d.statusLine}</span>
           </div>
-          <div className="flex items-center gap-4 mt-4">
-            <div className="bg-white/10 px-3 py-1 rounded-lg">
-              <span className="text-xs text-white/50 uppercase tracking-wider font-bold mr-2">Overs</span>
-              <span className="text-lg font-black tabular-nums">{d.overs}</span>
+          {d.target && (
+            <div className="flex gap-4">
+              <span>TARGET <span className="text-white ml-1">{d.target}</span></span>
+              <span>REQ RR <span className="text-white ml-1">{d.reqRunRate?.toFixed(2)}</span></span>
             </div>
-            <div className="px-2">
-              <span className="text-xs text-white/50 uppercase tracking-wider font-bold mr-2">CRR</span>
-              <span className="text-lg font-bold tabular-nums">{d.runRate.toFixed(2)}</span>
-            </div>
-          </div>
+          )}
         </div>
 
-        {/* Middle & Right Column: Batters and Bowler */}
-        <div className="col-span-2 p-6 flex flex-col gap-6">
+        {/* Main Scorebug (Middle thick bar) */}
+        <div className="flex h-[72px] bg-gradient-to-b from-[#0A0B10] to-[#12131C] border border-white/10 relative overflow-hidden shadow-black/50 shadow-2xl">
           
-          {/* Batters */}
-          <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-12 text-[10px] uppercase tracking-widest text-white/40 font-bold px-2 mb-1">
-              <div className="col-span-6">Batters</div>
-              <div className="col-span-2 text-center">R</div>
-              <div className="col-span-2 text-center">B</div>
-              <div className="col-span-1 text-center">4s</div>
-              <div className="col-span-1 text-center">6s</div>
+          {/* Batting Team Block */}
+          <div className="w-[120px] flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-900 border-r border-white/10 relative">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+            <span className="text-3xl font-black text-white italic tracking-tighter drop-shadow-md z-10">{d.battingTeam}</span>
+          </div>
+
+          {/* Main Score Block */}
+          <div className="w-[200px] flex items-center justify-center bg-[#15161E] border-r border-white/5 relative">
+            <div className="flex items-baseline gap-1 relative z-10">
+              <span className="text-5xl font-black text-white tabular-nums tracking-tighter leading-none">{d.runs}</span>
+              <span className="text-2xl font-black text-rose-500 tracking-tighter leading-none">-{d.wickets}</span>
             </div>
-            
+          </div>
+
+          {/* Overs & CRR */}
+          <div className="w-[140px] flex flex-col justify-center px-4 bg-[#1A1A24] border-r border-white/5">
+            <div className="flex justify-between items-end">
+              <span className="text-[10px] text-white/50 font-bold uppercase tracking-wider">Overs</span>
+              <span className="text-2xl font-black text-white tabular-nums leading-none tracking-tighter">{d.overs.toFixed(1)}</span>
+            </div>
+            <div className="flex justify-between items-center mt-1">
+              <span className="text-[10px] text-white/50 font-bold uppercase tracking-wider">CRR</span>
+              <span className="text-sm font-bold text-amber-400 tabular-nums">{d.runRate.toFixed(2)}</span>
+            </div>
+          </div>
+
+          {/* Batters Block */}
+          <div className="flex-1 flex flex-col justify-center px-4 bg-[#12131C] border-r border-white/5">
             {[d.batter1, d.batter2].map((batter, i) => (
-              <div key={i} className={`grid grid-cols-12 items-center px-2 py-2 rounded-xl ${batter.isStriker ? 'bg-white/5 border border-white/10' : ''}`}>
-                <div className="col-span-6 font-bold flex items-center gap-2">
-                  {batter.name}
-                  {batter.isStriker && <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]"></span>}
+              <div key={i} className={`flex justify-between items-center ${i===0 ? 'mb-1' : ''}`}>
+                <div className="flex items-center gap-2">
+                  <span className={`w-1.5 h-1.5 rounded-full ${batter.isStriker ? 'bg-rose-500' : 'bg-transparent'}`}></span>
+                  <span className={`text-sm font-bold truncate w-[120px] ${batter.isStriker ? 'text-white' : 'text-white/60'}`}>{batter.name}</span>
                 </div>
-                <div className="col-span-2 text-center font-black tabular-nums">{batter.runs}</div>
-                <div className="col-span-2 text-center font-medium text-white/60 tabular-nums">{batter.balls}</div>
-                <div className="col-span-1 text-center font-medium text-white/40 tabular-nums">{batter.fours}</div>
-                <div className="col-span-1 text-center font-medium text-white/40 tabular-nums">{batter.sixes}</div>
+                <div className="flex gap-4">
+                  <span className={`text-sm font-black tabular-nums ${batter.isStriker ? 'text-white' : 'text-white/60'}`}>{batter.runs}</span>
+                  <span className="text-[11px] font-medium text-white/40 tabular-nums w-6 text-right">({batter.balls})</span>
+                </div>
               </div>
             ))}
           </div>
 
-          {/* Bowler */}
-          <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-12 text-[10px] uppercase tracking-widest text-white/40 font-bold px-2 mb-1">
-              <div className="col-span-6">Bowler</div>
-              <div className="col-span-2 text-center">O</div>
-              <div className="col-span-1 text-center">M</div>
-              <div className="col-span-2 text-center">R</div>
-              <div className="col-span-1 text-center">W</div>
+          {/* Bowler Block */}
+          <div className="flex-1 flex flex-col justify-center px-4 bg-[#1A1A24]">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[10px] text-white/50 font-bold uppercase tracking-wider">Bowler</span>
             </div>
-            
-            <div className="grid grid-cols-12 items-center px-2 py-2 rounded-xl bg-white/5 border border-white/10">
-              <div className="col-span-6 font-bold">{d.bowler.name}</div>
-              <div className="col-span-2 text-center font-medium text-white/60 tabular-nums">{d.bowler.overs}</div>
-              <div className="col-span-1 text-center font-medium text-white/40 tabular-nums">{d.bowler.maidens}</div>
-              <div className="col-span-2 text-center font-medium text-white/60 tabular-nums">{d.bowler.runs}</div>
-              <div className="col-span-1 text-center font-black tabular-nums text-[#3B82F6]">{d.bowler.wickets}</div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-bold text-white truncate w-[100px]">{d.bowler.name}</span>
+              <div className="flex gap-3 text-xs font-black tabular-nums">
+                <span className="text-white/80">{d.bowler.wickets}-{d.bowler.runs}</span>
+                <span className="text-white/40">({d.bowler.overs.toFixed(1)})</span>
+              </div>
             </div>
           </div>
 
         </div>
-      </div>
 
-      {/* Bottom Bar: This Over & Status */}
-      <div className="bg-[#12121A] p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/5">
-        
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">This Over</span>
-          <div className="flex gap-1.5">
-            {d.thisOver.map((ball, i) => (
-              <span key={i} className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-black
-                ${ball === 'W' ? 'bg-[#F43F5E] text-white' : 
-                  ball === '4' || ball === '6' ? 'bg-[#3B82F6] text-white' : 
-                  'bg-white/10 text-white/80'}`}
-              >
-                {ball}
-              </span>
-            ))}
+        {/* Bottom Bar: This Over Timeline */}
+        <div className="bg-[#12131C] h-10 flex items-center px-4 rounded-b-xl border-b border-l border-r border-white/10 relative overflow-hidden">
+          <span className="text-[10px] font-bold text-white/50 uppercase tracking-widest mr-4">This Over</span>
+          <div className="flex items-center gap-2">
+            {d.thisOver.map((ball, i) => {
+              let bg = 'bg-white/10 text-white/80';
+              let border = 'border border-white/10';
+              if (ball === '4') bg = 'bg-blue-600 text-white shadow-[0_0_8px_rgba(37,99,235,0.6)]';
+              if (ball === '6') bg = 'bg-emerald-500 text-white shadow-[0_0_8px_rgba(16,185,129,0.6)]';
+              if (ball === 'W') bg = 'bg-rose-600 text-white shadow-[0_0_8px_rgba(225,29,72,0.6)]';
+              if (ball.includes('wd') || ball.includes('nb')) bg = 'bg-amber-500 text-black';
+              
+              return (
+                <div key={i} className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black ${bg} ${border}`}>
+                  {ball}
+                </div>
+              );
+            })}
+            {d.thisOver.length === 0 && (
+              <span className="text-xs text-white/30 italic">No balls bowled yet</span>
+            )}
           </div>
         </div>
 
-        <div className="text-sm font-bold text-[#FBBF24]">
-          {d.statusLine}
-        </div>
       </div>
-
     </div>
   );
 }

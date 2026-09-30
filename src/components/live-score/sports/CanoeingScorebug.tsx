@@ -1,80 +1,68 @@
 import { MatchStatus } from '@prisma/client';
 
 export interface CanoeingScoreData {
-  eventName: string; // e.g. "K1 200m Final"
-  lanes: Array<{
-    lane: number;
-    name: string;
-    team: string;
-    splitTime: string; // e.g. "34.12s"
-    gapToLeader: string; // e.g. "+0.42s"
-    rank: number;
-    status: 'RACING' | 'FINISHED' | 'DNF' | 'DSQ';
-  }>;
+  eventName: string; // e.g. "MEN's K-1 1000m FINAL"
+  distanceTotal: number;
+  racers: { lane: number; name: string; country: string; splitTime: string; position: number }[];
 }
 
 export default function CanoeingScorebug({ data, status }: { data: Partial<CanoeingScoreData>, status: MatchStatus }) {
   const d: CanoeingScoreData = {
-    eventName: data.eventName || 'Canoeing Event',
-    lanes: data.lanes || []
+    eventName: data.eventName || "MEN'S K-1 1000m FINAL",
+    distanceTotal: data.distanceTotal || 1000,
+    racers: data.racers || [
+      { lane: 4, name: "P. PIMENTA", country: "POR", splitTime: "01:23.45", position: 1 },
+      { lane: 5, name: "J. DOSTAL", country: "CZE", splitTime: "01:23.89", position: 2 },
+      { lane: 3, name: "A. KOPASZ", country: "HUN", splitTime: "01:24.12", position: 3 },
+    ]
   };
 
-  // Sort lanes by rank for display
-  const sortedLanes = [...d.lanes].sort((a, b) => {
-    if (a.rank === 0) return 1;
-    if (b.rank === 0) return -1;
-    return a.rank - b.rank;
-  });
+  // Sort by position for display
+  const sortedRacers = [...d.racers].sort((a, b) => a.position - b.position);
 
   return (
-    <div className="w-full bg-[#1A1A24] text-white rounded-3xl overflow-hidden shadow-2xl font-sans border border-white/10 max-w-4xl mx-auto flex flex-col">
-      <div className="bg-gradient-to-r from-cyan-600 to-blue-700 px-6 py-4 flex justify-between items-center shadow-lg z-10">
-        <h2 className="text-xl font-black uppercase tracking-widest drop-shadow-md">{d.eventName}</h2>
-        <div className="text-xs font-bold text-white bg-black/30 px-3 py-1 rounded-full uppercase tracking-wider">
-          {status}
-        </div>
+    <div className="w-full max-w-[600px] flex flex-col mt-auto pb-4 font-sans drop-shadow-2xl mx-auto">
+      
+      <div className="flex items-center gap-3 mb-2 px-2 drop-shadow-md">
+        {status === 'LIVE' && (
+          <div className="bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1.5 animate-pulse">
+            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+            LIVE
+          </div>
+        )}
+        <h2 className="text-sm font-black text-white uppercase tracking-widest bg-black/50 px-3 py-0.5 rounded-sm backdrop-blur-sm border border-white/10">{d.eventName}</h2>
       </div>
 
-      <div className="flex flex-col p-4 bg-[#12121A]">
+      <div className="bg-[#0A0B10]/95 backdrop-blur-md rounded-lg overflow-hidden border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+        
         {/* Table Header */}
-        <div className="grid grid-cols-12 text-[10px] font-bold uppercase tracking-widest text-white/40 px-4 py-2 border-b border-white/5">
-          <div className="col-span-1 text-center">Rank</div>
-          <div className="col-span-1 text-center">Lane</div>
-          <div className="col-span-5">Athlete / Team</div>
-          <div className="col-span-2 text-right">Split / Time</div>
-          <div className="col-span-2 text-right">Gap</div>
-          <div className="col-span-1 text-right">Status</div>
+        <div className="flex bg-[#1A1A24] border-b border-white/10 text-[9px] font-bold text-white/50 uppercase tracking-widest py-1.5">
+          <div className="w-10 text-center">POS</div>
+          <div className="w-10 text-center">LANE</div>
+          <div className="w-16 text-center">NAT</div>
+          <div className="flex-1">NAME</div>
+          <div className="w-24 text-right pr-4">TIME</div>
         </div>
 
-        {/* Lanes List */}
-        <div className="flex flex-col gap-1 mt-2">
-          {sortedLanes.map((lane) => (
-            <div key={lane.lane} className="grid grid-cols-12 items-center px-4 py-3 bg-white/5 rounded-xl border border-white/5 hover:bg-white/10 transition-colors">
-              <div className="col-span-1 text-center font-black text-lg text-cyan-400 tabular-nums">{lane.rank > 0 ? lane.rank : '-'}</div>
-              <div className="col-span-1 text-center font-bold text-white/50">{lane.lane}</div>
-              <div className="col-span-5 flex flex-col">
-                <span className="font-bold text-base uppercase tracking-wider">{lane.name}</span>
-                <span className="text-[10px] text-white/50 font-bold uppercase">{lane.team}</span>
-              </div>
-              <div className="col-span-2 text-right font-black tabular-nums text-lg tracking-wider">{lane.splitTime || '-'}</div>
-              <div className="col-span-2 text-right font-bold text-white/60 tabular-nums">{lane.gapToLeader}</div>
-              <div className="col-span-1 text-right">
-                <span className={`text-[9px] font-bold uppercase px-2 py-1 rounded-full 
-                  ${lane.status === 'FINISHED' ? 'bg-emerald-500/20 text-emerald-400' : 
-                    lane.status === 'RACING' ? 'bg-amber-500/20 text-amber-400 animate-pulse' : 
-                    'bg-red-500/20 text-red-400'}`}>
-                  {lane.status}
-                </span>
-              </div>
+        {/* Racers */}
+        <div className="flex flex-col">
+          {sortedRacers.map((racer, idx) => (
+            <div key={idx} className="flex items-center border-b border-white/5 py-1.5 relative overflow-hidden bg-gradient-to-r from-transparent hover:from-white/5">
+              {idx === 0 && <div className="absolute top-0 left-0 w-[2px] h-full bg-amber-400"></div>}
+              {idx === 1 && <div className="absolute top-0 left-0 w-[2px] h-full bg-gray-300"></div>}
+              {idx === 2 && <div className="absolute top-0 left-0 w-[2px] h-full bg-orange-600"></div>}
+              
+              <div className="w-10 text-center text-sm font-black text-white">{racer.position}</div>
+              <div className="w-10 text-center text-xs font-bold text-white/40">{racer.lane}</div>
+              <div className="w-16 text-center text-xs font-black text-white/80">{racer.country}</div>
+              <div className="flex-1 text-sm font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
+              <div className="w-24 text-right pr-4 text-sm font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
             </div>
           ))}
-          {sortedLanes.length === 0 && (
-            <div className="py-8 text-center text-white/30 text-sm font-bold uppercase tracking-widest">
-              Awaiting athletes to be assigned to lanes
-            </div>
-          )}
         </div>
+
       </div>
+
     </div>
   );
 }
