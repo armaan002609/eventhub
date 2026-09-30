@@ -40,7 +40,6 @@ export default async function Navbar() {
           <Link href="/events" className="hover:opacity-70 transition-opacity">Events</Link>
           <Link href="/hackathon" className="hover:opacity-70 transition-opacity">Hackathon</Link>
           <Link href="/leaderboard" className="hover:opacity-70 transition-opacity">Leaderboard</Link>
-          <Link href="/committees" className="hover:opacity-70 transition-opacity">Committees</Link>
           <div className="relative group">
             <button className="flex items-center gap-1 hover:opacity-70 transition-opacity">
               About

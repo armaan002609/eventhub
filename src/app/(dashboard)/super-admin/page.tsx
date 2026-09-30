@@ -25,20 +25,20 @@ export default async function SuperAdminDashboard() {
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-6">
       {/* Header Info */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-800 tracking-tight">Super Admin Dashboard</h1>
-        <p className="text-slate-500 font-medium mt-1">Manage platform access, roles, and landing page events.</p>
+        <h1 className="text-3xl font-bold text-[#554093] tracking-tight">Super Admin Dashboard</h1>
+        <p className="text-[#554093]/60 font-medium mt-1">Manage platform access, roles, and landing page events.</p>
       </div>
 
       <div className="flex flex-col gap-8">
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-h-[400px]">
+        <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
           <HackathonManagement hackathons={hackathons} />
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-h-[400px]">
+        <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
           <RoleManagement initialUsers={users} currentUserId={user?.id} />
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-h-[400px]">
+        <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
           <CommitteeManagement committees={committees} hackathons={hackathons} />
         </div>
       </div>
