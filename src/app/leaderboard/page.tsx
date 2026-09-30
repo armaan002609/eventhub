@@ -21,10 +21,11 @@ function getRelativeTime(date: Date) {
 export default async function LeaderboardPage({
   searchParams
 }: {
-  searchParams?: { competitionId?: string }
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  // Wait for searchParams (in Next.js 15, searchParams is an async promise or requires await if accessed dynamically, but in page props it's sometimes just passed. Let's do it safely.)
   const params = await searchParams;
+  const compIdParam = params?.competitionId;
+  const paramCompetitionId = Array.isArray(compIdParam) ? compIdParam[0] : compIdParam;
   
   // Fetch published competitions
   const competitions = await prisma.competition.findMany({
@@ -32,10 +33,10 @@ export default async function LeaderboardPage({
     orderBy: { createdAt: 'asc' }
   });
 
-  const activeCompetitionId = params?.competitionId || (competitions.length > 0 ? competitions[0].id : null);
+  const activeCompetitionId = paramCompetitionId || (competitions.length > 0 ? competitions[0].id : null);
   const activeCompetition = competitions.find(c => c.id === activeCompetitionId);
 
-  let rawEntries = [];
+  let rawEntries: any[] = [];
   if (activeCompetitionId) {
     rawEntries = await prisma.scoreEntry.findMany({
       where: { competitionId: activeCompetitionId },
