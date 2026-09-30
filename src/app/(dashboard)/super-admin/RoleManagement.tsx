@@ -11,13 +11,18 @@ type User = {
 
 export default function RoleManagement({ initialUsers, currentUserId }: { initialUsers: User[], currentUserId?: string }) {
   const [search, setSearch] = useState('');
+  const [roleFilter, setRoleFilter] = useState<string>('ALL');
 
-  const filteredUsers = initialUsers.filter(u => 
-    u.email.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredUsers = initialUsers.filter(u => {
+    const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase());
+    const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
+  const roles = ['ALL', 'SUPER_ADMIN', 'COORDINATOR', 'VOLUNTEER', 'PARTICIPANT'];
 
   return (
-    <div className="bg-[#FDFBF7] rounded-3xl shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 text-[#554093] flex flex-col h-full">
+    <div className="bg-[#FDFBF7] rounded-3xl shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 text-[#554093] flex flex-col h-full min-h-[500px]">
       <div className="px-6 py-6 border-b border-[#554093]/10">
         <h2 className="text-[17px] font-bold">Role Management</h2>
         <p className="text-[12px] font-medium text-[#554093]/60 mt-0.5">Assign users to staff roles.</p>
@@ -36,10 +41,26 @@ export default function RoleManagement({ initialUsers, currentUserId }: { initia
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
+          
+          <div className="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+            {roles.map(r => (
+              <button
+                key={r}
+                onClick={() => setRoleFilter(r)}
+                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap transition-colors ${
+                  roleFilter === r 
+                    ? 'bg-[#554093] text-white shadow-sm' 
+                    : 'bg-[#554093]/5 text-[#554093]/70 hover:bg-[#554093]/10'
+                }`}
+              >
+                {r.replace('_', ' ')}
+              </button>
+            ))}
+          </div>
         </div>
         
         <div className="flex-1 space-y-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">
-          <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#554093]/60">All Users ({filteredUsers.length})</h3>
+          <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#554093]/60">Users ({filteredUsers.length})</h3>
           {filteredUsers.length === 0 ? (
             <p className="text-[#554093]/60 text-sm font-medium">No users found.</p>
           ) : (
