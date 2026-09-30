@@ -10,9 +10,10 @@ type Props = {
   sport: SportType;
   initialData: any;
   status: MatchStatus;
+  hideSyncStatus?: boolean;
 };
 
-export default function LiveMatchView({ matchId, sport, initialData, status }: Props) {
+export default function LiveMatchView({ matchId, sport, initialData, status, hideSyncStatus }: Props) {
   const [scoreData, setScoreData] = useState<any>(initialData);
   const [matchStatus, setMatchStatus] = useState<MatchStatus>(status);
   const [isConnected, setIsConnected] = useState(false);
@@ -68,12 +69,14 @@ export default function LiveMatchView({ matchId, sport, initialData, status }: P
   return (
     <div className="flex flex-col gap-4">
       {/* Connection Status Indicator */}
-      <div className="flex justify-end items-center gap-2">
-        <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#554093]/40">
-          {isConnected ? 'Live Sync Active' : 'Reconnecting...'}
-        </span>
-      </div>
+      {!hideSyncStatus && (
+        <div className="flex justify-end items-center gap-2">
+          <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`}></div>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#554093]/40">
+            {isConnected ? 'Live Sync Active' : 'Reconnecting...'}
+          </span>
+        </div>
+      )}
 
       {/* Sport-specific Scorebug Component */}
       <Scorebug data={scoreData} status={matchStatus} />

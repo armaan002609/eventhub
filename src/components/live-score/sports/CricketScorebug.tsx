@@ -19,17 +19,17 @@ export interface CricketScoreData {
 export default function CricketScorebug({ data, status }: { data: Partial<CricketScoreData>, status: MatchStatus }) {
   // Safe defaults if data is missing
   const d: CricketScoreData = {
-    battingTeam: data.battingTeam || 'IND',
-    bowlingTeam: data.bowlingTeam || 'AUS',
+    battingTeam: data.battingTeam || 'TEAM A',
+    bowlingTeam: data.bowlingTeam || 'TEAM B',
     runs: data.runs || 0,
     wickets: data.wickets || 0,
     overs: data.overs || 0,
     runRate: data.runRate || 0,
     target: data.target,
     reqRunRate: data.reqRunRate,
-    batter1: data.batter1 || { name: 'Rohit S', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: true },
-    batter2: data.batter2 || { name: 'Virat K', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: false },
-    bowler: data.bowler || { name: 'Pat C', overs: 0, maidens: 0, runs: 0, wickets: 0 },
+    batter1: data.batter1 || { name: 'Batter 1', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: true },
+    batter2: data.batter2 || { name: 'Batter 2', runs: 0, balls: 0, fours: 0, sixes: 0, isStriker: false },
+    bowler: data.bowler || { name: 'Bowler 1', overs: 0, maidens: 0, runs: 0, wickets: 0 },
     thisOver: data.thisOver || [],
     statusLine: data.statusLine || 'MATCH YET TO BEGIN'
   };

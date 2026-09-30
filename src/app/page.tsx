@@ -43,21 +43,21 @@ export default async function Home() {
       <main className="pt-8 pb-24 max-w-[1400px] mx-auto px-8">
         
         {liveMatch && (
-          <section className="mb-12">
-            <div className="flex items-center gap-2 mb-4">
+          <section className="mb-16">
+            <div className="flex items-center gap-2 mb-6 justify-center">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
               </span>
               <h2 className="text-rose-600 font-bold uppercase tracking-widest text-sm">Now Live: {liveMatch.title}</h2>
-              <Link href="/live" className="ml-auto text-xs font-bold text-[#554093] hover:underline">View All Live Matches &rarr;</Link>
+              <Link href="/live" className="ml-4 text-xs font-bold text-[#554093] hover:underline bg-[#554093]/5 px-3 py-1 rounded-full border border-[#554093]/10">View All Matches &rarr;</Link>
             </div>
-            <div className="bg-white rounded-3xl p-6 shadow-sm border border-rose-500/20 overflow-hidden relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 via-orange-500 to-rose-500"></div>
+            <div className="flex justify-center w-full">
               <LiveMatchView 
                 matchId={liveMatch.id}
                 sport={liveMatch.sport}
                 status={liveMatch.status}
+                hideSyncStatus={true}
                 initialData={typeof liveMatch.scoreData === 'object' && liveMatch.scoreData !== null ? liveMatch.scoreData : {}}
               />
             </div>

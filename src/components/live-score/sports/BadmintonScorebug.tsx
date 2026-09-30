@@ -11,12 +11,12 @@ export interface BadmintonScoreData {
 
 export default function BadmintonScorebug({ data, status }: { data: Partial<BadmintonScoreData>, status: MatchStatus }) {
   const d: BadmintonScoreData = {
-    team1: data.team1 || { name: 'P. Sindhu', isServing: true, gamesWon: 1 },
-    team2: data.team2 || { name: 'C. Yufei', isServing: false, gamesWon: 0 },
-    currentSet: data.currentSet || 2,
-    scoresTeam1: data.scoresTeam1 || [21, 14, 0],
-    scoresTeam2: data.scoresTeam2 || [19, 11, 0],
-    statusLine: data.statusLine || 'GAME 2'
+    team1: data.team1 || { name: 'TEAM 1', isServing: true, gamesWon: 0 },
+    team2: data.team2 || { name: 'TEAM 2', isServing: false, gamesWon: 0 },
+    currentSet: data.currentSet || 1,
+    scoresTeam1: data.scoresTeam1 || [0, 0, 0],
+    scoresTeam2: data.scoresTeam2 || [0, 0, 0],
+    statusLine: data.statusLine || 'GAME 1'
   };
 
   return (
