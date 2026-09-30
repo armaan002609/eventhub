@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { updateIdProofStatus } from './actions';
 
 type Registration = {
   id: string;
@@ -9,11 +10,24 @@ type Registration = {
   university: { name: string };
   hackathon: { title: string };
   teamName: string | null;
+  idProofPath: string;
   idProofStatus: string;
 };
 
 export default function RegistrationManagement({ registrations }: { registrations: Registration[] }) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+
+  async function handleStatus(id: string, status: 'VERIFIED' | 'REJECTED') {
+    setLoadingId(id);
+    try {
+      await updateIdProofStatus(id, status);
+    } catch (err) {
+      alert('Failed to update status');
+    } finally {
+      setLoadingId(null);
+    }
+  }
 
   const filteredRegistrations = registrations.filter(reg => 
     reg.studentName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -50,7 +64,8 @@ export default function RegistrationManagement({ registrations }: { registration
               <th className="px-4 py-3 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Contact</th>
               <th className="px-4 py-3 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Event</th>
               <th className="px-4 py-3 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Team</th>
-              <th className="px-4 py-3 text-right text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Status</th>
+              <th className="px-4 py-3 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">ID Proof</th>
+              <th className="px-4 py-3 text-right text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Status & Action</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-[#554093]/10">
@@ -76,14 +91,51 @@ export default function RegistrationManagement({ registrations }: { registration
                   <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
                     {reg.teamName || <span className="text-[#554093]/40 italic">Individual</span>}
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <a 
+                      href={reg.idProofPath} 
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#554093] bg-[#554093]/5 border border-[#554093]/10 px-2 py-1 rounded-md hover:bg-[#554093]/10 transition-colors"
+                    >
+                      View ID
+                    </a>
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap text-right">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                      reg.idProofStatus === 'VERIFIED' ? 'bg-emerald-100 text-emerald-700' :
-                      reg.idProofStatus === 'REJECTED' ? 'bg-rose-100 text-rose-700' :
-                      'bg-amber-100 text-amber-700'
-                    }`}>
-                      {reg.idProofStatus}
-                    </span>
+                    <div className="flex items-center justify-end gap-3">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                        reg.idProofStatus === 'VERIFIED' ? 'bg-emerald-100 text-emerald-700' :
+                        reg.idProofStatus === 'REJECTED' ? 'bg-rose-100 text-rose-700' :
+                        'bg-amber-100 text-amber-700'
+                      }`}>
+                        {reg.idProofStatus}
+                      </span>
+                      
+                      {reg.idProofStatus === 'PENDING' && (
+                        <div className="flex items-center gap-1">
+                          {loadingId === reg.id ? (
+                            <span className="text-[10px] font-bold text-[#554093]/40 uppercase">...</span>
+                          ) : (
+                            <>
+                              <button 
+                                onClick={() => handleStatus(reg.id, 'VERIFIED')}
+                                className="p-1.5 text-emerald-600 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-md transition-colors" 
+                                title="Approve"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                              </button>
+                              <button 
+                                onClick={() => handleStatus(reg.id, 'REJECTED')}
+                                className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors" 
+                                title="Reject"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
