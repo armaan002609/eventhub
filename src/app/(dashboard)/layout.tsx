@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/db";
+import MobileNav from "@/components/MobileNav";
 
 export default async function DashboardLayout({
   children,
@@ -34,12 +35,14 @@ export default async function DashboardLayout({
         <aside className="w-[280px] bg-white hidden lg:flex flex-col justify-between shrink-0 border border-[#554093]/10 rounded-3xl h-full overflow-hidden shadow-[0_4px_24px_rgba(85,64,147,0.05)]">
           <div className="p-6">
             {/* Logo */}
-            <div className="flex items-center gap-3 mb-10 px-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-blue-500 flex items-center justify-center shadow-inner">
-                 <div className="w-3 h-3 bg-white rounded-full"></div>
+            <Link href="/" className="flex items-center gap-2 mb-10 px-2">
+              <div className="w-7 h-7 rounded-full border-[3px] border-[#554093] flex flex-col justify-center items-center gap-0.5">
+                 <div className="w-4 h-[2px] bg-[#554093]"></div>
+                 <div className="w-4 h-[2px] bg-[#554093]"></div>
+                 <div className="w-4 h-[2px] bg-[#554093]"></div>
               </div>
-              <span className="font-bold text-xl text-[#554093] tracking-tight">EventHub</span>
-            </div>
+              <span className="font-bold text-2xl tracking-tight text-[#554093]">eventhub</span>
+            </Link>
 
             {/* Nav */}
             <nav className="space-y-1">
@@ -115,10 +118,14 @@ export default async function DashboardLayout({
         {/* Main Content */}
         <main className="flex-1 flex flex-col min-w-0 bg-[#FDFBF7] h-full rounded-3xl overflow-hidden relative">
           {/* Header */}
-          <header className="px-8 py-5 flex items-center justify-between sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-10 border-b border-[#554093]/5">
-            <div className="relative w-full max-w-[280px]">
-              <svg className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#554093]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-              <input type="text" placeholder="Quick search..." className="w-full pl-11 pr-4 py-2 bg-white border border-[#554093]/10 rounded-full text-[13px] shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:ring-2 focus:ring-[#554093] outline-none transition-all placeholder:text-[#554093]/40 font-bold text-[#554093]" />
+          <header className="px-4 sm:px-8 py-5 flex items-center justify-between sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-10 border-b border-[#554093]/5">
+            <div className="flex items-center gap-4">
+              <MobileNav role={role} />
+              
+              <div className="relative w-full max-w-[280px] hidden sm:block">
+                <svg className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#554093]/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                <input type="text" placeholder="Quick search..." className="w-full pl-11 pr-4 py-2 bg-white border border-[#554093]/10 rounded-full text-[13px] shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:ring-2 focus:ring-[#554093] outline-none transition-all placeholder:text-[#554093]/40 font-bold text-[#554093]" />
+              </div>
             </div>
             
             <div className="flex items-center gap-4 sm:gap-6">
