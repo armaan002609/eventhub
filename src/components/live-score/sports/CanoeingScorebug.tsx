@@ -8,13 +8,9 @@ export interface CanoeingScoreData {
 
 export default function CanoeingScorebug({ data, status }: { data: Partial<CanoeingScoreData>, status: MatchStatus }) {
   const d: CanoeingScoreData = {
-    eventName: data.eventName || "MEN'S K-1 1000m FINAL",
+    eventName: data.eventName || "MATCH",
     distanceTotal: data.distanceTotal || 1000,
-    racers: data.racers || [
-      { lane: 4, name: "P. PIMENTA", country: "POR", splitTime: "01:23.45", position: 1 },
-      { lane: 5, name: "J. DOSTAL", country: "CZE", splitTime: "01:23.89", position: 2 },
-      { lane: 3, name: "A. KOPASZ", country: "HUN", splitTime: "01:24.12", position: 3 },
-    ]
+    racers: data.racers || []
   };
 
   // Sort by position for display

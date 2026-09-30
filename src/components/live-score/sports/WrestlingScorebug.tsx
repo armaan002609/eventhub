@@ -12,13 +12,13 @@ export interface WrestlingScoreData {
 
 export default function WrestlingScorebug({ data, status }: { data: Partial<WrestlingScoreData>, status: MatchStatus }) {
   const d: WrestlingScoreData = {
-    redName: data.redName || 'D. TAYLOR',
-    blueName: data.blueName || 'H. YAZDANI',
-    redScore: data.redScore || 4,
-    blueScore: data.blueScore || 2,
-    weightClass: data.weightClass || 'FS 86KG',
-    periodTimer: data.periodTimer || '01:45',
-    period: data.period || 'PERIOD 2'
+    redName: data.redName || 'RED CORNER',
+    blueName: data.blueName || 'BLUE CORNER',
+    redScore: data.redScore || 0,
+    blueScore: data.blueScore || 0,
+    weightClass: data.weightClass || 'MATCH',
+    periodTimer: data.periodTimer || '00:00',
+    period: data.period || 'PERIOD 1'
   };
 
   return (

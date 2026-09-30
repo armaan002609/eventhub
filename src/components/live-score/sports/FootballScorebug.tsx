@@ -17,8 +17,8 @@ export interface FootballScoreData {
 
 export default function FootballScorebug({ data, status }: { data: Partial<FootballScoreData>, status: MatchStatus }) {
   const d: FootballScoreData = {
-    homeTeam: data.homeTeam || 'CHE',
-    awayTeam: data.awayTeam || 'ARS',
+    homeTeam: data.homeTeam || 'HOME',
+    awayTeam: data.awayTeam || 'AWAY',
     homeScore: data.homeScore || 0,
     awayScore: data.awayScore || 0,
     matchClock: data.matchClock || '00:00',
