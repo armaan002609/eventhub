@@ -117,8 +117,14 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
               <input name="endsAt" type="date" required defaultValue={editingHackathon?.endsAt ? new Date(editingHackathon.endsAt).toISOString().split('T')[0] : ''} className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-[13px] font-bold text-[#554093] mb-1">Landscape Photo {editingHackathon ? '(Optional, keeps existing if blank)' : ''}</label>
-              <input name="image" type="file" required={!editingHackathon} accept="image/*" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white" />
+              <label className="block text-[13px] font-bold text-[#554093] mb-1">Landscape Photo</label>
+              {editingHackathon?.imagePath && (
+                <div className="mb-2">
+                  <p className="text-[11px] font-bold text-[#554093]/70 mb-1">Current Image:</p>
+                  <img src={editingHackathon.imagePath} alt="Current" className="h-24 w-auto rounded border border-[#554093]/20" />
+                </div>
+              )}
+              <input name="image" type="file" required accept="image/*" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white" />
               <p className="text-[11px] font-bold text-[#554093]/50 mt-1">Recommended size: 1200x600 pixels (16:9 ratio)</p>
             </div>
             <div className="md:col-span-2">
@@ -135,9 +141,15 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hackathons.map(h => (
-          <div key={h.id} className="border border-[#554093]/10 rounded-xl p-4 bg-white shadow-[0_4px_24px_rgba(85,64,147,0.05)] flex flex-col">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-bold text-[#554093] line-clamp-1" title={h.title}>{h.title}</h3>
+          <div key={h.id} className="border border-[#554093]/10 rounded-xl bg-white shadow-[0_4px_24px_rgba(85,64,147,0.05)] flex flex-col overflow-hidden">
+            {h.imagePath && (
+              <div className="h-28 w-full bg-[#554093]/5">
+                <img src={h.imagePath} alt={h.title} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="p-4 flex flex-col flex-1">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="font-bold text-[#554093] line-clamp-1" title={h.title}>{h.title}</h3>
               <div className="flex gap-2">
                 <button 
                   onClick={() => {
@@ -171,6 +183,7 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
               >
                 {activeHackathonId === h.id ? 'Hide Committees' : 'Manage Committees'}
               </button>
+            </div>
             </div>
           </div>
         ))}
