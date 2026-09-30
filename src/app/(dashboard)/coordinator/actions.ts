@@ -21,7 +21,9 @@ export async function createDuty(formData: FormData) {
     const startsAtStr = formData.get("startsAt") as string;
     const endsAtStr = formData.get("endsAt") as string;
     const assignedToId = formData.get("assignedToId") as string;
-    const level = requester.role === 'SUPER_ADMIN' ? 'HIGH_LEVEL' : 'TASK';
+    const targetUser = await prisma.user.findUnique({ where: { id: assignedToId } });
+    if (!targetUser) return { error: 'Assigned user not found' };
+    const level = targetUser.role === 'COORDINATOR' ? 'HIGH_LEVEL' : 'TASK';
 
     if (!title || !venue || !startsAtStr || !endsAtStr || !assignedToId) {
       return { error: 'Missing required fields' };
