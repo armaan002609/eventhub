@@ -77,13 +77,7 @@ export default async function Home() {
 
       <main className="pt-12 pb-24 max-w-[1400px] mx-auto px-8">
         
-        {/* NEW Badge */}
-        <div className="inline-flex items-center border border-[#554093]/20 rounded-full mb-10 overflow-hidden">
-          <span className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[#554093] border-r border-[#554093]/20">NEW</span>
-          <span className="px-4 py-1.5 text-[14px] font-medium text-[#554093] hover:bg-[#554093]/5 transition-colors cursor-pointer flex items-center gap-2">
-            Introducing EventHub 3B <span>&rarr;</span>
-          </span>
-        </div>
+
 
         {/* Hero Section */}
         <section className="max-w-[1000px] mb-16">
