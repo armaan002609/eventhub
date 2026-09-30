@@ -144,8 +144,12 @@ export default async function Home() {
                   
                   {/* Logo (Overlapping) */}
                   <div className="px-5 relative">
-                    <div className="w-14 h-14 rounded-xl bg-white shadow-md border border-[#554093]/10 flex items-center justify-center -mt-7 mb-3 overflow-hidden p-2">
-                      <div className={`w-full h-full rounded-full bg-gradient-to-br ${isClosed ? "from-rose-400 to-orange-400" : "from-indigo-500 to-purple-400"}`}></div>
+                    <div className="w-14 h-14 rounded-xl bg-white shadow-md border border-[#554093]/10 flex items-center justify-center -mt-7 mb-3 overflow-hidden p-0.5">
+                      {hackathon.logoPath ? (
+                        <img src={hackathon.logoPath} alt={`${hackathon.organizer} logo`} className="w-full h-full object-cover rounded-lg" />
+                      ) : (
+                        <div className={`w-full h-full rounded-lg bg-gradient-to-br ${isClosed ? "from-rose-400 to-orange-400" : "from-indigo-500 to-purple-400"}`}></div>
+                      )}
                     </div>
                   </div>
 

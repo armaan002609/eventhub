@@ -77,6 +77,12 @@ export async function createHackathon(formData: FormData) {
   
   const imagePath = await uploadHackathonImage(imageFile);
 
+  const logoFile = formData.get('logo') as File | null;
+  let logoPath = undefined;
+  if (logoFile && logoFile.size > 0) {
+    logoPath = await uploadHackathonImage(logoFile);
+  }
+
   await prisma.hackathon.create({
     data: {
       title,
@@ -89,6 +95,7 @@ export async function createHackathon(formData: FormData) {
       isPublished: true,
       participants: 0,
       imagePath,
+      ...(logoPath ? { logoPath } : {}),
       eventType,
     }
   });
@@ -205,6 +212,12 @@ export async function updateHackathon(id: string, formData: FormData) {
     imagePath = await uploadHackathonImage(imageFile);
   }
 
+  let logoPath = undefined;
+  const logoFile = formData.get('logo') as File | null;
+  if (logoFile && logoFile.size > 0) {
+    logoPath = await uploadHackathonImage(logoFile);
+  }
+
   await prisma.hackathon.update({
     where: { id },
     data: {
@@ -217,6 +230,7 @@ export async function updateHackathon(id: string, formData: FormData) {
       endsAt: new Date(endsAtStr),
       eventType,
       ...(imagePath ? { imagePath } : {}),
+      ...(logoPath ? { logoPath } : {}),
     }
   });
 
