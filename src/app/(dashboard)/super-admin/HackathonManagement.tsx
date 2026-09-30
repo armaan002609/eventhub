@@ -128,6 +128,19 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
               <p className="text-[11px] font-bold text-[#554093]/50 mt-1">Recommended size: 1200x600 pixels (16:9 ratio)</p>
             </div>
             <div className="md:col-span-2">
+              <label className="block text-[13px] font-bold text-[#554093] mb-1">College/Event Logo (Optional)</label>
+              {/* @ts-ignore */}
+              {editingHackathon?.logoPath && (
+                <div className="mb-2">
+                  <p className="text-[11px] font-bold text-[#554093]/70 mb-1">Current Logo:</p>
+                  {/* @ts-ignore */}
+                  <img src={editingHackathon.logoPath} alt="Current Logo" className="h-16 w-16 object-cover rounded-full border border-[#554093]/20" />
+                </div>
+              )}
+              <input name="logo" type="file" accept="image/*" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white" />
+              <p className="text-[11px] font-bold text-[#554093]/50 mt-1">Recommended size: 200x200 pixels (1:1 ratio)</p>
+            </div>
+            <div className="md:col-span-2">
               <label className="block text-[13px] font-bold text-[#554093] mb-1">Prize Text (Optional)</label>
               <input name="prizeText" defaultValue={editingHackathon?.prizeText || ''} placeholder="e.g. $50k Prizes" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
             </div>

@@ -49,8 +49,17 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
                   {hackathon.eventType}
                </div>
              </div>
-             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 drop-shadow-md">{hackathon.title}</h1>
-             <p className="text-lg md:text-xl font-medium text-white/90 drop-shadow">by {hackathon.organizer} &middot; {hackathon.location}</p>
+             <div className="flex flex-col md:flex-row md:items-end gap-6">
+               {hackathon.logoPath && (
+                 <div className="w-24 h-24 rounded-2xl bg-white shadow-xl border-4 border-white overflow-hidden flex-shrink-0">
+                   <img src={hackathon.logoPath} alt={`${hackathon.organizer} logo`} className="w-full h-full object-cover" />
+                 </div>
+               )}
+               <div>
+                 <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-2 drop-shadow-md">{hackathon.title}</h1>
+                 <p className="text-lg md:text-xl font-medium text-white/90 drop-shadow">by {hackathon.organizer} &middot; {hackathon.location}</p>
+               </div>
+             </div>
           </div>
         </div>
 
