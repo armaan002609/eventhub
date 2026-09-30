@@ -255,3 +255,18 @@ export async function updateHackathon(id: string, formData: FormData) {
   revalidatePath('/');
   revalidatePath('/super-admin');
 }
+
+export async function deleteRegistration(id: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+  if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
+
+  await prisma.registration.delete({
+    where: { id }
+  });
+
+  revalidatePath('/super-admin');
+}
