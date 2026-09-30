@@ -69,11 +69,12 @@ export async function createHackathon(formData: FormData) {
 
   const themes = themesStr.split(',').map(t => t.trim()).filter(Boolean);
 
-  let imagePath = null;
   const imageFile = formData.get('image') as File | null;
-  if (imageFile && imageFile.size > 0) {
-    imagePath = await uploadHackathonImage(imageFile);
+  if (!imageFile || imageFile.size === 0) {
+    throw new Error("Landscape photo is required");
   }
+  
+  const imagePath = await uploadHackathonImage(imageFile);
 
   await prisma.hackathon.create({
     data: {
