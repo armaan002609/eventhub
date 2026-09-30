@@ -110,3 +110,66 @@ export async function deleteHackathon(id: string) {
   revalidatePath('/super-admin');
 }
 
+
+export async function createCommittee(formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+  if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
+
+  await prisma.committee.create({
+    data: {
+      hackathonId: formData.get("hackathonId") as string,
+      committeeName: formData.get("committeeName") as string,
+      inCharge: formData.get("inCharge") as string,
+      contactDetails: formData.get("contactDetails") as string || null,
+      responsibility: formData.get("responsibility") as string || null,
+      duty: formData.get("duty") as string || null,
+      venue: formData.get("venue") as string || null,
+      remarks: formData.get("remarks") as string || null,
+    }
+  });
+
+  revalidatePath('/super-admin');
+  revalidatePath('/committees');
+}
+
+export async function updateCommittee(id: string, formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+  if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
+
+  await prisma.committee.update({
+    where: { id },
+    data: {
+      committeeName: formData.get("committeeName") as string,
+      inCharge: formData.get("inCharge") as string,
+      contactDetails: formData.get("contactDetails") as string || null,
+      responsibility: formData.get("responsibility") as string || null,
+      duty: formData.get("duty") as string || null,
+      venue: formData.get("venue") as string || null,
+      remarks: formData.get("remarks") as string || null,
+    }
+  });
+
+  revalidatePath('/super-admin');
+  revalidatePath('/committees');
+}
+
+export async function deleteCommittee(id: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+  if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
+
+  await prisma.committee.delete({ where: { id } });
+  revalidatePath('/super-admin');
+  revalidatePath('/committees');
+}

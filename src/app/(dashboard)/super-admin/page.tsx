@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { createClient } from "@/utils/supabase/server";
 import RoleManagement from "./RoleManagement";
 import HackathonManagement from "./HackathonManagement";
+import CommitteeManagement from "./CommitteeManagement";
 
 export default async function SuperAdminDashboard() {
   const supabase = await createClient();
@@ -14,6 +15,10 @@ export default async function SuperAdminDashboard() {
 
   const hackathons = await prisma.hackathon.findMany({
     orderBy: { createdAt: 'desc' }
+  });
+
+  const committees = await prisma.committee.findMany({
+    orderBy: { createdAt: 'asc' }
   });
 
   return (
@@ -31,6 +36,10 @@ export default async function SuperAdminDashboard() {
 
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-h-[400px]">
           <RoleManagement initialUsers={users} currentUserId={user?.id} />
+        </div>
+
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 min-h-[400px]">
+          <CommitteeManagement committees={committees} hackathons={hackathons} />
         </div>
       </div>
     </div>
