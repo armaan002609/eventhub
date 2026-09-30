@@ -6,7 +6,7 @@ export default async function CommitteesPage() {
   const hackathons = await prisma.hackathon.findMany({
     where: { isPublished: true },
     include: {
-      Committee: true
+      committees: true
     },
     orderBy: { startsAt: 'asc' }
   });
@@ -24,7 +24,7 @@ export default async function CommitteesPage() {
         </div>
 
         {hackathons.map(hackathon => {
-          if (hackathon.Committee.length === 0) return null;
+          if (hackathon.committees.length === 0) return null;
           
           return (
             <div key={hackathon.id} className="mb-20">
@@ -33,7 +33,7 @@ export default async function CommitteesPage() {
               </h2>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {hackathon.Committee.map(committee => (
+                {hackathon.committees.map(committee => (
                   <div key={committee.id} className="bg-white rounded-2xl p-6 border border-[#554093]/10 shadow-sm hover:shadow-lg transition-all group">
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="text-xl font-bold text-[#554093] group-hover:text-[#3B2C66] transition-colors">{committee.committeeName}</h3>
@@ -86,7 +86,7 @@ export default async function CommitteesPage() {
           );
         })}
 
-        {hackathons.filter(h => h.Committee.length > 0).length === 0 && (
+        {hackathons.filter(h => h.committees.length > 0).length === 0 && (
           <div className="text-center py-20 bg-white rounded-3xl border border-[#554093]/10">
             <h3 className="text-xl font-bold text-[#554093] mb-2">No Committees Found</h3>
             <p className="text-[#554093]/60">There are currently no public committees assigned to any active events.</p>
