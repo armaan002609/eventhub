@@ -127,7 +127,7 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
                   <img src={editingHackathon.imagePath} alt="Current" className="h-24 w-auto rounded border border-[#554093]/20" />
                 </div>
               )}
-              <input name="image" type="file" required accept="image/*" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white" />
+              <input name="image" type="file" required={!editingHackathon?.imagePath} accept="image/*" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white" />
               <p className="text-[11px] font-bold text-[#554093]/50 mt-1">Recommended size: 1200x600 pixels (16:9 ratio)</p>
             </div>
             <div className="md:col-span-2">
