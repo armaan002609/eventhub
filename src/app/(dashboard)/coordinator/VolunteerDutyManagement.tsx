@@ -29,16 +29,17 @@ export default function VolunteerDutyManagement({ volunteers, duties }: { volunt
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setLoading(true);
     try {
-      const formData = new FormData(e.currentTarget);
+      const formData = new FormData(form);
       const res = await createDuty(formData);
       if (res && res.error) {
         alert('Error: ' + res.error);
         return;
       }
       setIsAssigning(false);
-      e.currentTarget.reset();
+      form.reset();
     } catch (err: any) {
       console.error(err);
       alert('Failed to assign duty: ' + (err.message || ''));
