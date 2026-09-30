@@ -60,20 +60,47 @@ export default function VolunteerDutyManagement({ volunteers, duties }: { volunt
       setDeletingId(null);
     }
   }
+  function handleDownloadCSV() {
+    const header = ['Volunteer Name', 'Duty Title', 'Venue', 'Starts At', 'Ends At'];
+    const rows = duties.map(d => [
+      `"${d.assignedTo.name}"`,
+      `"${d.title}"`,
+      `"${d.venue}"`,
+      `"${new Date(d.startsAt).toLocaleString()}"`,
+      `"${new Date(d.endsAt).toLocaleString()}"`
+    ]);
+    const csvContent = [header.join(','), ...rows.map(r => r.join(','))].join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'volunteer_duties.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   return (
-    <div className="flex flex-col gap-6 h-full">
+    <div className="flex flex-col gap-6 h-full w-full">
       <div className="flex justify-between items-center px-2">
         <div>
           <h2 className="text-xl font-bold text-[#554093]">Volunteer Duties</h2>
           <p className="text-sm text-[#554093]/60 font-medium">Assign tasks and view volunteer schedules.</p>
         </div>
-        <button 
-          onClick={() => setIsAssigning(!isAssigning)}
-          className="px-4 py-2 bg-[#554093] text-white rounded-lg text-sm font-bold hover:bg-[#3B2C66] transition"
-        >
-          {isAssigning ? 'Cancel' : 'Assign Duty'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={handleDownloadCSV}
+            className="px-4 py-2 bg-[#554093]/10 text-[#554093] rounded-lg text-sm font-bold hover:bg-[#554093]/20 transition"
+          >
+            Download CSV
+          </button>
+          <button 
+            onClick={() => setIsAssigning(!isAssigning)}
+            className="px-4 py-2 bg-[#554093] text-white rounded-lg text-sm font-bold hover:bg-[#3B2C66] transition"
+          >
+            {isAssigning ? 'Cancel' : 'Assign Duty'}
+          </button>
+        </div>
       </div>
 
       {isAssigning && (

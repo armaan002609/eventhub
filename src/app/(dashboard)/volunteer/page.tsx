@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import VolunteerDutyManagement from "../coordinator/VolunteerDutyManagement";
 
 export default async function VolunteerDashboard() {
   const supabase = await createClient();
@@ -8,6 +9,27 @@ export default async function VolunteerDashboard() {
 
   if (!user) {
     redirect('/login');
+  }
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+
+  if (requester?.role === 'SUPER_ADMIN' || requester?.role === 'COORDINATOR') {
+    const volunteers = await prisma.user.findMany({
+      where: { role: 'VOLUNTEER' },
+      select: { id: true, name: true, email: true, role: true }
+    });
+
+    const allDuties = await prisma.duty.findMany({
+      include: { assignedTo: { select: { id: true, name: true } } },
+      orderBy: { startsAt: 'asc' }
+    });
+
+    return (
+      <div className="w-full max-w-6xl mx-auto flex flex-col gap-6">
+        <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
+          <VolunteerDutyManagement volunteers={volunteers} duties={allDuties} />
+        </div>
+      </div>
+    );
   }
 
   // Fetch real duties assigned to this volunteer
