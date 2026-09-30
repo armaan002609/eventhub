@@ -15,25 +15,19 @@ type Committee = {
   remarks: string | null;
 };
 
-type Hackathon = {
-  id: string;
-  title: string;
-};
-
-export default function CommitteeManagement({ committees, hackathons }: { committees: Committee[], hackathons: Hackathon[] }) {
+export default function CommitteeManagement({ committees, hackathonId }: { committees: Committee[], hackathonId: string }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [filterHackathon, setFilterHackathon] = useState(hackathons.length > 0 ? hackathons[0].id : '');
 
-  const filteredCommittees = committees.filter(c => c.hackathonId === filterHackathon);
+  const filteredCommittees = committees.filter(c => c.hackathonId === hackathonId);
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
-      formData.append('hackathonId', filterHackathon);
+      formData.append('hackathonId', hackathonId);
       await createCommittee(formData);
       setIsCreating(false);
     } catch (err) {
@@ -68,15 +62,6 @@ export default function CommitteeManagement({ committees, hackathons }: { commit
         </div>
         
         <div className="flex items-center gap-4">
-          <select 
-            value={filterHackathon} 
-            onChange={(e) => setFilterHackathon(e.target.value)}
-            className="px-3 py-2 border border-[#554093]/20 rounded-lg text-[13px] font-bold text-[#554093] bg-white focus:outline-none focus:ring-2 focus:ring-[#554093]"
-          >
-            {hackathons.map(h => (
-              <option key={h.id} value={h.id}>{h.title}</option>
-            ))}
-          </select>
           <button 
             onClick={() => setIsCreating(!isCreating)}
             className="px-4 py-2 bg-[#554093] text-white rounded-lg text-sm font-bold hover:bg-[#3B2C66] transition"

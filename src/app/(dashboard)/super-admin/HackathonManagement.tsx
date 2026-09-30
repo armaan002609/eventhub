@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createHackathon, deleteHackathon } from './actions';
+import CommitteeManagement from './CommitteeManagement';
 
 type Hackathon = {
   id: string;
@@ -16,9 +17,22 @@ type Hackathon = {
   isPublished: boolean;
 };
 
-export default function HackathonManagement({ hackathons }: { hackathons: Hackathon[] }) {
+type Committee = {
+  id: string;
+  hackathonId: string;
+  committeeName: string;
+  inCharge: string;
+  contactDetails: string | null;
+  responsibility: string | null;
+  duty: string | null;
+  venue: string | null;
+  remarks: string | null;
+};
+
+export default function HackathonManagement({ hackathons, committees = [] }: { hackathons: Hackathon[], committees?: Committee[] }) {
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeHackathonId, setActiveHackathonId] = useState<string | null>(null);
 
   async function handleCreate(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -113,6 +127,15 @@ export default function HackathonManagement({ hackathons }: { hackathons: Hackat
               <div>📅 {new Date(h.startsAt).toLocaleDateString()} - {new Date(h.endsAt).toLocaleDateString()}</div>
               <div>👥 {h.participants} participants</div>
             </div>
+            
+            <div className="mt-4 pt-4 border-t border-[#554093]/10">
+              <button 
+                onClick={() => setActiveHackathonId(activeHackathonId === h.id ? null : h.id)}
+                className="w-full text-center text-[13px] font-bold text-[#554093] hover:text-[#554093]/80 transition-colors"
+              >
+                {activeHackathonId === h.id ? 'Hide Committees' : 'Manage Committees'}
+              </button>
+            </div>
           </div>
         ))}
         {hackathons.length === 0 && (
@@ -121,6 +144,12 @@ export default function HackathonManagement({ hackathons }: { hackathons: Hackat
           </div>
         )}
       </div>
+      
+      {activeHackathonId && (
+        <div className="mt-8 bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10">
+          <CommitteeManagement committees={committees} hackathonId={activeHackathonId} />
+        </div>
+      )}
     </div>
   );
 }
