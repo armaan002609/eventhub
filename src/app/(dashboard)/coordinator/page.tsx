@@ -2,11 +2,15 @@ import { prisma } from "@/lib/db";
 import VerificationQueue from "../super-admin/VerificationQueue";
 
 export default async function CoordinatorDashboard() {
-  // Fetch pending ID proofs for Verification Queue
+  // Fetch pending and rejected ID proofs for Verification Queue
   const pendingRegistrations = await prisma.registration.findMany({
-    where: { idProofStatus: 'PENDING' },
+    where: { 
+      idProofStatus: {
+        in: ['PENDING', 'REJECTED']
+      }
+    },
     include: { university: true },
-    orderBy: { createdAt: 'asc' }
+    orderBy: { createdAt: 'desc' }
   });
 
   const approvedRegistrationsCount = await prisma.registration.count({
