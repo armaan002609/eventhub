@@ -58,7 +58,7 @@ export default function FootballScorebug({ data, status }: { data: Partial<Footb
               <span className="font-bold">{e.player}</span>
               <span className="text-white/50 text-xs tabular-nums">{e.minute}'</span>
               <div className="w-5 h-5 flex items-center justify-center">
-                {e.type === 'GOAL' && ⚽}
+                {e.type === 'GOAL' && <span>⚽</span>}
                 {e.type === 'YELLOW_CARD' && <div className="w-3 h-4 bg-yellow-400 rounded-sm"></div>}
                 {e.type === 'RED_CARD' && <div className="w-3 h-4 bg-red-500 rounded-sm"></div>}
                 {e.type === 'SUB' && <span className="text-green-400">⇅</span>}
@@ -72,7 +72,7 @@ export default function FootballScorebug({ data, status }: { data: Partial<Footb
           {d.events.filter(e => e.team === 'AWAY').map((e, i) => (
             <div key={i} className="flex items-center justify-start gap-3 text-sm">
               <div className="w-5 h-5 flex items-center justify-center">
-                {e.type === 'GOAL' && ⚽}
+                {e.type === 'GOAL' && <span>⚽</span>}
                 {e.type === 'YELLOW_CARD' && <div className="w-3 h-4 bg-yellow-400 rounded-sm"></div>}
                 {e.type === 'RED_CARD' && <div className="w-3 h-4 bg-red-500 rounded-sm"></div>}
                 {e.type === 'SUB' && <span className="text-green-400">⇅</span>}
