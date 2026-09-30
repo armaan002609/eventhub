@@ -95,7 +95,7 @@ export default async function HackathonPage() {
               const badgeText = isClosed ? "Applications Closed" : (startsInDays <= 7 ? `Starts in ${startsInDays} days` : "Apply Now");
               
               return (
-                <div key={hackathon.id} className="bg-white rounded-2xl overflow-hidden border border-[#554093]/10 hover:shadow-xl hover:shadow-[#554093]/5 transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
+                <Link href={`/hackathon/${hackathon.id}`} key={hackathon.id} className="bg-white rounded-2xl overflow-hidden border border-[#554093]/10 hover:shadow-xl hover:shadow-[#554093]/5 transition-all duration-300 group cursor-pointer flex flex-col h-full relative block">
                   {/* Cover Image / Gradient */}
                   <div className={`h-32 w-full bg-gradient-to-r relative ${
                     !hackathon.imagePath ? (isClosed ? "from-rose-500 to-orange-400" : (startsInDays <= 7 ? "from-[#554093] to-[#7B61C8]" : "from-emerald-500 to-teal-400")) : ""
@@ -140,7 +140,7 @@ export default async function HackathonPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

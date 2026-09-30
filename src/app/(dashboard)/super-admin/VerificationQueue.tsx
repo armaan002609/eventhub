@@ -26,40 +26,40 @@ export default function VerificationQueue({ registrations }: { registrations: Re
   }
 
   return (
-    <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full">
-      <div className="px-6 py-6 flex justify-between items-center border-b border-slate-100">
+    <div className="lg:col-span-2 bg-[#FDFBF7] rounded-3xl shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 overflow-hidden flex flex-col h-full">
+      <div className="px-6 py-6 flex justify-between items-center border-b border-[#554093]/10">
         <div>
-          <h2 className="text-[17px] font-bold text-slate-800">Verification Queue</h2>
-          <p className="text-[12px] font-medium text-slate-500 mt-0.5">Review and approve uploaded ID proofs.</p>
+          <h2 className="text-[17px] font-bold text-[#554093]">Verification Queue</h2>
+          <p className="text-[12px] font-medium text-[#554093]/60 mt-0.5">Review and approve uploaded ID proofs.</p>
         </div>
         <span className="bg-amber-50 border border-amber-200/60 text-amber-600 text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
           {registrations.length} Pending
         </span>
       </div>
       <div className="overflow-x-auto flex-1">
-        <table className="min-w-full divide-y divide-slate-100">
-          <thead className="bg-[#F8F9FA] sticky top-0 z-10">
+        <table className="min-w-full divide-y divide-[#554093]/10">
+          <thead className="bg-[#554093]/5 sticky top-0 z-10">
             <tr>
-              <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">Participant</th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">College</th>
-              <th className="px-6 py-4 text-left text-[11px] font-bold text-slate-500 uppercase tracking-wider">ID Proof</th>
-              <th className="px-6 py-4 text-right text-[11px] font-bold text-slate-500 uppercase tracking-wider">Action</th>
+              <th className="px-6 py-4 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Participant</th>
+              <th className="px-6 py-4 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">College</th>
+              <th className="px-6 py-4 text-left text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">ID Proof</th>
+              <th className="px-6 py-4 text-right text-[11px] font-bold text-[#554093]/60 uppercase tracking-wider">Action</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-slate-100">
+          <tbody className="bg-white divide-y divide-[#554093]/10">
             {registrations.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-slate-500 font-medium">
+                <td colSpan={4} className="px-6 py-12 text-center text-[#554093]/60 font-medium">
                   Queue is empty! All ID proofs are verified.
                 </td>
               </tr>
             ) : (
               registrations.map((reg) => (
-                <tr key={reg.id} className="hover:bg-slate-50/80 transition-colors group">
+                <tr key={reg.id} className="hover:bg-[#554093]/5 transition-colors group">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-[14px] font-bold text-slate-800">{reg.studentName}</div>
+                    <div className="text-[14px] font-bold text-[#554093]">{reg.studentName}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-[13px] font-medium text-slate-600">
+                  <td className="px-6 py-4 whitespace-nowrap text-[13px] font-medium text-[#554093]/60">
                     {reg.university?.name || 'Unknown'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -67,7 +67,7 @@ export default function VerificationQueue({ registrations }: { registrations: Re
                       href={reg.idProofPath} 
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[12px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors shadow-sm"
+                      className="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#554093] bg-[#554093]/5 border border-[#554093]/10 px-3 py-1.5 rounded-lg hover:bg-[#554093]/10 transition-colors shadow-[0_2px_8px_rgba(85,64,147,0.04)]"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -78,7 +78,7 @@ export default function VerificationQueue({ registrations }: { registrations: Re
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                     {loadingId === reg.id ? (
-                      <span className="text-[12px] font-bold text-slate-400">Updating...</span>
+                      <span className="text-[12px] font-bold text-[#554093]/40">Updating...</span>
                     ) : (
                       <div className="flex items-center justify-end gap-2">
                         <button 
