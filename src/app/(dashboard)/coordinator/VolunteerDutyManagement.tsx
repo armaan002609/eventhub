@@ -32,12 +32,16 @@ export default function VolunteerDutyManagement({ volunteers, duties }: { volunt
     setLoading(true);
     try {
       const formData = new FormData(e.currentTarget);
-      await createDuty(formData);
+      const res = await createDuty(formData);
+      if (res && res.error) {
+        alert('Error: ' + res.error);
+        return;
+      }
       setIsAssigning(false);
       e.currentTarget.reset();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert('Failed to assign duty');
+      alert('Failed to assign duty: ' + (err.message || ''));
     } finally {
       setLoading(false);
     }
