@@ -50,18 +50,19 @@ export default function CanoeingScorebug({ data, status }: { data: Partial<Canoe
             </div>
           ) : (
             sortedRacers.map((racer, idx) => (
-            <div key={idx} className="flex items-center border-b border-white/5 py-1.5 relative overflow-hidden bg-gradient-to-r from-transparent hover:from-white/5">
-              {idx === 0 && <div className="absolute top-0 left-0 w-[2px] h-full bg-amber-400"></div>}
-              {idx === 1 && <div className="absolute top-0 left-0 w-[2px] h-full bg-gray-300"></div>}
-              {idx === 2 && <div className="absolute top-0 left-0 w-[2px] h-full bg-orange-600"></div>}
-              
-              <div className="w-10 text-center text-sm font-black text-white">{racer.position}</div>
-              <div className="w-10 text-center text-xs font-bold text-white/40">{racer.lane}</div>
-              <div className="w-16 text-center text-xs font-black text-white/80">{racer.country}</div>
-              <div className="flex-1 text-sm font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
-              <div className="w-24 text-right pr-4 text-sm font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
-            </div>
-          ))}
+              <div key={idx} className="flex items-center border-b border-white/5 py-1.5 relative overflow-hidden bg-gradient-to-r from-transparent hover:from-white/5">
+                {idx === 0 && <div className="absolute top-0 left-0 w-[2px] h-full bg-amber-400"></div>}
+                {idx === 1 && <div className="absolute top-0 left-0 w-[2px] h-full bg-gray-300"></div>}
+                {idx === 2 && <div className="absolute top-0 left-0 w-[2px] h-full bg-orange-600"></div>}
+                
+                <div className="w-10 text-center text-sm font-black text-white">{racer.position}</div>
+                <div className="w-10 text-center text-xs font-bold text-white/40">{racer.lane}</div>
+                <div className="w-16 text-center text-xs font-black text-white/80">{racer.country}</div>
+                <div className="flex-1 text-sm font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
+                <div className="w-24 text-right pr-4 text-sm font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>
