@@ -40,7 +40,19 @@ export default async function Navbar() {
           <Link href="/events" className="hover:opacity-70 transition-opacity">Events</Link>
           <Link href="/hackathon" className="hover:opacity-70 transition-opacity">Hackathon</Link>
           <Link href="/leaderboard" className="hover:opacity-70 transition-opacity">Leaderboard</Link>
-          <Link href="/about" className="hover:opacity-70 transition-opacity">About</Link>
+          <div className="relative group">
+            <button className="flex items-center gap-1 hover:opacity-70 transition-opacity">
+              About
+              <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            <div className="absolute top-full -left-4 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="w-48 bg-[#FDFBF7] rounded-xl shadow-xl border border-[#554093]/10 overflow-hidden flex flex-col py-2">
+                <Link href="/about#team" className="px-5 py-2.5 text-[14px] font-medium text-[#554093] hover:bg-[#554093]/5 hover:text-[#554093] transition-colors">Our Team</Link>
+                <Link href="/about#contact" className="px-5 py-2.5 text-[14px] font-medium text-[#554093] hover:bg-[#554093]/5 hover:text-[#554093] transition-colors">Contact Us</Link>
+                <Link href="/about#faq" className="px-5 py-2.5 text-[14px] font-medium text-[#554093] hover:bg-[#554093]/5 hover:text-[#554093] transition-colors">FAQ</Link>
+              </div>
+            </div>
+          </div>
         </nav>
       </div>
 
