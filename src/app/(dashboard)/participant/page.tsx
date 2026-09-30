@@ -62,14 +62,20 @@ export default async function ParticipantDashboard() {
                       {reg.idProofStatus === 'PENDING' ? 'ID Pending Verification' : reg.idProofStatus}
                     </span>
                     <div className="flex items-center gap-4">
-                      <span className="text-[#554093]/60 font-semibold text-sm">Total Due: <strong className="text-[#554093]">₹{reg.totalFee}</strong></span>
-                      {reg.totalFee > 0 && reg.paymentStatus !== 'PAID' && (
-                        <button className="bg-[#554093] hover:bg-[#3B2C66] text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors">
-                          Pay Now
-                        </button>
-                      )}
-                      {reg.paymentStatus === 'PAID' && (
-                        <span className="text-emerald-600 font-bold text-sm bg-emerald-50 px-3 py-1 rounded-md">Paid</span>
+                      {isVerified ? (
+                        <>
+                          <span className="text-[#554093]/60 font-semibold text-sm">Total Due: <strong className="text-[#554093]">₹{reg.totalFee}</strong></span>
+                          {reg.totalFee > 0 && reg.paymentStatus !== 'PAID' && (
+                            <button className="bg-[#554093] hover:bg-[#3B2C66] text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors">
+                              Pay Now
+                            </button>
+                          )}
+                          {reg.paymentStatus === 'PAID' && (
+                            <span className="text-emerald-600 font-bold text-sm bg-emerald-50 px-3 py-1 rounded-md">Paid</span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-[#554093]/60 font-semibold text-sm">Fees calculated after ID verification</span>
                       )}
                     </div>
                   </div>

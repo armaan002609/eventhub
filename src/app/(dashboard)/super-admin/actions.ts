@@ -64,6 +64,11 @@ export async function createHackathon(formData: FormData) {
   const endsAtStr = formData.get("endsAt") as string;
   const eventType = formData.get("eventType") as string || "Event";
 
+  const baseFee = parseInt(formData.get("baseFee") as string || "500");
+  const transportFee = parseInt(formData.get("transportFee") as string || "350");
+  const accommodationFee = parseInt(formData.get("accommodationFee") as string || "1500");
+  const foodFee = parseInt(formData.get("foodFee") as string || "900");
+
   if (!title || !organizer || !location || !startsAtStr || !endsAtStr) {
     throw new Error("Missing required fields");
   }
@@ -97,6 +102,10 @@ export async function createHackathon(formData: FormData) {
       imagePath,
       ...(logoPath ? { logoPath } : {}),
       eventType,
+      baseFee,
+      transportFee,
+      accommodationFee,
+      foodFee,
     }
   });
 
@@ -200,6 +209,11 @@ export async function updateHackathon(id: string, formData: FormData) {
   const endsAtStr = formData.get("endsAt") as string;
   const eventType = formData.get("eventType") as string || "Event";
 
+  const baseFee = parseInt(formData.get("baseFee") as string || "500");
+  const transportFee = parseInt(formData.get("transportFee") as string || "350");
+  const accommodationFee = parseInt(formData.get("accommodationFee") as string || "1500");
+  const foodFee = parseInt(formData.get("foodFee") as string || "900");
+
   if (!title || !organizer || !location || !startsAtStr || !endsAtStr) {
     throw new Error("Missing required fields");
   }
@@ -229,6 +243,10 @@ export async function updateHackathon(id: string, formData: FormData) {
       startsAt: new Date(startsAtStr),
       endsAt: new Date(endsAtStr),
       eventType,
+      baseFee,
+      transportFee,
+      accommodationFee,
+      foodFee,
       ...(imagePath ? { imagePath } : {}),
       ...(logoPath ? { logoPath } : {}),
     }

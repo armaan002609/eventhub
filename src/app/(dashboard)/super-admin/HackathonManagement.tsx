@@ -14,9 +14,12 @@ type Hackathon = {
   startsAt: Date;
   endsAt: Date;
   participants: number;
-  isPublished: boolean;
   imagePath?: string | null;
   eventType: string;
+  baseFee: number;
+  transportFee: number;
+  accommodationFee: number;
+  foodFee: number;
 };
 
 type Committee = {
@@ -143,6 +146,29 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
             <div className="md:col-span-2">
               <label className="block text-[13px] font-bold text-[#554093] mb-1">Prize Text (Optional)</label>
               <input name="prizeText" defaultValue={editingHackathon?.prizeText || ''} placeholder="e.g. $50k Prizes" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+            </div>
+            
+            {/* Fees section */}
+            <div className="md:col-span-2 mt-2 pt-4 border-t border-[#554093]/10">
+              <h3 className="text-[14px] font-bold text-[#554093] mb-3">Registration & Service Fees (INR)</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-[12px] font-bold text-[#554093]/70 mb-1">Base Event Fee</label>
+                  <input name="baseFee" type="number" min="0" required defaultValue={editingHackathon?.baseFee ?? 500} className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+                </div>
+                <div>
+                  <label className="block text-[12px] font-bold text-[#554093]/70 mb-1">Transport Fee</label>
+                  <input name="transportFee" type="number" min="0" required defaultValue={editingHackathon?.transportFee ?? 350} className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+                </div>
+                <div>
+                  <label className="block text-[12px] font-bold text-[#554093]/70 mb-1">Accommodation Fee</label>
+                  <input name="accommodationFee" type="number" min="0" required defaultValue={editingHackathon?.accommodationFee ?? 1500} className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+                </div>
+                <div>
+                  <label className="block text-[12px] font-bold text-[#554093]/70 mb-1">Food Fee</label>
+                  <input name="foodFee" type="number" min="0" required defaultValue={editingHackathon?.foodFee ?? 900} className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex justify-end pt-2">

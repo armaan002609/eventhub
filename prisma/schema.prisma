@@ -236,6 +236,12 @@ model Hackathon {
   imagePath   String?
   logoPath    String?
   eventType   String   @default("Event")
+
+  // Registration Fees
+  baseFee          Int @default(500)
+  transportFee     Int @default(350)
+  accommodationFee Int @default(1500)
+  foodFee          Int @default(900)
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
