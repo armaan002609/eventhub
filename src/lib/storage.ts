@@ -37,7 +37,8 @@ export async function uploadHackathonImage(file: File): Promise<string> {
   const ext = file.name.split('.').pop() || 'jpg';
   const path = `hackathons/${randomUUID()}.${ext}`;
   
-  const { data, error } = await supabase.storage.from('public-images').upload(path, file, {
+  const buffer = await file.arrayBuffer();
+  const { data, error } = await supabase.storage.from('public-images').upload(path, buffer, {
     contentType: file.type,
     upsert: false
   });
