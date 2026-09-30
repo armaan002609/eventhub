@@ -42,7 +42,14 @@ export default function CanoeingScorebug({ data, status }: { data: Partial<Canoe
 
         {/* Racers */}
         <div className="flex flex-col">
-          {sortedRacers.map((racer, idx) => (
+          {sortedRacers.length === 0 ? (
+            <div className="flex items-center border-b border-white/5 py-4 relative overflow-hidden bg-[#15161E]">
+              <div className="w-full text-center text-xs font-bold text-white/30 uppercase tracking-widest">
+                Awaiting Racers & Splits...
+              </div>
+            </div>
+          ) : (
+            sortedRacers.map((racer, idx) => (
             <div key={idx} className="flex items-center border-b border-white/5 py-1.5 relative overflow-hidden bg-gradient-to-r from-transparent hover:from-white/5">
               {idx === 0 && <div className="absolute top-0 left-0 w-[2px] h-full bg-amber-400"></div>}
               {idx === 1 && <div className="absolute top-0 left-0 w-[2px] h-full bg-gray-300"></div>}
