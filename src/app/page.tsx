@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/db';
 import Navbar from '@/components/Navbar';
+import LiveMatchView from '@/app/(dashboard)/live/[matchId]/LiveMatchView';
 
 export default async function Home() {
   const supabase = await createClient();
@@ -28,15 +29,40 @@ export default async function Home() {
     orderBy: { startsAt: 'asc' }
   });
 
+  const liveMatch = await prisma.match.findFirst({
+    where: { status: 'LIVE' },
+    orderBy: { updatedAt: 'desc' }
+  });
+
   return (
     <>
       <Navbar />
 
 
 
-      <main className="pt-12 pb-24 max-w-[1400px] mx-auto px-8">
+      <main className="pt-8 pb-24 max-w-[1400px] mx-auto px-8">
         
-
+        {liveMatch && (
+          <section className="mb-12">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+              </span>
+              <h2 className="text-rose-600 font-bold uppercase tracking-widest text-sm">Now Live: {liveMatch.title}</h2>
+              <Link href="/live" className="ml-auto text-xs font-bold text-[#554093] hover:underline">View All Live Matches &rarr;</Link>
+            </div>
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-rose-500/20 overflow-hidden relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-rose-500 via-orange-500 to-rose-500"></div>
+              <LiveMatchView 
+                matchId={liveMatch.id}
+                sport={liveMatch.sport}
+                status={liveMatch.status}
+                initialData={typeof liveMatch.scoreData === 'object' && liveMatch.scoreData !== null ? liveMatch.scoreData : {}}
+              />
+            </div>
+          </section>
+        )}
 
         {/* Hero Section */}
         <section className="max-w-[1000px] mb-16">
