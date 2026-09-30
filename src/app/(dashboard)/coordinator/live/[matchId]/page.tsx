@@ -6,9 +6,10 @@ import BadmintonScorer from "@/components/live-score/scorer/BadmintonScorer";
 import WrestlingScorer from "@/components/live-score/scorer/WrestlingScorer";
 import CanoeingScorer from "@/components/live-score/scorer/CanoeingScorer";
 
-export default async function ScorerPanelPage({ params }: { params: { matchId: string } }) {
+export default async function ScorerPanelPage({ params }: { params: Promise<{ matchId: string }> }) {
+  const resolvedParams = await params;
   const match = await prisma.match.findUnique({
-    where: { id: params.matchId }
+    where: { id: resolvedParams.matchId }
   });
 
   if (!match) notFound();

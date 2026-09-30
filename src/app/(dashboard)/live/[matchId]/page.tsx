@@ -2,9 +2,10 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import LiveMatchView from "./LiveMatchView";
 
-export default async function MatchDetailPage({ params }: { params: { matchId: string } }) {
+export default async function MatchDetailPage({ params }: { params: Promise<{ matchId: string }> }) {
+  const resolvedParams = await params;
   const match = await prisma.match.findUnique({
-    where: { id: params.matchId }
+    where: { id: resolvedParams.matchId }
   });
 
   if (!match) {
