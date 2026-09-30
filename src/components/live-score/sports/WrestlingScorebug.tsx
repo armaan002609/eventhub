@@ -5,50 +5,71 @@ export interface WrestlingScoreData {
   blueName: string;
   redScore: number;
   blueScore: number;
-  periodTimer: string; // e.g. "02:14"
-  period: number; // 1 or 2
-  weightCategory: string; // e.g. "74kg Freestyle"
+  weightClass: string; // e.g. "MENS FREESTYLE 86KG"
+  periodTimer: string; // e.g. "01:45"
+  period: string; // e.g. "PERIOD 2"
 }
 
 export default function WrestlingScorebug({ data, status }: { data: Partial<WrestlingScoreData>, status: MatchStatus }) {
   const d: WrestlingScoreData = {
-    redName: data.redName || 'RED WRESTLER',
-    blueName: data.blueName || 'BLUE WRESTLER',
-    redScore: data.redScore || 0,
-    blueScore: data.blueScore || 0,
-    periodTimer: data.periodTimer || '03:00',
-    period: data.period || 1,
-    weightCategory: data.weightCategory || 'Freestyle'
+    redName: data.redName || 'D. TAYLOR',
+    blueName: data.blueName || 'H. YAZDANI',
+    redScore: data.redScore || 4,
+    blueScore: data.blueScore || 2,
+    weightClass: data.weightClass || 'FS 86KG',
+    periodTimer: data.periodTimer || '01:45',
+    period: data.period || 'PERIOD 2'
   };
 
   return (
-    <div className="w-full bg-[#1A1A24] text-white rounded-3xl overflow-hidden shadow-2xl font-sans max-w-4xl mx-auto flex flex-col">
-      <div className="bg-[#12121A] px-6 py-2 flex justify-between items-center text-xs font-bold uppercase tracking-widest text-white/50">
-        <span>{d.weightCategory}</span>
-        <span className="text-[#F43F5E] animate-pulse">{status}</span>
+    <div className="w-full max-w-[800px] flex flex-col items-center mt-8 drop-shadow-2xl font-sans mx-auto">
+      
+      {/* Top Banner (Weight & Period) */}
+      <div className="bg-[#1A1A24] text-white/80 border-t border-l border-r border-white/10 rounded-t-2xl px-6 py-1.5 flex items-center justify-between w-[300px] relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+        <span className="text-[10px] font-black uppercase tracking-widest">{d.weightClass}</span>
+        <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">{d.period}</span>
       </div>
 
-      <div className="flex h-48">
+      {/* Main Score Bar */}
+      <div className="flex bg-[#0A0B10]/95 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)] w-full">
+        
         {/* Red Corner */}
-        <div className="flex-1 bg-gradient-to-br from-red-700 to-red-900 flex flex-col justify-center items-center p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
-          <h2 className="text-2xl font-black uppercase tracking-widest drop-shadow-lg z-10 text-center">{d.redName}</h2>
-          <span className="text-8xl font-black tabular-nums tracking-tighter drop-shadow-2xl z-10 mt-2">{d.redScore}</span>
+        <div className="flex-1 flex justify-between bg-gradient-to-r from-red-700 to-red-900 border-r border-black">
+          <div className="flex items-center pl-6">
+            <span className="text-3xl font-black text-white italic tracking-tighter drop-shadow-md">{d.redName}</span>
+          </div>
+          <div className="w-24 bg-red-950 flex items-center justify-center relative shadow-inner">
+            <span className="text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-lg">{d.redScore}</span>
+          </div>
         </div>
 
-        {/* Timer Middle */}
-        <div className="w-48 bg-black flex flex-col justify-center items-center border-x-4 border-[#1A1A24] z-20 shadow-2xl">
-          <span className="text-white/50 text-xs font-bold uppercase tracking-widest mb-1">Period {d.period}</span>
-          <span className="text-5xl font-black text-yellow-400 tabular-nums">{d.periodTimer}</span>
+        {/* Center Clock */}
+        <div className="w-32 bg-[#15161E] flex items-center justify-center relative">
+          <div className="absolute inset-x-0 top-0 h-[1px] bg-white/20"></div>
+          <span className="text-4xl font-black text-amber-400 tabular-nums tracking-tighter drop-shadow-[0_0_12px_rgba(251,191,36,0.4)]">{d.periodTimer}</span>
         </div>
 
         {/* Blue Corner */}
-        <div className="flex-1 bg-gradient-to-bl from-blue-700 to-blue-900 flex flex-col justify-center items-center p-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
-          <h2 className="text-2xl font-black uppercase tracking-widest drop-shadow-lg z-10 text-center">{d.blueName}</h2>
-          <span className="text-8xl font-black tabular-nums tracking-tighter drop-shadow-2xl z-10 mt-2">{d.blueScore}</span>
+        <div className="flex-1 flex justify-between bg-gradient-to-l from-blue-700 to-blue-900 border-l border-black">
+          <div className="w-24 bg-blue-950 flex items-center justify-center relative shadow-inner">
+            <span className="text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-lg">{d.blueScore}</span>
+          </div>
+          <div className="flex items-center pr-6">
+            <span className="text-3xl font-black text-white italic tracking-tighter drop-shadow-md">{d.blueName}</span>
+          </div>
         </div>
+
       </div>
+      
+      {/* Status */}
+      {status === 'LIVE' && (
+        <div className="mt-3 flex items-center gap-2 bg-rose-500/20 border border-rose-500/30 px-3 py-1 rounded-full">
+          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">LIVE</span>
+        </div>
+      )}
+      
     </div>
   );
 }
