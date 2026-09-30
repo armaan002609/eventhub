@@ -51,8 +51,8 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
              </div>
              <div className="flex flex-col md:flex-row md:items-end gap-6">
                {hackathon.logoPath && (
-                 <div className="w-24 h-24 rounded-2xl bg-white shadow-xl border-4 border-white overflow-hidden flex-shrink-0">
-                   <img src={hackathon.logoPath} alt={`${hackathon.organizer} logo`} className="w-full h-full object-cover" />
+                 <div className="w-24 h-24 rounded-2xl bg-white shadow-xl border-4 border-white flex items-center justify-center flex-shrink-0 p-1">
+                   <img src={hackathon.logoPath} alt={`${hackathon.organizer} logo`} className="w-full h-full object-contain rounded-xl block" />
                  </div>
                )}
                <div>
