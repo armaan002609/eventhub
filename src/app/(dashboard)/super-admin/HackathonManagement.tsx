@@ -132,6 +132,7 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
             </button>
           </div>
         </form>
+      )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hackathons.map(h => (
           <div key={h.id} className="border border-[#554093]/10 rounded-xl p-4 bg-white shadow-[0_4px_24px_rgba(85,64,147,0.05)] flex flex-col">
