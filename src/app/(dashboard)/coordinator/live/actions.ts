@@ -55,4 +55,31 @@ export async function updateMatchStatus(matchId: string, status: 'UPCOMING' | 'L
 
   revalidatePath(`/live/${matchId}`);
   revalidatePath(`/coordinator/live/${matchId}`);
+  revalidatePath(`/live`);
+  revalidatePath(`/coordinator/live`);
+}
+
+export async function createMatch(title: string, sport: 'CRICKET' | 'FOOTBALL' | 'BADMINTON' | 'WRESTLING' | 'CANOEING') {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+  
+  const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
+  if (!dbUser || (dbUser.role !== 'SUPER_ADMIN' && dbUser.role !== 'COORDINATOR')) {
+    throw new Error("Unauthorized role");
+  }
+
+  const match = await prisma.match.create({
+    data: {
+      title,
+      sport,
+      status: 'UPCOMING',
+      scoreData: {}
+    }
+  });
+
+  revalidatePath(`/live`);
+  revalidatePath(`/coordinator/live`);
+  
+  return match;
 }

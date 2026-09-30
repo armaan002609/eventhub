@@ -5,6 +5,7 @@ import FootballScorer from "@/components/live-score/scorer/FootballScorer";
 import BadmintonScorer from "@/components/live-score/scorer/BadmintonScorer";
 import WrestlingScorer from "@/components/live-score/scorer/WrestlingScorer";
 import CanoeingScorer from "@/components/live-score/scorer/CanoeingScorer";
+import MatchStatusToggle from "@/components/live-score/scorer/MatchStatusToggle";
 
 export default async function ScorerPanelPage({ params }: { params: Promise<{ matchId: string }> }) {
   const resolvedParams = await params;
@@ -23,9 +24,7 @@ export default async function ScorerPanelPage({ params }: { params: Promise<{ ma
           <h1 className="text-2xl font-bold text-[#554093]">{match.title}</h1>
           <p className="text-[#554093]/60 font-medium text-xs tracking-wider uppercase mt-1">Scorer Panel • {match.sport}</p>
         </div>
-        <div className="text-xs font-bold px-3 py-1 bg-amber-500/10 text-amber-600 rounded-full uppercase">
-          {match.status}
-        </div>
+        <MatchStatusToggle matchId={match.id} initialStatus={match.status} />
       </div>
 
       <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#554093]/10">
