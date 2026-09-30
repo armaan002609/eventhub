@@ -25,7 +25,8 @@ export default async function FullscreenScorePage({ params }: { params: Promise<
         <LiveMatchView 
           matchId={match.id} 
           sport={match.sport} 
-          initialData={initialData} 
+          initialData={initialData}
+          status={match.status} 
         />
       </div>
     </div>
