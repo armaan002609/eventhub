@@ -76,23 +76,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Logos Strip */}
-        <section className="mb-24 overflow-hidden border-b border-[#554093]/10 pb-20">
-           <div className="flex flex-wrap items-center justify-between gap-8 opacity-80">
-             <div className="text-3xl font-bold font-sans tracking-tighter">coinbase</div>
-             <div className="text-3xl font-normal font-sans tracking-tight flex items-center gap-2">
-                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                databricks
-             </div>
-             <div className="text-3xl font-black font-sans tracking-tighter">reddit</div>
-             <div className="text-3xl font-bold font-serif">snowflake</div>
-             <div className="text-3xl font-bold font-sans tracking-tight">intercom</div>
-             <div className="text-3xl font-semibold font-sans tracking-tighter flex items-center gap-2">
-                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8 6v8l-8 6-8-6V8z"/></svg>
-                Dropbox
-             </div>
-           </div>
-        </section>
 
         {/* Upcoming Hackathons (Devfolio Style, Tines Themed) */}
         {hackathons.length > 0 && (
