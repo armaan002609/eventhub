@@ -22,6 +22,7 @@ export const uploadRequestSchema = z
 
 export const registrationSchema = z
   .object({
+    hackathonId: z.string().cuid(),
     studentName: text(2, 100),
     phone: z.string().trim().regex(/^\+?[0-9]{10,13}$/, 'Enter a valid phone number'),
     email: z.string().trim().toLowerCase().email().max(254),

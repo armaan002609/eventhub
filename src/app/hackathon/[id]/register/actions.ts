@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function registerParticipant(formData: FormData) {
+export async function registerParticipant(hackathonId: string, formData: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -20,6 +20,8 @@ export async function registerParticipant(formData: FormData) {
   const needsAccommodation = formData.get('needsAccommodation') === 'true';
   const needsFood = formData.get('needsFood') === 'true';
   const file = formData.get('idProof') as File;
+  const teamName = formData.get('teamName') as string | null;
+  const teamMembers = formData.get('teamMembers') as string | null;
 
   if (!studentName || !phone || !universityName || !file || file.size === 0) {
     return { error: 'Missing required fields' };
@@ -67,15 +69,32 @@ export async function registerParticipant(formData: FormData) {
   const foodFee = needsFood ? 900 : 0;
   const totalFee = baseFee + transportFee + accommodationFee + foodFee;
 
+  // Check if already registered
+  const existing = await prisma.registration.findUnique({
+    where: {
+      userId_hackathonId: {
+        userId: user.id,
+        hackathonId,
+      }
+    }
+  });
+
+  if (existing) {
+    return { error: 'You are already registered for this event.' };
+  }
+
   // Create Registration
   await prisma.registration.create({
     data: {
       userId: user.id,
+      hackathonId,
       studentName,
       phone,
       email: user.email || '',
       universityId: university.id,
       idProofPath: publicUrl,
+      teamName,
+      teamMembers,
       needsTransport,
       transportFee,
       needsAccommodation,
@@ -86,6 +105,7 @@ export async function registerParticipant(formData: FormData) {
     }
   });
 
+  revalidatePath(`/hackathon/${hackathonId}`);
   revalidatePath('/participant');
   return { success: true };
 }

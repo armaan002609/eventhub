@@ -37,6 +37,7 @@ export const POST = (req: Request) =>
       const reg = await prisma.registration.create({
         data: {
           userId: user.id,
+          hackathonId: input.hackathonId,
           studentName: input.studentName,
           phone: input.phone,
           email: input.email,

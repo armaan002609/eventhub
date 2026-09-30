@@ -64,7 +64,7 @@ model User {
   universityId String?
   university   University? @relation(fields: [universityId], references: [id])
 
-  registration     Registration?
+  registrations    Registration[]
   dutiesCreated    Duty[]          @relation("DutyCreator")
   dutiesAssigned   Duty[]          @relation("DutyAssignee")
   attendance       AttendanceLog[] @relation("AttendanceVolunteer")
@@ -88,8 +88,14 @@ model BoardingPoint {
 
 model Registration {
   id     String @id @default(cuid())
-  userId String @unique
+  userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  hackathonId String
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+
+  teamName    String?
+  teamMembers String?
 
   // Basic info
   studentName  String
@@ -130,6 +136,7 @@ model Registration {
 
   @@index([universityId])
   @@index([paymentStatus])
+  @@unique([userId, hackathonId])
 }
 
 model Duty {
@@ -234,6 +241,7 @@ model Hackathon {
   updatedAt   DateTime @updatedAt
 
   committees  Committee[]
+  registrations Registration[]
 }
 
 model Committee {

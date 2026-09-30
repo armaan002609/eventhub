@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { registerParticipant } from './actions';
+import { registerParticipant } from '@/app/hackathon/[id]/register/actions';
 
-export default function RegistrationForm() {
+export default function RegistrationForm({ hackathonId }: { hackathonId: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,7 +15,7 @@ export default function RegistrationForm() {
     const formData = new FormData(e.currentTarget);
     
     try {
-      const res = await registerParticipant(formData);
+      const res = await registerParticipant(hackathonId, formData);
       if (res?.error) {
         setError(res.error);
       }
@@ -61,6 +61,21 @@ export default function RegistrationForm() {
           <label className="text-[13px] font-bold text-[#554093]">Student ID Proof (Image or PDF)</label>
           <input name="idProof" required type="file" accept="image/*,.pdf" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-[13px] font-medium text-[#554093] focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors shadow-[0_2px_8px_rgba(85,64,147,0.04)] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#554093]/5 file:text-[#554093] hover:file:bg-[#554093]/10" />
           <p className="text-[11px] text-[#554093]/60 font-medium">Please upload a valid college ID card.</p>
+        </div>
+
+        <hr className="border-[#554093]/10 my-6" />
+        <h3 className="text-[15px] font-bold text-[#554093] mb-4">Team Details (Optional)</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="space-y-2">
+            <label className="text-[13px] font-bold text-[#554093]">Team Name</label>
+            <input name="teamName" type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Code Ninjas" />
+          </div>
+          
+          <div className="space-y-2">
+            <label className="text-[13px] font-bold text-[#554093]">Team Members</label>
+            <input name="teamMembers" type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Alice, Bob, Charlie" />
+          </div>
         </div>
 
         <hr className="border-[#554093]/10 my-6" />
