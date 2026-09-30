@@ -5,7 +5,7 @@ import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 
 export default function SignupPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F6F5F0] py-12 px-4 sm:px-6 lg:px-8 font-sans selection:bg-[#554093] selection:text-[#F6F5F0]">
+    <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[440px] w-full">
         <div className="mb-12">
           <Link href="/" className="inline-flex items-center gap-2 text-[#554093] mb-12 hover:opacity-70 transition-opacity">
