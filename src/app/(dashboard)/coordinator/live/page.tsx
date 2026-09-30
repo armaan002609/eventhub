@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import CreateMatchModal from "@/components/live-score/scorer/CreateMatchModal";
+import MatchActionsMenu from "@/components/live-score/scorer/MatchActionsMenu";
 
 export default async function CoordinatorLiveMatchesPage() {
   const matches = await prisma.match.findMany({
@@ -25,9 +26,12 @@ export default async function CoordinatorLiveMatchesPage() {
           </div>
         ) : (
           matches.map(match => (
-            <div key={match.id} className="bg-white rounded-3xl p-6 shadow-sm border border-[#554093]/10">
-              <div className="text-[11px] font-bold text-[#554093]/60 tracking-wider uppercase mb-2">{match.sport} • {match.status}</div>
-              <h3 className="text-lg font-bold text-[#554093] mb-4 line-clamp-2">{match.title}</h3>
+            <div key={match.id} className="bg-white rounded-3xl p-6 shadow-sm border border-[#554093]/10 relative">
+              <div className="flex justify-between items-start mb-2">
+                <div className="text-[11px] font-bold text-[#554093]/60 tracking-wider uppercase">{match.sport} • {match.status}</div>
+                <MatchActionsMenu matchId={match.id} initialTitle={match.title} />
+              </div>
+              <h3 className="text-lg font-bold text-[#554093] mb-4 line-clamp-2 pr-6">{match.title}</h3>
               <Link 
                 href={`/coordinator/live/${match.id}`} 
                 className="w-full py-2 bg-[#554093] text-white rounded-xl font-bold text-sm hover:bg-[#554093]/90 transition-colors flex items-center justify-center gap-2"

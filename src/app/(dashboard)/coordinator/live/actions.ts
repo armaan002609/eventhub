@@ -83,3 +83,40 @@ export async function createMatch(title: string, sport: 'CRICKET' | 'FOOTBALL' |
   
   return match;
 }
+
+export async function deleteMatch(matchId: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+  
+  const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
+  if (!dbUser || (dbUser.role !== 'SUPER_ADMIN' && dbUser.role !== 'COORDINATOR')) {
+    throw new Error("Unauthorized role");
+  }
+
+  await prisma.match.delete({ where: { id: matchId } });
+
+  revalidatePath(`/live`);
+  revalidatePath(`/coordinator/live`);
+}
+
+export async function updateMatchDetails(matchId: string, title: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("Unauthorized");
+  
+  const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
+  if (!dbUser || (dbUser.role !== 'SUPER_ADMIN' && dbUser.role !== 'COORDINATOR')) {
+    throw new Error("Unauthorized role");
+  }
+
+  await prisma.match.update({
+    where: { id: matchId },
+    data: { title }
+  });
+
+  revalidatePath(`/live`);
+  revalidatePath(`/coordinator/live`);
+  revalidatePath(`/live/${matchId}`);
+  revalidatePath(`/coordinator/live/${matchId}`);
+}
