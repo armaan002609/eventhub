@@ -43,6 +43,21 @@ enum ScoreMetric {
   POINTS_DESC // higher is better
 }
 
+enum SportType {
+  CRICKET
+  FOOTBALL
+  BADMINTON
+  WRESTLING
+  CANOEING
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  PAUSED
+  COMPLETED
+}
+
 model University {
   id            String         @id @default(cuid())
   uid           String         @unique // College/University UID used for coordinator assignment
@@ -71,6 +86,7 @@ model User {
   attendanceMarked AttendanceLog[] @relation("AttendanceMarker")
   scoresUpdated    ScoreEntry[]
   auditLogs        AuditLog[]
+  matchLogs        MatchLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -248,6 +264,7 @@ model Hackathon {
 
   committees  Committee[]
   registrations Registration[]
+  matches     Match[]
 }
 
 model Committee {
@@ -265,4 +282,39 @@ model Committee {
   updatedAt       DateTime @updatedAt
   
   hackathon       Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+}
+
+model Match {
+  id          String      @id @default(cuid())
+  title       String      // e.g. "Finals: Team A vs Team B"
+  sport       SportType
+  status      MatchStatus @default(UPCOMING)
+  
+  startTime   DateTime?
+  endTime     DateTime?
+  
+  // JSON field for sport-specific state
+  scoreData   Json        @default("{}")
+  
+  hackathonId String?
+  hackathon   Hackathon?  @relation(fields: [hackathonId], references: [id])
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  logs        MatchLog[]
+}
+
+model MatchLog {
+  id          String   @id @default(cuid())
+  matchId     String
+  match       Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  
+  action      String   
+  payload     Json?    
+  
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  
+  createdAt   DateTime @default(now())
 }
