@@ -2,7 +2,6 @@ import { prisma } from "@/lib/db";
 import { createClient } from "@/utils/supabase/server";
 import RoleManagement from "./RoleManagement";
 import HackathonManagement from "./HackathonManagement";
-import CommitteeManagement from "./CommitteeManagement";
 
 export default async function SuperAdminDashboard() {
   const supabase = await createClient();
@@ -31,15 +30,11 @@ export default async function SuperAdminDashboard() {
 
       <div className="flex flex-col gap-8">
         <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
-          <HackathonManagement hackathons={hackathons} />
+          <HackathonManagement hackathons={hackathons} committees={committees} />
         </div>
 
         <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
           <RoleManagement initialUsers={users} currentUserId={user?.id} />
-        </div>
-
-        <div className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 min-h-[400px]">
-          <CommitteeManagement committees={committees} hackathons={hackathons} />
         </div>
       </div>
     </div>
