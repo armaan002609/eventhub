@@ -1,0 +1,133 @@
+import Link from "next/link";
+import { createClient } from "@/utils/supabase/server";
+import { prisma } from "@/lib/db";
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  let role = 'PARTICIPANT';
+  let userName = 'User';
+  let userEmail = '';
+
+  if (user) {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { role: true, name: true, email: true }
+    });
+    if (dbUser) {
+      role = dbUser.role;
+      userName = dbUser.name;
+      userEmail = dbUser.email;
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-100 selection:text-indigo-900">
+      <div className="flex h-screen overflow-hidden p-3 gap-3">
+        
+        {/* Sidebar */}
+        <aside className="w-[280px] bg-[#F8F9FA] hidden lg:flex flex-col justify-between shrink-0 border border-slate-200/60 rounded-3xl h-full overflow-hidden shadow-sm">
+          <div className="p-6">
+            {/* Logo */}
+            <div className="flex items-center gap-3 mb-10 px-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-blue-500 flex items-center justify-center shadow-inner">
+                 <div className="w-3 h-3 bg-white rounded-full"></div>
+              </div>
+              <span className="font-bold text-xl text-slate-800 tracking-tight">EventHub</span>
+            </div>
+
+            {/* Nav */}
+            <nav className="space-y-1">
+              {/* Conditional Dashboard Links based on Role */}
+              
+              {role === 'SUPER_ADMIN' && (
+                <Link href="/super-admin" className="flex items-center gap-3 px-4 py-2.5 text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100/50 rounded-xl transition-colors">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /></svg>
+                  Super Admin
+                </Link>
+              )}
+
+              {(role === 'COORDINATOR' || role === 'SUPER_ADMIN') && (
+                <Link href="/coordinator" className="flex items-center gap-3 px-4 py-2.5 text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100/50 rounded-xl transition-colors">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                  Coordinator
+                </Link>
+              )}
+
+              {(role === 'VOLUNTEER' || role === 'COORDINATOR' || role === 'SUPER_ADMIN') && (
+                <Link href="/volunteer" className="flex items-center gap-3 px-4 py-2.5 text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100/50 rounded-xl transition-colors">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                  Volunteer Duties
+                </Link>
+              )}
+
+              {/* Everyone gets Participant and Leaderboard access */}
+              <Link href="/participant" className="flex items-center gap-3 px-4 py-2.5 text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100/50 rounded-xl transition-colors">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                My Registration
+              </Link>
+
+              <Link href="/leaderboard" className="flex items-center gap-3 px-4 py-2.5 text-slate-600 font-medium hover:text-slate-900 hover:bg-slate-100/50 rounded-xl transition-colors">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                Live Leaderboard
+              </Link>
+            </nav>
+          </div>
+
+          <div className="p-6">
+            <nav className="space-y-1">
+              <Link href="/settings" className="flex items-center gap-3 px-4 py-2.5 text-slate-500 font-medium hover:text-slate-800 rounded-xl transition-colors">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /></svg>
+                Settings
+              </Link>
+              <form action="/auth/signout" method="post">
+                <button type="submit" className="w-full flex items-center gap-3 px-4 py-2.5 text-slate-500 font-medium hover:text-rose-600 rounded-xl transition-colors">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                  Log Out
+                </button>
+              </form>
+            </nav>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col min-w-0 bg-[#F4F7FE] h-full rounded-3xl overflow-hidden border border-slate-200/60 shadow-sm relative">
+          {/* Header */}
+          <header className="px-8 py-5 flex items-center justify-between sticky top-0 bg-[#F4F7FE]/90 backdrop-blur-md z-10 border-b border-slate-200/40">
+            <div className="relative w-full max-w-[280px]">
+              <svg className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+              <input type="text" placeholder="Quick search..." className="w-full pl-11 pr-4 py-2 bg-white border-none rounded-full text-[13px] shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all placeholder:text-slate-400 font-medium text-slate-700" />
+            </div>
+            
+            <div className="flex items-center gap-4 sm:gap-6">
+              
+              <button className="relative text-slate-400 hover:text-slate-600 p-2 transition-colors">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" /></svg>
+              </button>
+
+              <div className="flex items-center gap-3 pl-2 sm:pl-4 sm:border-l border-slate-200/80">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 overflow-hidden shrink-0 shadow-sm flex items-center justify-center text-white font-bold text-sm">
+                  {userName.charAt(0).toUpperCase()}
+                </div>
+                <div className="hidden sm:block">
+                  <p className="text-[13px] font-bold text-slate-800 leading-tight">{userName}</p>
+                  <p className="text-[11px] text-slate-500 font-bold uppercase tracking-wider">{role.replace('_', ' ')}</p>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          {/* Page Content */}
+          <div className="px-8 pb-8 pt-4 overflow-y-auto custom-scrollbar flex-1">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

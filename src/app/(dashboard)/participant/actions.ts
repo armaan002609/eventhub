@@ -1,0 +1,91 @@
+'use server';
+
+import { prisma } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
+import { createClient } from '@/utils/supabase/server';
+import { v4 as uuidv4 } from 'uuid';
+
+export async function registerParticipant(formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: 'Not authenticated' };
+  }
+
+  const studentName = formData.get('studentName') as string;
+  const phone = formData.get('phone') as string;
+  const universityName = formData.get('universityName') as string;
+  const needsTransport = formData.get('needsTransport') === 'true';
+  const needsAccommodation = formData.get('needsAccommodation') === 'true';
+  const needsFood = formData.get('needsFood') === 'true';
+  const file = formData.get('idProof') as File;
+
+  if (!studentName || !phone || !universityName || !file || file.size === 0) {
+    return { error: 'Missing required fields' };
+  }
+
+  // Upload file to Supabase Storage
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${user.id}-${uuidv4()}.${fileExt}`;
+  
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('id-proofs')
+    .upload(fileName, file);
+
+  if (uploadError) {
+    console.error("Storage upload error:", uploadError);
+    return { error: `Storage Error: Make sure you have created a public bucket named 'id-proofs' in your Supabase dashboard. (${uploadError.message})` };
+  }
+
+  // Get the public URL
+  const { data: { publicUrl } } = supabase.storage
+    .from('id-proofs')
+    .getPublicUrl(fileName);
+
+  // Find or Create University
+  // We'll create a simple hash/slug for the UID if it doesn't exist
+  const uid = universityName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  
+  let university = await prisma.university.findFirst({
+    where: { uid }
+  });
+
+  if (!university) {
+    university = await prisma.university.create({
+      data: {
+        uid,
+        name: universityName
+      }
+    });
+  }
+
+  // Calculate fees (Example logic)
+  const baseFee = 500;
+  const transportFee = needsTransport ? 350 : 0;
+  const accommodationFee = needsAccommodation ? 1500 : 0;
+  const foodFee = needsFood ? 900 : 0;
+  const totalFee = baseFee + transportFee + accommodationFee + foodFee;
+
+  // Create Registration
+  await prisma.registration.create({
+    data: {
+      userId: user.id,
+      studentName,
+      phone,
+      email: user.email || '',
+      universityId: university.id,
+      idProofPath: publicUrl,
+      needsTransport,
+      transportFee,
+      needsAccommodation,
+      accommodationFee,
+      needsFood,
+      foodFee,
+      totalFee
+    }
+  });
+
+  revalidatePath('/participant');
+  return { success: true };
+}

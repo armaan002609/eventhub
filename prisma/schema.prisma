@@ -1,0 +1,232 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  SUPER_ADMIN
+  COORDINATOR
+  VOLUNTEER
+  PARTICIPANT
+}
+
+enum PaymentStatus {
+  UNPAID
+  PENDING_VERIFICATION
+  PAID
+  WAIVED
+}
+
+enum IdProofStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum DutyLevel {
+  HIGH_LEVEL // Super Admin -> Coordinator
+  TASK       // Coordinator -> Volunteer
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+}
+
+enum ScoreMetric {
+  TIME_MS_ASC // lower is better (timed events)
+  POINTS_DESC // higher is better
+}
+
+model University {
+  id            String         @id @default(cuid())
+  uid           String         @unique // College/University UID used for coordinator assignment
+  name          String
+  users         User[]
+  registrations Registration[]
+  duties        Duty[]
+  createdAt     DateTime       @default(now())
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  role         Role        @default(PARTICIPANT)
+  isActive     Boolean     @default(true)
+  tokenVersion Int         @default(0) // bump to revoke every issued JWT for this user
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id])
+
+  registration     Registration?
+  dutiesCreated    Duty[]          @relation("DutyCreator")
+  dutiesAssigned   Duty[]          @relation("DutyAssignee")
+  attendance       AttendanceLog[] @relation("AttendanceVolunteer")
+  attendanceMarked AttendanceLog[] @relation("AttendanceMarker")
+  scoresUpdated    ScoreEntry[]
+  auditLogs        AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([role, universityId])
+}
+
+model BoardingPoint {
+  id            String         @id @default(cuid())
+  name          String         @unique
+  charge        Int // INR, integer rupees
+  isActive      Boolean        @default(true)
+  registrations Registration[]
+}
+
+model Registration {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Basic info
+  studentName  String
+  phone        String
+  email        String
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+
+  // ID proof: private storage object path, NEVER a public URL
+  idProofPath   String
+  idProofStatus IdProofStatus @default(PENDING)
+
+  // Transport
+  needsTransport  Boolean        @default(false)
+  boardingPointId String?
+  boardingPoint   BoardingPoint? @relation(fields: [boardingPointId], references: [id])
+  transportFee    Int            @default(0)
+
+  // Accommodation
+  needsAccommodation Boolean   @default(false)
+  accommodationDays  Int?
+  checkIn            DateTime?
+  checkOut           DateTime?
+  accommodationFee   Int       @default(0)
+
+  // Food
+  needsFood   Boolean @default(false)
+  mealsPerDay Int?
+  foodFee     Int     @default(0)
+
+  // Fees: always computed server-side
+  totalFee      Int           @default(0)
+  paymentStatus PaymentStatus @default(UNPAID)
+  paymentRef    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([universityId])
+  @@index([paymentStatus])
+}
+
+model Duty {
+  id           String      @id @default(cuid())
+  level        DutyLevel
+  title        String
+  description  String?
+  venue        String
+  startsAt     DateTime
+  endsAt       DateTime
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id])
+  createdById  String
+  createdBy    User        @relation("DutyCreator", fields: [createdById], references: [id])
+  assignedToId String
+  assignedTo   User        @relation("DutyAssignee", fields: [assignedToId], references: [id])
+  attendance   AttendanceLog[]
+  createdAt    DateTime    @default(now())
+
+  @@index([assignedToId, startsAt])
+}
+
+model AttendanceLog {
+  id          String           @id @default(cuid())
+  dutyId      String
+  duty        Duty             @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  volunteerId String
+  volunteer   User             @relation("AttendanceVolunteer", fields: [volunteerId], references: [id])
+  status      AttendanceStatus
+  markedAt    DateTime         @default(now()) // exact timestamp of the mark
+  markedById  String
+  markedBy    User             @relation("AttendanceMarker", fields: [markedById], references: [id])
+  note        String?
+
+  @@index([dutyId, volunteerId, markedAt])
+}
+
+model Competition {
+  id          String       @id @default(cuid())
+  name        String
+  metric      ScoreMetric
+  unit        String?
+  isPublished Boolean      @default(false)
+  entries     ScoreEntry[]
+  createdAt   DateTime     @default(now())
+}
+
+model ScoreEntry {
+  id            String      @id @default(cuid())
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+  teamName      String
+  participantId String?
+  timeMs        Int?
+  points        Int?
+  metrics       Json? // event-specific extras
+  updatedById   String
+  updatedBy     User        @relation(fields: [updatedById], references: [id])
+  updatedAt     DateTime    @updatedAt
+
+  // Rank is computed at read time (ORDER BY per competition.metric), never stored, so it can't go stale.
+  @@unique([competitionId, teamName])
+  @@index([competitionId, points])
+  @@index([competitionId, timeMs])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String // e.g. IDPROOF_VIEWED, COORDINATOR_ASSIGNED
+  target    String?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+}
+
+model Hackathon {
+  id          String   @id @default(cuid())
+  title       String
+  organizer   String
+  location    String
+  themes      String[]
+  prizeText   String?
+  startsAt    DateTime
+  endsAt      DateTime
+  participants Int     @default(0)
+  isPublished Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
