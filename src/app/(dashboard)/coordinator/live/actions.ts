@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 // Super Admin & Coordinator allowed
 export async function updateMatchScore(matchId: string, scoreData: any, actionType: string) {
-  const supabase = createClient();
+  const supabase = await createClient();
   
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized");
@@ -39,7 +39,7 @@ export async function updateMatchScore(matchId: string, scoreData: any, actionTy
 }
 
 export async function updateMatchStatus(matchId: string, status: 'UPCOMING' | 'LIVE' | 'PAUSED' | 'COMPLETED') {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Unauthorized");
   
