@@ -80,21 +80,31 @@ export default function VerificationQueue({ registrations }: { registrations: Re
                     {loadingId === reg.id ? (
                       <span className="text-[12px] font-bold text-[#554093]/40">Updating...</span>
                     ) : (
-                      <div className="flex items-center justify-end gap-2">
-                        <button 
-                          onClick={() => handleStatus(reg.id, 'VERIFIED')}
-                          className="p-2 text-emerald-600 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-lg transition-colors shadow-sm" 
-                          title="Approve"
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
-                        </button>
-                        <button 
-                          onClick={() => handleStatus(reg.id, 'REJECTED')}
-                          className="p-2 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-lg transition-colors shadow-sm" 
-                          title="Reject"
-                        >
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
-                        </button>
+                      <div className="flex items-center justify-end gap-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                          reg.idProofStatus === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {reg.idProofStatus}
+                        </span>
+                        
+                        <div className="flex items-center gap-1">
+                          <button 
+                            onClick={() => handleStatus(reg.id, 'VERIFIED')}
+                            className="p-1.5 text-emerald-600 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-md transition-colors shadow-sm" 
+                            title="Approve"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                          </button>
+                          {reg.idProofStatus !== 'REJECTED' && (
+                            <button 
+                              onClick={() => handleStatus(reg.id, 'REJECTED')}
+                              className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors shadow-sm" 
+                              title="Reject"
+                            >
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                          )}
+                        </div>
                       </div>
                     )}
                   </td>
