@@ -61,12 +61,17 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
       }
     });
   }
+  // Fetch Hackathon to get fees
+  const hackathon = await prisma.hackathon.findUnique({ where: { id: hackathonId } });
+  if (!hackathon) {
+    return { error: 'Event not found' };
+  }
 
-  // Calculate fees (Example logic)
-  const baseFee = 500;
-  const transportFee = needsTransport ? 350 : 0;
-  const accommodationFee = needsAccommodation ? 1500 : 0;
-  const foodFee = needsFood ? 900 : 0;
+  // Calculate fees
+  const baseFee = hackathon.baseFee;
+  const transportFee = needsTransport ? hackathon.transportFee : 0;
+  const accommodationFee = needsAccommodation ? hackathon.accommodationFee : 0;
+  const foodFee = needsFood ? hackathon.foodFee : 0;
   const totalFee = baseFee + transportFee + accommodationFee + foodFee;
 
   // Check if already registered
