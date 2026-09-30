@@ -7,13 +7,19 @@ export default function CanoeingScorer({ matchId, initialData }: { matchId: stri
   const [data, setData] = useState(initialData);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const lanes = data.lanes || [];
+  const racers = data.racers || [];
 
-  const updateLane = async (laneIdx: number, field: string, value: any) => {
+  const updateRacer = async (idx: number, field: string, value: any) => {
     const newData = { ...data };
-    if (!newData.lanes) newData.lanes = [];
+    if (!newData.racers) newData.racers = [];
     
-    newData.lanes[laneIdx] = { ...newData.lanes[laneIdx], [field]: value };
+    newData.racers[idx] = { ...newData.racers[idx], [field]: value };
+    setData(newData);
+  };
+
+  const removeRacer = (idx: number) => {
+    const newData = { ...data };
+    newData.racers = newData.racers.filter((_: any, i: number) => i !== idx);
     setData(newData);
   };
 
@@ -38,75 +44,86 @@ export default function CanoeingScorer({ matchId, initialData }: { matchId: stri
       </div>
 
       <div className="flex flex-col gap-3">
-        {lanes.map((lane: any, idx: number) => (
+        {racers.map((racer: any, idx: number) => (
           <div key={idx} className="bg-gray-50 p-4 rounded-xl border border-gray-200 grid grid-cols-12 gap-4 items-center">
             
             <div className="col-span-1">
               <span className="text-xs font-bold text-gray-400">LANE</span>
-              <div className="font-black text-lg">{lane.lane}</div>
+              <input 
+                type="number" 
+                value={racer.lane || ''} 
+                onChange={(e) => updateRacer(idx, 'lane', parseInt(e.target.value) || 0)}
+                className="w-full px-2 py-1 border rounded bg-white font-black text-lg"
+              />
             </div>
 
             <div className="col-span-3">
-              <span className="text-xs font-bold text-gray-400">ATHLETE</span>
+              <span className="text-xs font-bold text-gray-400">NAME</span>
               <input 
                 type="text" 
-                value={lane.name || ''} 
-                onChange={(e) => updateLane(idx, 'name', e.target.value)}
+                value={racer.name || ''} 
+                onChange={(e) => updateRacer(idx, 'name', e.target.value)}
                 className="w-full px-2 py-1 border rounded bg-white font-semibold"
                 placeholder="Name"
               />
             </div>
 
             <div className="col-span-2">
+              <span className="text-xs font-bold text-gray-400">NAT (Country)</span>
+              <input 
+                type="text" 
+                value={racer.country || ''} 
+                onChange={(e) => updateRacer(idx, 'country', e.target.value)}
+                className="w-full px-2 py-1 border rounded bg-white font-semibold uppercase"
+                placeholder="e.g. USA"
+                maxLength={3}
+              />
+            </div>
+            <div className="col-span-2">
               <span className="text-xs font-bold text-gray-400">TIME</span>
               <input 
                 type="text" 
-                value={lane.splitTime || ''} 
-                onChange={(e) => updateLane(idx, 'splitTime', e.target.value)}
+                value={racer.splitTime || ''} 
+                onChange={(e) => updateRacer(idx, 'splitTime', e.target.value)}
                 className="w-full px-2 py-1 border rounded bg-white font-black tabular-nums"
                 placeholder="00.00s"
               />
             </div>
 
             <div className="col-span-2">
-              <span className="text-xs font-bold text-gray-400">RANK</span>
+              <span className="text-xs font-bold text-gray-400">POSITION</span>
               <input 
                 type="number" 
-                value={lane.rank || ''} 
-                onChange={(e) => updateLane(idx, 'rank', parseInt(e.target.value) || 0)}
+                value={racer.position || ''} 
+                onChange={(e) => updateRacer(idx, 'position', parseInt(e.target.value) || 0)}
                 className="w-full px-2 py-1 border rounded bg-white font-black tabular-nums text-cyan-600"
               />
             </div>
 
-            <div className="col-span-3">
-              <span className="text-xs font-bold text-gray-400">STATUS</span>
-              <select 
-                value={lane.status || 'RACING'} 
-                onChange={(e) => updateLane(idx, 'status', e.target.value)}
-                className="w-full px-2 py-1 border rounded bg-white font-bold text-sm"
+            <div className="col-span-2 flex items-end">
+              <button 
+                onClick={() => removeRacer(idx)}
+                className="w-full py-1.5 border border-rose-200 text-rose-500 rounded bg-white font-bold text-sm hover:bg-rose-50 transition-colors"
               >
-                <option value="RACING">RACING</option>
-                <option value="FINISHED">FINISHED</option>
-                <option value="DNF">DNF</option>
-                <option value="DSQ">DSQ</option>
-              </select>
+                Remove
+              </button>
             </div>
 
           </div>
         ))}
 
-        {lanes.length === 0 && (
-          <button 
-            onClick={() => {
-              const newData = { ...data };
-              newData.lanes = Array.from({length: 8}).map((_, i) => ({ lane: i+1, name: '', team: '', splitTime: '', gapToLeader: '', rank: 0, status: 'RACING' }));
-              setData(newData);
-            }}
-            className="py-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 font-bold hover:bg-gray-50 hover:border-gray-400"
-          >
-            + Generate 8 Lanes
-          </button>
-        )}
+        <button 
+          onClick={() => {
+            const newData = { ...data };
+            if (!newData.racers) newData.racers = [];
+            const nextLane = newData.racers.length + 1;
+            newData.racers.push({ lane: nextLane, name: '', country: '', splitTime: '', position: nextLane });
+            setData(newData);
+          }}
+          className="py-4 border-2 border-dashed border-[#554093]/30 rounded-xl text-[#554093] font-bold hover:bg-[#554093]/5 transition-colors"
+        >
+          + Add Racer
+        </button>
       </div>
 
     </div>
