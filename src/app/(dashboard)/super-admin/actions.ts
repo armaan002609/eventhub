@@ -175,3 +175,51 @@ export async function deleteCommittee(id: string) {
   revalidatePath('/super-admin');
   revalidatePath('/committees');
 }
+
+export async function updateHackathon(id: string, formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+
+  const requester = await prisma.user.findUnique({ where: { id: user.id } });
+  if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
+
+  const title = formData.get("title") as string;
+  const organizer = formData.get("organizer") as string;
+  const location = formData.get("location") as string;
+  const themesStr = formData.get("themes") as string;
+  const prizeText = formData.get("prizeText") as string;
+  const startsAtStr = formData.get("startsAt") as string;
+  const endsAtStr = formData.get("endsAt") as string;
+  const eventType = formData.get("eventType") as string || "Event";
+
+  if (!title || !organizer || !location || !startsAtStr || !endsAtStr) {
+    throw new Error("Missing required fields");
+  }
+
+  const themes = themesStr.split(',').map(t => t.trim()).filter(Boolean);
+
+  let imagePath = undefined;
+  const imageFile = formData.get('image') as File | null;
+  if (imageFile && imageFile.size > 0) {
+    imagePath = await uploadHackathonImage(imageFile);
+  }
+
+  await prisma.hackathon.update({
+    where: { id },
+    data: {
+      title,
+      organizer,
+      location,
+      themes,
+      prizeText: prizeText || null,
+      startsAt: new Date(startsAtStr),
+      endsAt: new Date(endsAtStr),
+      eventType,
+      ...(imagePath ? { imagePath } : {}),
+    }
+  });
+
+  revalidatePath('/');
+  revalidatePath('/super-admin');
+}
