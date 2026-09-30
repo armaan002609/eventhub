@@ -15,6 +15,8 @@ type Hackathon = {
   endsAt: Date;
   participants: number;
   isPublished: boolean;
+  imagePath?: string | null;
+  eventType: string;
 };
 
 type Committee = {
@@ -70,6 +72,15 @@ export default function HackathonManagement({ hackathons, committees = [] }: { h
             <div>
               <label className="block text-[13px] font-bold text-[#554093] mb-1">Event Title</label>
               <input name="title" required placeholder="e.g. Global AI Hackathon '26" className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093]" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-bold text-[#554093] mb-1">Event Type</label>
+              <select name="eventType" required className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white">
+                <option value="Event">Event</option>
+                <option value="Hackathon">Hackathon</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Conference">Conference</option>
+              </select>
             </div>
             <div>
               <label className="block text-[13px] font-bold text-[#554093] mb-1">Organizer</label>

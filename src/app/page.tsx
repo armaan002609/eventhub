@@ -137,6 +137,9 @@ export default async function Home() {
                     <div className="absolute top-4 left-4 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-wider border border-white/20">
                       {badgeText}
                     </div>
+                    <div className="absolute top-4 right-4 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-wider border border-white/20">
+                      {hackathon.eventType}
+                    </div>
                   </div>
                   
                   {/* Logo (Overlapping) */}

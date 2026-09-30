@@ -62,6 +62,7 @@ export async function createHackathon(formData: FormData) {
   const prizeText = formData.get("prizeText") as string;
   const startsAtStr = formData.get("startsAt") as string;
   const endsAtStr = formData.get("endsAt") as string;
+  const eventType = formData.get("eventType") as string || "Event";
 
   if (!title || !organizer || !location || !startsAtStr || !endsAtStr) {
     throw new Error("Missing required fields");
@@ -88,6 +89,7 @@ export async function createHackathon(formData: FormData) {
       isPublished: true,
       participants: 0,
       imagePath,
+      eventType,
     }
   });
 
