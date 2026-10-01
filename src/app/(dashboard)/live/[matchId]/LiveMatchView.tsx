@@ -67,7 +67,7 @@ export default function LiveMatchView({ matchId, sport, initialData, status, hid
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {/* Connection Status Indicator */}
       {!hideSyncStatus && (
         <div className="flex justify-end items-center gap-2">
