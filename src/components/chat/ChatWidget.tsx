@@ -30,7 +30,10 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
     if (showLoading) setIsRefreshing(true);
     try {
       const msgs = await getMessages(selectedContact.id);
-      setMessages(msgs);
+      setMessages(prev => {
+        const optimistic = prev.filter(m => m.id.startsWith('temp-'));
+        return [...msgs, ...optimistic];
+      });
       markAsRead(selectedContact.id);
       setUnreadCounts(prev => ({ ...prev, [selectedContact.id]: 0 }));
     } finally {
