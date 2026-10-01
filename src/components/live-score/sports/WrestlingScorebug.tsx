@@ -22,54 +22,84 @@ export default function WrestlingScorebug({ data, status }: { data: Partial<Wres
   };
 
   return (
-    <div className="w-full max-w-[800px] flex flex-col items-center mt-8 drop-shadow-2xl font-sans mx-auto">
+    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans">
+      {/* Background Image (Placeholder) */}
+      <img 
+        src="https://images.unsplash.com/photo-1544211145-8c017ef65427?auto=format&fit=crop&q=80&w=1600" 
+        alt="Wrestling Background" 
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
       
-      {/* Top Banner (Weight & Period) */}
-      <div className="bg-[#1A1A24] text-white/80 border-t border-l border-r border-white/10 rounded-t-2xl px-6 py-1.5 flex items-center justify-between w-[300px] relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
-        <span className="text-[10px] font-black uppercase tracking-widest">{d.weightClass}</span>
-        <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">{d.period}</span>
+      {/* Dark Gradient Overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+
+      {/* Match Status Badge (Top Right) */}
+      <div className="absolute top-6 right-6 z-10">
+        {status === 'LIVE' ? (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest flex items-center gap-2 bg-rose-600 text-white shadow-lg shadow-rose-600/30">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            LIVE
+          </div>
+        ) : (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
+            {status}
+          </div>
+        )}
       </div>
 
-      {/* Main Score Bar */}
-      <div className="flex bg-[#0A0B10]/95 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)] w-full">
+      {/* Match Information (Top Left) */}
+      <div className="absolute top-6 left-6 md:left-12 flex items-center gap-3 z-10">
+         <span className="bg-amber-500 text-black px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest">
+           {d.weightClass}
+         </span>
+         <span className="bg-black/50 backdrop-blur-md border border-white/10 text-white px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest">
+           {d.period}
+         </span>
+      </div>
+
+      {/* Score Information (Bottom Aligned) */}
+      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col items-center gap-4 z-10">
         
-        {/* Red Corner */}
-        <div className="flex-1 flex justify-between bg-gradient-to-r from-red-700 to-red-900 border-r border-black">
-          <div className="flex items-center pl-6">
-            <span className="text-3xl font-black text-white italic tracking-tighter drop-shadow-md">{d.redName}</span>
-          </div>
-          <div className="w-24 bg-red-950 flex items-center justify-center relative shadow-inner">
-            <span className="text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-lg">{d.redScore}</span>
-          </div>
+        {/* Timer */}
+        <div className="text-3xl md:text-5xl font-black text-amber-400 tabular-nums tracking-tighter drop-shadow-lg mb-2">
+          {d.periodTimer}
         </div>
 
-        {/* Center Clock */}
-        <div className="w-32 bg-[#15161E] flex items-center justify-center relative">
-          <div className="absolute inset-x-0 top-0 h-[1px] bg-white/20"></div>
-          <span className="text-4xl font-black text-amber-400 tabular-nums tracking-tighter drop-shadow-[0_0_12px_rgba(251,191,36,0.4)]">{d.periodTimer}</span>
-        </div>
-
-        {/* Blue Corner */}
-        <div className="flex-1 flex justify-between bg-gradient-to-l from-blue-700 to-blue-900 border-l border-black">
-          <div className="w-24 bg-blue-950 flex items-center justify-center relative shadow-inner">
-            <span className="text-5xl font-black text-white tabular-nums tracking-tighter drop-shadow-lg">{d.blueScore}</span>
+        {/* Scores */}
+        <div className="flex items-end justify-between w-full">
+          {/* Red Corner */}
+          <div className="flex flex-col items-start w-[40%]">
+             <div className="w-full flex items-center gap-4">
+               <span className="text-5xl md:text-7xl font-black text-white tabular-nums drop-shadow-xl bg-red-600 px-4 rounded-xl">{d.redScore}</span>
+               <span className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md truncate max-w-full">
+                 {d.redName}
+               </span>
+             </div>
           </div>
-          <div className="flex items-center pr-6">
-            <span className="text-3xl font-black text-white italic tracking-tighter drop-shadow-md">{d.blueName}</span>
+          
+          <span className="text-3xl font-black text-white/40 mb-2">VS</span>
+
+          {/* Blue Corner */}
+          <div className="flex flex-col items-end w-[40%]">
+             <div className="w-full flex items-center justify-end gap-4">
+               <span className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md truncate max-w-full text-right">
+                 {d.blueName}
+               </span>
+               <span className="text-5xl md:text-7xl font-black text-white tabular-nums drop-shadow-xl bg-blue-600 px-4 rounded-xl">{d.blueScore}</span>
+             </div>
           </div>
         </div>
 
       </div>
-      
-      {/* Status */}
-      {status === 'LIVE' && (
-        <div className="mt-3 flex items-center gap-2 bg-rose-500/20 border border-rose-500/30 px-3 py-1 rounded-full">
-          <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
-          <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">LIVE</span>
-        </div>
-      )}
-      
+
+      {/* Carousel Dots */}
+      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+      </div>
     </div>
   );
 }
