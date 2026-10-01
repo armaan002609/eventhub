@@ -68,7 +68,10 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
           } else if (newMsg.senderId === currentUser.id) {
             // Outgoing message (e.g. from another tab)
             if (selectedContact?.id === newMsg.receiverId) {
-              setMessages(prev => [...prev, newMsg]);
+              setMessages(prev => {
+                if (prev.some(m => m.id === newMsg.id)) return prev;
+                return [...prev, newMsg];
+              });
             }
           }
         }
@@ -87,12 +90,33 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
     const content = inputText.trim();
     setInputText('');
     
-    // Optimistic UI update could go here, but server action is fast enough usually
+    // Optimistic UI update
+    const tempId = `temp-${Date.now()}`;
+    const tempMsg: Message = {
+      id: tempId,
+      content,
+      createdAt: new Date(),
+      senderId: currentUser.id,
+      receiverId: selectedContact.id,
+      read: false
+    };
+    
+    setMessages(prev => [...prev, tempMsg]);
+    
     try {
-      const msg = await sendMessage(selectedContact.id, content);
-      setMessages(prev => [...prev, msg as unknown as Message]);
+      const msg = (await sendMessage(selectedContact.id, content)) as unknown as Message;
+      setMessages(prev => {
+        // If realtime beat us and already inserted the real message
+        if (prev.some(m => m.id === msg.id)) {
+          return prev.filter(m => m.id !== tempId);
+        }
+        // Otherwise replace the optimistic message with the real one
+        return prev.map(m => m.id === tempId ? msg : m);
+      });
     } catch (err) {
       console.error("Failed to send", err);
+      // Remove optimistic message on failure
+      setMessages(prev => prev.filter(m => m.id !== tempId));
     }
   };
 
