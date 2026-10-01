@@ -153,7 +153,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-[350px] h-[500px] bg-white rounded-3xl shadow-[0_8px_40px_rgba(85,64,147,0.12)] border border-[#554093]/10 z-50 flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="bg-[#554093] text-white p-4 flex items-center justify-between shadow-md z-10">
+          <div className="bg-[#554093] text-white p-4 flex items-center justify-between shadow-md z-10 shrink-0">
             {selectedContact ? (
               <div className="flex items-center gap-3">
                 <button onClick={() => setSelectedContact(null)} className="hover:bg-white/10 p-1 rounded-lg transition-colors">
@@ -189,7 +189,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
 
           {!selectedContact ? (
             /* Contact List */
-            <div className="flex-1 overflow-y-auto bg-[#FDFBF7] p-2 space-y-1">
+            <div className="flex-1 min-h-0 overflow-y-auto bg-[#FDFBF7] p-2 space-y-1">
               {contacts.map(c => (
                 <button 
                   key={c.id} 
@@ -215,8 +215,8 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
             </div>
           ) : (
             /* Chat Interface */
-            <div className="flex-1 flex flex-col bg-[#FDFBF7]">
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col custom-scrollbar">
+            <div className="flex-1 min-h-0 flex flex-col bg-[#FDFBF7]">
+              <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3 flex flex-col custom-scrollbar">
                 {messages.map((m, i) => {
                   const isMe = m.senderId === currentUser.id;
                   return (
@@ -229,7 +229,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
                 })}
                 <div ref={messagesEndRef} />
               </div>
-              <form onSubmit={handleSend} className="p-3 bg-white border-t border-[#554093]/10 flex gap-2 items-center">
+              <form onSubmit={handleSend} className="p-3 bg-white border-t border-[#554093]/10 flex gap-2 items-center shrink-0">
                 <input 
                   type="text" 
                   value={inputText}
