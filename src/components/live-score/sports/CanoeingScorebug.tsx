@@ -17,12 +17,7 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
   const sortedRacers = [...d.racers].sort((a, b) => a.position - b.position);
 
   return (
-    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-[#1E1536] to-[#0A0710]">
-      {/* Background Image (Placeholder for canoeing/rowing) */}
-      
-      {/* Dark Gradient Overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent"></div>
-
+    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-[#130E24] p-6 md:p-10 border border-white/5 pb-16">
       {/* Match Status Badge (Top Right) */}
       <div className="absolute top-6 right-6 z-10">
         {status === 'LIVE' ? (
@@ -37,8 +32,8 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
         )}
       </div>
 
-      {/* Race Information & Leaderboard (Bottom Aligned) */}
-      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col items-start gap-4 z-10">
+      {/* Race Information & Leaderboard */}
+      <div className="w-full flex flex-col items-start gap-4 pr-24">
         <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight drop-shadow-md">
           {d.eventName}
         </h2>

@@ -22,12 +22,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
   };
 
   return (
-    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-[#1E1536] to-[#0A0710]">
-      {/* Background Image (Placeholder) */}
-      
-      {/* Dark Gradient Overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
-
+    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-[#130E24] p-6 md:p-10 border border-white/5 pb-16">
       {/* Match Status Badge (Top Right) */}
       <div className="absolute top-6 right-6 z-10">
         {status === 'LIVE' ? (
@@ -43,7 +38,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
       </div>
 
       {/* Match Information (Top Left) */}
-      <div className="absolute top-6 left-6 md:left-12 flex items-center gap-3 z-10">
+      <div className="flex items-center gap-3 z-10 mb-6">
          <span className="bg-amber-500 text-black px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest">
            {d.weightClass}
          </span>
@@ -52,8 +47,8 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
          </span>
       </div>
 
-      {/* Score Information (Bottom Aligned) */}
-      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col items-center gap-4 z-10">
+      {/* Score Information */}
+      <div className="w-full flex flex-col items-center gap-4 z-10">
         
         {/* Timer */}
         <div className="text-3xl md:text-5xl font-black text-amber-400 tabular-nums tracking-tighter drop-shadow-lg mb-2">
