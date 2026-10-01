@@ -70,35 +70,55 @@ export default async function Home() {
         )}
 
         {/* Hero Section */}
-        <section className="max-w-[1000px] mb-16">
-          <h1 className="text-6xl sm:text-7xl md:text-[88px] font-normal tracking-tight leading-[1.05] mb-6">
-            You told everyone to host amazing events. <br/>
-            Now give them a secure place to do it.
+        <section className="relative pt-16 md:pt-24 pb-20 md:pb-32 flex flex-col items-center text-center overflow-hidden mb-16 rounded-3xl">
+          
+          {/* Background Glows */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-[#554093]/15 to-transparent rounded-full blur-3xl -z-10"></div>
+
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#554093]/10 text-[#554093] text-[13px] font-bold mb-8 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            THE NEW STANDARD FOR HACKATHONS
+          </div>
+
+          {/* Main Title */}
+          <h1 className="text-5xl sm:text-6xl md:text-[84px] font-bold tracking-tight leading-[1.05] mb-8 max-w-[1000px] animate-in fade-in slide-in-from-bottom-6 duration-700 delay-150">
+            You told everyone to host amazing events.<br className="hidden md:block"/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#554093] to-rose-500">
+              Now give them a secure place to do it.
+            </span>
           </h1>
           
-          <p className="text-xl md:text-[26px] font-light mb-12 leading-relaxed max-w-4xl text-[#554093]/90">
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl md:text-[22px] font-medium mb-12 leading-relaxed max-w-3xl text-[#554093]/70 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
             EventHub lets every team build. Organizers and Coordinators maintain complete visibility, governance, and control.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center gap-4">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
             {user ? (
               <Link
                 href={dashboardPath}
-                className="w-full sm:w-auto bg-[#554093] text-white rounded-full px-8 py-3.5 text-[12px] font-bold uppercase tracking-widest hover:bg-[#433275] transition-colors text-center"
+                className="group relative w-full sm:w-auto bg-[#554093] text-white rounded-full px-10 py-4 text-[14px] font-bold uppercase tracking-widest hover:bg-[#433275] transition-all shadow-xl shadow-[#554093]/20 hover:shadow-2xl hover:shadow-[#554093]/40 hover:-translate-y-1 flex items-center justify-center gap-3"
               >
                 Go to Dashboard
+                <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
               </Link>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="w-full sm:w-auto bg-[#554093] text-white rounded-full px-8 py-3.5 text-[12px] font-bold uppercase tracking-widest hover:bg-[#433275] transition-colors text-center"
+                  className="group relative w-full sm:w-auto bg-[#554093] text-white rounded-full px-10 py-4 text-[14px] font-bold uppercase tracking-widest hover:bg-[#433275] transition-all shadow-xl shadow-[#554093]/20 hover:shadow-2xl hover:shadow-[#554093]/40 hover:-translate-y-1 flex items-center justify-center gap-3"
                 >
                   GET STARTED
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
                 </Link>
                 <Link
                   href="/register"
-                  className="w-full sm:w-auto bg-transparent border border-[#554093]/30 text-[#554093] rounded-full px-8 py-3.5 text-[12px] font-bold uppercase tracking-widest hover:bg-[#554093]/5 transition-colors text-center"
+                  className="w-full sm:w-auto bg-white border-2 border-[#554093]/10 text-[#554093] rounded-full px-10 py-4 text-[14px] font-bold uppercase tracking-widest hover:border-[#554093]/30 hover:bg-[#554093]/5 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 text-center"
                 >
                   SIGN UP FREE
                 </Link>
