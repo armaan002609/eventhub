@@ -119,7 +119,7 @@ export default async function DashboardLayout({
         {/* Main Content */}
         <main className="flex-1 flex flex-col min-w-0 bg-[#FDFBF7] h-full rounded-3xl overflow-hidden relative">
           {/* Header */}
-          <header className="px-4 sm:px-8 py-5 flex items-center justify-between sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-10 border-b border-[#554093]/5">
+          <header className="px-4 sm:px-8 py-5 flex items-center justify-between sticky top-0 bg-[#FDFBF7]/90 backdrop-blur-md z-40 border-b border-[#554093]/5">
             <div className="flex items-center gap-4">
               <MobileNav role={role} />
               

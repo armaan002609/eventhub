@@ -17,7 +17,7 @@ export default function MobileNav({ role }: { role: string }) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+        <div className="fixed inset-0 z-[100] flex lg:hidden">
           <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
           
           <div className="relative w-[280px] h-full bg-white flex flex-col justify-between shadow-2xl p-6 overflow-y-auto">
