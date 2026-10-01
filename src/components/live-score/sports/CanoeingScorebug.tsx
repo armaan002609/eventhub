@@ -17,13 +17,8 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
   const sortedRacers = [...d.racers].sort((a, b) => a.position - b.position);
 
   return (
-    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans">
+    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-[#1E1536] to-[#0A0710]">
       {/* Background Image (Placeholder for canoeing/rowing) */}
-      <img 
-        src="https://images.unsplash.com/photo-1541846434444-245f7bd0076a?auto=format&fit=crop&q=80&w=1600" 
-        alt="Race Background" 
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
       
       {/* Dark Gradient Overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent"></div>
