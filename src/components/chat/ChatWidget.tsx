@@ -26,6 +26,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
   // Load messages when contact selected
   useEffect(() => {
     if (selectedContact) {
+      setMessages([]); // instantly clear previous messages while loading
       getMessages(selectedContact.id).then(msgs => {
         setMessages(msgs);
         markAsRead(selectedContact.id);
@@ -36,7 +37,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
 
   // Scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
   }, [messages, isOpen]);
 
   // Listen for new messages
