@@ -101,7 +101,6 @@ export default function MobileNav({ role }: { role: string }) {
               </form>
             </nav>
 
-          </div>
         </div>
     </div>
   );
