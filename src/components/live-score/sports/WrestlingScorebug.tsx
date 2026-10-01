@@ -56,26 +56,26 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
         </div>
 
         {/* Scores */}
-        <div className="flex items-end justify-between w-full">
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-between w-full gap-4 md:gap-0 mt-4 md:mt-0">
           {/* Red Corner */}
-          <div className="flex flex-col items-start w-[40%]">
-             <div className="w-full flex items-center gap-4">
-               <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums  bg-red-600 px-4 rounded-xl">{d.redScore}</span>
-               <span className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight  truncate max-w-full">
+          <div className="flex flex-col items-start w-full md:w-[40%]">
+             <div className="w-full flex items-center justify-between md:justify-start gap-4">
+               <span className="text-4xl md:text-7xl font-black text-white tabular-nums bg-red-600 px-3 md:px-4 py-1 rounded-xl order-2 md:order-1">{d.redScore}</span>
+               <span className="text-2xl sm:text-3xl md:text-5xl font-black text-gray-900 tracking-tight truncate max-w-full order-1 md:order-2">
                  {d.redName}
                </span>
              </div>
           </div>
           
-          <span className="text-3xl font-black text-gray-400 mb-2">VS</span>
+          <span className="text-xl md:text-3xl font-black text-gray-400 mb-0 md:mb-2 py-2 md:py-0">VS</span>
 
           {/* Blue Corner */}
-          <div className="flex flex-col items-end w-[40%]">
-             <div className="w-full flex items-center justify-end gap-4">
-               <span className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight  truncate max-w-full text-right">
+          <div className="flex flex-col items-end w-full md:w-[40%]">
+             <div className="w-full flex items-center justify-between md:justify-end gap-4">
+               <span className="text-2xl sm:text-3xl md:text-5xl font-black text-gray-900 tracking-tight truncate max-w-full text-left md:text-right">
                  {d.blueName}
                </span>
-               <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums  bg-blue-600 px-4 rounded-xl">{d.blueScore}</span>
+               <span className="text-4xl md:text-7xl font-black text-white tabular-nums bg-blue-600 px-3 md:px-4 py-1 rounded-xl">{d.blueScore}</span>
              </div>
           </div>
         </div>
