@@ -171,7 +171,7 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
                     <p className="text-[10px] text-white/70 uppercase tracking-widest">{selectedContact.role.replace('_', ' ')}</p>
                   </div>
                   <button 
-                    onClick={refreshChat} 
+                    onClick={() => refreshChat(true)} 
                     disabled={isRefreshing}
                     className="ml-2 hover:bg-white/10 p-1.5 rounded-full transition-colors disabled:opacity-50"
                     title="Refresh Chat"
