@@ -20,71 +20,102 @@ export default function BadmintonScorebug({ data, status }: { data: Partial<Badm
   };
 
   return (
-    <div className="w-full max-w-[500px] flex flex-col font-sans drop-shadow-2xl mx-auto my-auto border border-white/10 rounded-2xl overflow-hidden bg-[#0A0B10]/95 backdrop-blur-md shadow-black/60 shadow-2xl">
+    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans">
+      {/* Background Image (Placeholder) */}
+      <img 
+        src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&q=80&w=1600" 
+        alt="Badminton Background" 
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
       
-      {/* Header */}
-      <div className="bg-[#1A1A24] h-8 flex items-center justify-between px-4 border-b border-white/5 relative">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
-        <div className="flex items-center gap-2">
-          <span className={`w-1.5 h-1.5 rounded-full ${status === 'LIVE' ? 'bg-rose-500 animate-pulse' : 'bg-gray-500'}`}></span>
-          <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{status === 'LIVE' ? 'BWF LIVE' : status}</span>
+      {/* Dark Gradient Overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent"></div>
+
+      {/* Match Status Badge (Top Right) */}
+      <div className="absolute top-6 right-6 z-10 flex gap-2">
+        <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-emerald-400 border border-white/10">
+          {d.statusLine}
         </div>
-        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{d.statusLine}</span>
+        {status === 'LIVE' ? (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest flex items-center gap-2 bg-rose-600 text-white shadow-lg shadow-rose-600/30">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+            LIVE
+          </div>
+        ) : (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
+            {status}
+          </div>
+        )}
       </div>
 
-      {/* Main Table */}
-      <div className="flex flex-col">
-        {/* TEAM 1 */}
-        <div className="flex items-center bg-[#15161E] border-b border-white/5">
-          {/* Serving Dot */}
-          <div className="w-8 flex justify-center">
-            {d.team1.isServing && <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>}
-          </div>
-          
-          <div className="flex-1 py-3 text-lg font-black text-white uppercase tracking-tighter truncate">
-            {d.team1.name}
-          </div>
+      {/* Score Information (Bottom Aligned) */}
+      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col items-center gap-6 z-10">
+        
+        {/* Main Score Table */}
+        <div className="w-full max-w-3xl bg-black/50 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10">
+           {/* Header */}
+           <div className="flex bg-white/5 border-b border-white/10 py-2 px-6">
+              <div className="flex-1 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest">Team</div>
+              <div className="w-[120px] md:w-[150px] flex justify-end gap-6 text-[10px] md:text-xs font-bold text-white/50 uppercase tracking-widest pr-4">
+                 <span>Sets</span>
+              </div>
+           </div>
 
-          <div className="w-[100px] flex items-center justify-end px-4 gap-4">
-            {/* Previous Sets */}
-            {d.scoresTeam1.map((score, i) => {
-              if (i >= d.currentSet) return null;
-              const isCurrent = i === d.currentSet - 1;
-              return (
-                <span key={i} className={`text-2xl font-black tabular-nums tracking-tighter ${isCurrent ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]' : 'text-white/40'}`}>
-                  {score}
-                </span>
-              );
-            })}
-          </div>
+           <div className="flex flex-col">
+              {/* TEAM 1 */}
+              <div className="flex items-center py-4 px-6 border-b border-white/5 hover:bg-white/5 transition-colors">
+                <div className="w-6 flex justify-start">
+                  {d.team1.isServing && <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>}
+                </div>
+                <div className="flex-1 text-xl md:text-3xl font-black text-white uppercase tracking-tighter truncate">
+                  {d.team1.name}
+                </div>
+                <div className="w-[120px] md:w-[150px] flex items-center justify-end gap-4 md:gap-8 pr-4">
+                  {d.scoresTeam1.map((score, i) => {
+                    if (i >= d.currentSet) return null;
+                    const isCurrent = i === d.currentSet - 1;
+                    return (
+                      <span key={i} className={`text-2xl md:text-4xl font-black tabular-nums tracking-tighter ${isCurrent ? 'text-emerald-400 drop-shadow-md' : 'text-white/40'}`}>
+                        {score}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* TEAM 2 */}
+              <div className="flex items-center py-4 px-6 hover:bg-white/5 transition-colors">
+                <div className="w-6 flex justify-start">
+                  {d.team2.isServing && <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>}
+                </div>
+                <div className="flex-1 text-xl md:text-3xl font-black text-white uppercase tracking-tighter truncate">
+                  {d.team2.name}
+                </div>
+                <div className="w-[120px] md:w-[150px] flex items-center justify-end gap-4 md:gap-8 pr-4">
+                  {d.scoresTeam2.map((score, i) => {
+                    if (i >= d.currentSet) return null;
+                    const isCurrent = i === d.currentSet - 1;
+                    return (
+                      <span key={i} className={`text-2xl md:text-4xl font-black tabular-nums tracking-tighter ${isCurrent ? 'text-emerald-400 drop-shadow-md' : 'text-white/40'}`}>
+                        {score}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+           </div>
         </div>
 
-        {/* TEAM 2 */}
-        <div className="flex items-center bg-[#0A0B10]">
-          {/* Serving Dot */}
-          <div className="w-8 flex justify-center">
-            {d.team2.isServing && <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>}
-          </div>
-          
-          <div className="flex-1 py-3 text-lg font-black text-white uppercase tracking-tighter truncate">
-            {d.team2.name}
-          </div>
-
-          <div className="w-[100px] flex items-center justify-end px-4 gap-4">
-            {/* Previous Sets */}
-            {d.scoresTeam2.map((score, i) => {
-              if (i >= d.currentSet) return null;
-              const isCurrent = i === d.currentSet - 1;
-              return (
-                <span key={i} className={`text-2xl font-black tabular-nums tracking-tighter ${isCurrent ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]' : 'text-white/40'}`}>
-                  {score}
-                </span>
-              );
-            })}
-          </div>
-        </div>
       </div>
 
+      {/* Carousel Dots */}
+      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+      </div>
     </div>
   );
 }
