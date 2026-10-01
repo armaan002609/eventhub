@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/server';
 import { prisma } from '@/lib/db';
+import MobileMenu from './MobileMenu';
 
 export default async function Navbar() {
   const supabase = await createClient();
@@ -23,7 +24,7 @@ export default async function Navbar() {
   }
 
   return (
-    <header className="flex justify-between items-center py-5 px-8 max-w-[1400px] mx-auto w-full">
+    <header className="flex justify-between items-center py-5 px-6 md:px-8 max-w-[1400px] mx-auto w-full">
       <div className="flex items-center gap-12">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
@@ -35,8 +36,8 @@ export default async function Navbar() {
           <span className="font-bold text-2xl tracking-tight">eventhub</span>
         </Link>
         
-        {/* Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 text-[15px] font-medium text-[#554093]">
+        {/* Desktop Nav Links */}
+        <nav className="hidden lg:flex items-center gap-6 text-[15px] font-medium text-[#554093]">
           <Link href="/events" className="hover:opacity-70 transition-opacity">Events</Link>
           <Link href="/hackathon" className="hover:opacity-70 transition-opacity">Hackathon</Link>
           <Link href="/leaderboard" className="hover:opacity-70 transition-opacity">Leaderboard</Link>
@@ -56,7 +57,7 @@ export default async function Navbar() {
         </nav>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="hidden lg:flex items-center gap-6">
         {user ? (
           <>
             <Link href={dashboardPath} className="flex items-center gap-2 font-medium text-[15px] hover:opacity-70 transition-opacity bg-[#554093]/10 px-4 py-2 rounded-full">
@@ -74,6 +75,10 @@ export default async function Navbar() {
             </div>
           </>
         )}
+      </div>
+
+      <div className="lg:hidden flex items-center">
+        <MobileMenu userEmail={user?.email} dashboardPath={dashboardPath} />
       </div>
     </header>
   );
