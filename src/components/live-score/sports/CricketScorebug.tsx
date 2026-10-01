@@ -35,12 +35,7 @@ export default function CricketScorebug({ data, status, showCarouselDots = true 
   };
 
   return (
-    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-[#1E1536] to-[#0A0710]">
-      {/* Background Image (Placeholder) */}
-      
-      {/* Dark Gradient Overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent"></div>
-
+    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-[#130E24] p-6 md:p-10 border border-white/5 pb-16">
       {/* Match Status Badge (Top Right) */}
       <div className="absolute top-6 right-6 z-10 flex gap-2">
         <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-amber-400 border border-white/10">
@@ -58,8 +53,8 @@ export default function CricketScorebug({ data, status, showCarouselDots = true 
         )}
       </div>
 
-      {/* Score Information (Bottom Aligned) */}
-      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col gap-6 z-10">
+      {/* Score Information */}
+      <div className="w-full flex flex-col gap-6 z-10 mt-8 md:mt-0">
         
         {/* Main Score Area */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between w-full gap-4">
