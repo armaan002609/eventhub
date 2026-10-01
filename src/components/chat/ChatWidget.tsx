@@ -18,20 +18,31 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const supabase = createClient();
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   // Load contacts
   useEffect(() => {
     getChatContacts().then(setContacts);
   }, []);
 
+  const refreshChat = async () => {
+    if (!selectedContact) return;
+    setIsRefreshing(true);
+    try {
+      const msgs = await getMessages(selectedContact.id);
+      setMessages(msgs);
+      markAsRead(selectedContact.id);
+      setUnreadCounts(prev => ({ ...prev, [selectedContact.id]: 0 }));
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
   // Load messages when contact selected
   useEffect(() => {
     if (selectedContact) {
       setMessages([]); // instantly clear previous messages while loading
-      getMessages(selectedContact.id).then(msgs => {
-        setMessages(msgs);
-        markAsRead(selectedContact.id);
-        setUnreadCounts(prev => ({ ...prev, [selectedContact.id]: 0 }));
-      });
+      refreshChat();
     }
   }, [selectedContact]);
 
@@ -148,9 +159,21 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
                 <button onClick={() => setSelectedContact(null)} className="hover:bg-white/10 p-1 rounded-lg transition-colors">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 </button>
-                <div>
-                  <h3 className="font-bold text-sm">{selectedContact.name}</h3>
-                  <p className="text-[10px] text-white/70 uppercase tracking-widest">{selectedContact.role.replace('_', ' ')}</p>
+                <div className="flex items-center gap-2">
+                  <div>
+                    <h3 className="font-bold text-sm">{selectedContact.name}</h3>
+                    <p className="text-[10px] text-white/70 uppercase tracking-widest">{selectedContact.role.replace('_', ' ')}</p>
+                  </div>
+                  <button 
+                    onClick={refreshChat} 
+                    disabled={isRefreshing}
+                    className="ml-2 hover:bg-white/10 p-1.5 rounded-full transition-colors disabled:opacity-50"
+                    title="Refresh Chat"
+                  >
+                    <svg className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                  </button>
                 </div>
               </div>
             ) : (
