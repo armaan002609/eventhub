@@ -18,42 +18,6 @@ export default function AboutPage() {
           </p>
         </section>
 
-        {/* Team Section */}
-        <section id="team" className="py-20 px-8 bg-[#FDFBF7] border-t border-b border-[#554093]/10 scroll-mt-20">
-          <div className="max-w-[1200px] mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#554093] tracking-tight mb-4">Meet the Team</h2>
-              <p className="text-[#554093]/70 max-w-xl mx-auto">The people working tirelessly to make your hackathon experience incredible.</p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {/* Team Member 1 */}
-              <div className="bg-white rounded-2xl p-6 border border-[#554093]/10 shadow-sm text-center group hover:shadow-xl hover:shadow-[#554093]/5 transition-all">
-                <div className="w-24 h-24 rounded-full bg-[#554093]/10 mx-auto mb-4 border-2 border-white shadow-sm flex items-center justify-center text-3xl">👨‍💻</div>
-                <h3 className="text-lg font-bold text-[#554093]">Alex Chen</h3>
-                <p className="text-[13px] font-bold tracking-wider uppercase text-[#554093]/50 mt-1 mb-3">Founder & CEO</p>
-                <p className="text-[14px] text-[#554093]/70">Former hackathon addict turned platform builder. Loves shipping fast.</p>
-              </div>
-              
-              {/* Team Member 2 */}
-              <div className="bg-white rounded-2xl p-6 border border-[#554093]/10 shadow-sm text-center group hover:shadow-xl hover:shadow-[#554093]/5 transition-all">
-                <div className="w-24 h-24 rounded-full bg-[#554093]/10 mx-auto mb-4 border-2 border-white shadow-sm flex items-center justify-center text-3xl">👩‍🎨</div>
-                <h3 className="text-lg font-bold text-[#554093]">Sarah Jenkins</h3>
-                <p className="text-[13px] font-bold tracking-wider uppercase text-[#554093]/50 mt-1 mb-3">Head of Design</p>
-                <p className="text-[14px] text-[#554093]/70">Obsessed with pixels, typography, and making complex tools feel simple.</p>
-              </div>
-
-              {/* Team Member 3 */}
-              <div className="bg-white rounded-2xl p-6 border border-[#554093]/10 shadow-sm text-center group hover:shadow-xl hover:shadow-[#554093]/5 transition-all">
-                <div className="w-24 h-24 rounded-full bg-[#554093]/10 mx-auto mb-4 border-2 border-white shadow-sm flex items-center justify-center text-3xl">🚀</div>
-                <h3 className="text-lg font-bold text-[#554093]">Marcus Doe</h3>
-                <p className="text-[13px] font-bold tracking-wider uppercase text-[#554093]/50 mt-1 mb-3">Lead Engineer</p>
-                <p className="text-[14px] text-[#554093]/70">Scales our infrastructure so your live leaderboards never go down.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Contact Section */}
         <section id="contact" className="py-24 px-8 max-w-[1000px] mx-auto scroll-mt-20">
           <div className="flex flex-col md:flex-row gap-12 items-center bg-white p-8 md:p-12 rounded-3xl border border-[#554093]/10 shadow-lg shadow-[#554093]/5">
