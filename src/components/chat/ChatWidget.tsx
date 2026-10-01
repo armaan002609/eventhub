@@ -32,7 +32,11 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
       const msgs = await getMessages(selectedContact.id);
       setMessages(prev => {
         const optimistic = prev.filter(m => m.id.startsWith('temp-'));
-        return [...msgs, ...optimistic];
+        // Prevent duplicate bubbles by filtering out optimistic messages that are already in the DB response
+        const trulyOptimistic = optimistic.filter(opt => {
+          return !msgs.some(dbMsg => dbMsg.senderId === opt.senderId && dbMsg.content === opt.content);
+        });
+        return [...msgs, ...trulyOptimistic];
       });
       markAsRead(selectedContact.id);
       setUnreadCounts(prev => ({ ...prev, [selectedContact.id]: 0 }));
@@ -47,8 +51,15 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
       setMessages([]); // instantly clear previous messages while loading
       refreshChat(true);
 
-      const interval = setInterval(() => {
-        refreshChat(false);
+      let isPolling = false;
+      const interval = setInterval(async () => {
+        if (isPolling) return;
+        isPolling = true;
+        try {
+          await refreshChat(false);
+        } finally {
+          isPolling = false;
+        }
       }, 2000);
 
       return () => clearInterval(interval);
