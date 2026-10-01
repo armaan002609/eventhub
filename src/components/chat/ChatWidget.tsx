@@ -25,31 +25,37 @@ export default function ChatWidget({ currentUser }: { currentUser: { id: string,
     getChatContacts().then(setContacts);
   }, []);
 
-  const refreshChat = async () => {
+  const refreshChat = async (showLoading = true) => {
     if (!selectedContact) return;
-    setIsRefreshing(true);
+    if (showLoading) setIsRefreshing(true);
     try {
       const msgs = await getMessages(selectedContact.id);
       setMessages(msgs);
       markAsRead(selectedContact.id);
       setUnreadCounts(prev => ({ ...prev, [selectedContact.id]: 0 }));
     } finally {
-      setIsRefreshing(false);
+      if (showLoading) setIsRefreshing(false);
     }
   };
 
-  // Load messages when contact selected
+  // Auto-refresh chat every 2 seconds when contact is selected
   useEffect(() => {
     if (selectedContact) {
       setMessages([]); // instantly clear previous messages while loading
-      refreshChat();
+      refreshChat(true);
+
+      const interval = setInterval(() => {
+        refreshChat(false);
+      }, 2000);
+
+      return () => clearInterval(interval);
     }
   }, [selectedContact]);
 
-  // Scroll to bottom
+  // Scroll to bottom only when new messages are added
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'auto' });
-  }, [messages, isOpen]);
+  }, [messages.length, isOpen]);
 
   // Listen for new messages
   useEffect(() => {
