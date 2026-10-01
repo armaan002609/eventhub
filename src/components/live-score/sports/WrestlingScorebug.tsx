@@ -10,7 +10,7 @@ export interface WrestlingScoreData {
   period: string; // e.g. "PERIOD 2"
 }
 
-export default function WrestlingScorebug({ data, status }: { data: Partial<WrestlingScoreData>, status: MatchStatus }) {
+export default function WrestlingScorebug({ data, status, showCarouselDots = true }: { data: Partial<WrestlingScoreData>, status: MatchStatus, showCarouselDots?: boolean }) {
   const d: WrestlingScoreData = {
     redName: data.redName || 'RED CORNER',
     blueName: data.blueName || 'BLUE CORNER',
@@ -93,13 +93,16 @@ export default function WrestlingScorebug({ data, status }: { data: Partial<Wres
       </div>
 
       {/* Carousel Dots */}
-      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-      </div>
+      {showCarouselDots && (
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -6,7 +6,7 @@ export interface CanoeingScoreData {
   racers: { lane: number; name: string; country: string; splitTime: string; position: number }[];
 }
 
-export default function CanoeingScorebug({ data, status }: { data: Partial<CanoeingScoreData>, status: MatchStatus }) {
+export default function CanoeingScorebug({ data, status, showCarouselDots = true }: { data: Partial<CanoeingScoreData>, status: MatchStatus, showCarouselDots?: boolean }) {
   const d: CanoeingScoreData = {
     eventName: data.eventName || "MATCH",
     distanceTotal: data.distanceTotal || 1000,
@@ -83,13 +83,16 @@ export default function CanoeingScorebug({ data, status }: { data: Partial<Canoe
       </div>
 
       {/* Carousel Dots (for visual similarity to reference) */}
-      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-      </div>
+      {showCarouselDots && (
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        </div>
+      )}
     </div>
   );
 }
+
