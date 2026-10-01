@@ -27,13 +27,8 @@ export default function FootballScorebug({ data, status, showCarouselDots = true
   };
 
   return (
-    <div className="relative w-full h-[400px] md:h-[500px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans">
+    <div className="relative w-full h-[400px] md:h-[500px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-[#1E1536] to-[#0A0710]">
       {/* Background Image (Placeholder) */}
-      <img 
-        src="https://images.unsplash.com/photo-1518605368461-1b6323be0710?auto=format&fit=crop&q=80&w=1600" 
-        alt="Match Background" 
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
       
       {/* Dark Gradient Overlay for readability */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
