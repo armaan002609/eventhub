@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/db";
 import MobileNav from "@/components/MobileNav";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 export default async function DashboardLayout({
   children,
@@ -152,6 +153,10 @@ export default async function DashboardLayout({
           </div>
         </main>
       </div>
+
+      {role !== 'PARTICIPANT' && (
+        <ChatWidget currentUser={{ id: user?.id || '', role, name: userName }} />
+      )}
     </div>
   );
 }

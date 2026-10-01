@@ -87,6 +87,8 @@ model User {
   scoresUpdated    ScoreEntry[]
   auditLogs        AuditLog[]
   matchLogs        MatchLog[]
+  messagesSent     ChatMessage[]   @relation("ChatSent")
+  messagesReceived ChatMessage[]   @relation("ChatReceived")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -317,4 +319,19 @@ model MatchLog {
   createdBy   User     @relation(fields: [createdById], references: [id])
   
   createdAt   DateTime @default(now())
+}
+
+model ChatMessage {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  sender     User     @relation("ChatSent", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ChatReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([senderId, receiverId])
+  @@index([createdAt])
 }
