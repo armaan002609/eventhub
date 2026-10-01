@@ -59,15 +59,15 @@ export default function CricketScorebug({ data, status, showCarouselDots = true 
         {/* Main Score Area */}
         <div className="flex flex-col md:flex-row items-start md:items-end justify-between w-full gap-4">
            <div className="flex flex-col">
-              <span className="text-3xl md:text-5xl font-black text-gray-700 uppercase tracking-tight mb-2">
+              <span className="text-2xl sm:text-3xl md:text-5xl font-black text-gray-700 uppercase tracking-tight mb-1 md:mb-2">
                 {d.battingTeam}
               </span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-6xl md:text-8xl font-black text-gray-900 tabular-nums  leading-none">{d.runs}</span>
-                <span className="text-4xl md:text-6xl font-black text-rose-600  leading-none">-{d.wickets}</span>
-                <span className="text-xl md:text-2xl font-bold text-gray-500 ml-2">({d.overs.toFixed(1)})</span>
+              <div className="flex items-baseline gap-1 md:gap-2">
+                <span className="text-5xl sm:text-6xl md:text-8xl font-black text-gray-900 tabular-nums leading-none">{d.runs}</span>
+                <span className="text-3xl sm:text-4xl md:text-6xl font-black text-rose-600 leading-none">-{d.wickets}</span>
+                <span className="text-lg sm:text-xl md:text-2xl font-bold text-gray-500 ml-1 md:ml-2">({d.overs.toFixed(1)})</span>
               </div>
-              <div className="flex gap-4 mt-2 text-sm font-bold uppercase tracking-widest">
+              <div className="flex gap-3 md:gap-4 mt-2 text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-widest">
                  <span className="text-gray-500">CRR: <span className="text-amber-600 ml-1">{d.runRate.toFixed(2)}</span></span>
                  {d.target && (
                    <span className="text-gray-500">Target: <span className="text-gray-900 ml-1">{d.target}</span></span>

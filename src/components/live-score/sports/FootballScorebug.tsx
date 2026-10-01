@@ -56,26 +56,29 @@ export default function FootballScorebug({ data, status, showCarouselDots = true
         </div>
 
         {/* Teams and Scores */}
-        <div className="flex items-end gap-4 md:gap-8 w-full">
-          {/* Home Team */}
-          <div className="flex flex-col items-start w-[35%] md:w-[40%]">
-            <span className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight  truncate w-full">
-              {d.homeTeam}
-            </span>
-          </div>
+        <div className="flex flex-col md:flex-row items-center md:items-end justify-between gap-4 md:gap-8 w-full mt-2 md:mt-0">
+          
+          <div className="flex items-center justify-between w-full">
+            {/* Home Team */}
+            <div className="flex flex-col items-start w-[35%] md:w-[40%]">
+              <span className="text-2xl sm:text-4xl md:text-6xl font-black text-gray-900 tracking-tight truncate w-full">
+                {d.homeTeam}
+              </span>
+            </div>
 
-          {/* Scores */}
-          <div className="flex items-center justify-center gap-3 md:gap-6 w-[30%] md:w-[20%]">
-             <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums ">{d.homeScore}</span>
-             <span className="text-3xl font-black text-gray-400">-</span>
-             <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums ">{d.awayScore}</span>
-          </div>
+            {/* Scores */}
+            <div className="flex items-center justify-center gap-2 sm:gap-4 md:gap-6 w-[30%] md:w-[20%]">
+               <span className="text-4xl sm:text-5xl md:text-7xl font-black text-gray-900 tabular-nums">{d.homeScore}</span>
+               <span className="text-2xl sm:text-3xl font-black text-gray-400">-</span>
+               <span className="text-4xl sm:text-5xl md:text-7xl font-black text-gray-900 tabular-nums">{d.awayScore}</span>
+            </div>
 
-          {/* Away Team */}
-          <div className="flex flex-col items-end w-[35%] md:w-[40%]">
-            <span className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight  truncate w-full text-right">
-              {d.awayTeam}
-            </span>
+            {/* Away Team */}
+            <div className="flex flex-col items-end w-[35%] md:w-[40%]">
+              <span className="text-2xl sm:text-4xl md:text-6xl font-black text-gray-900 tracking-tight truncate w-full text-right">
+                {d.awayTeam}
+              </span>
+            </div>
           </div>
         </div>
       </div>
