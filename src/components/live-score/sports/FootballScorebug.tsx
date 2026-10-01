@@ -15,7 +15,7 @@ export interface FootballScoreData {
   }[];
 }
 
-export default function FootballScorebug({ data, status }: { data: Partial<FootballScoreData>, status: MatchStatus }) {
+export default function FootballScorebug({ data, status, showCarouselDots = true }: { data: Partial<FootballScoreData>, status: MatchStatus, showCarouselDots?: boolean }) {
   const d: FootballScoreData = {
     homeTeam: data.homeTeam || 'HOME',
     awayTeam: data.awayTeam || 'AWAY',
@@ -91,13 +91,16 @@ export default function FootballScorebug({ data, status }: { data: Partial<Footb
       </div>
 
       {/* Carousel Dots (for visual similarity to reference) */}
-      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-      </div>
+      {showCarouselDots && (
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        </div>
+      )}
     </div>
   );
 }
+

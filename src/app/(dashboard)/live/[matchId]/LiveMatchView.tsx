@@ -11,9 +11,10 @@ type Props = {
   initialData: any;
   status: MatchStatus;
   hideSyncStatus?: boolean;
+  showCarouselDots?: boolean;
 };
 
-export default function LiveMatchView({ matchId, sport, initialData, status, hideSyncStatus }: Props) {
+export default function LiveMatchView({ matchId, sport, initialData, status, hideSyncStatus, showCarouselDots }: Props) {
   const [scoreData, setScoreData] = useState<any>(initialData);
   const [matchStatus, setMatchStatus] = useState<MatchStatus>(status);
   const [isConnected, setIsConnected] = useState(false);
@@ -79,7 +80,7 @@ export default function LiveMatchView({ matchId, sport, initialData, status, hid
       )}
 
       {/* Sport-specific Scorebug Component */}
-      <Scorebug data={scoreData} status={matchStatus} />
+      <Scorebug data={scoreData} status={matchStatus} showCarouselDots={showCarouselDots} />
     </div>
   );
 }

@@ -29,6 +29,10 @@ export default async function Home() {
     orderBy: { startsAt: 'asc' }
   });
 
+  const liveMatchCount = await prisma.match.count({
+    where: { status: 'LIVE' }
+  });
+
   const liveMatch = await prisma.match.findFirst({
     where: { status: 'LIVE' },
     orderBy: { updatedAt: 'desc' }
@@ -59,6 +63,7 @@ export default async function Home() {
                 status={liveMatch.status}
                 hideSyncStatus={true}
                 initialData={typeof liveMatch.scoreData === 'object' && liveMatch.scoreData !== null ? liveMatch.scoreData : {}}
+                showCarouselDots={liveMatchCount > 1}
               />
             </div>
           </section>

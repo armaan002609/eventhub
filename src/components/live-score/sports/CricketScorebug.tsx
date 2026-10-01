@@ -16,7 +16,7 @@ export interface CricketScoreData {
   statusLine: string;
 }
 
-export default function CricketScorebug({ data, status }: { data: Partial<CricketScoreData>, status: MatchStatus }) {
+export default function CricketScorebug({ data, status, showCarouselDots = true }: { data: Partial<CricketScoreData>, status: MatchStatus, showCarouselDots?: boolean }) {
   // Safe defaults if data is missing
   const d: CricketScoreData = {
     battingTeam: data.battingTeam || 'TEAM A',
@@ -143,13 +143,16 @@ export default function CricketScorebug({ data, status }: { data: Partial<Cricke
       </div>
 
       {/* Carousel Dots */}
-      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-      </div>
+      {showCarouselDots && (
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        </div>
+      )}
     </div>
   );
 }
+
