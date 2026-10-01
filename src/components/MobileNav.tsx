@@ -1,26 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
 export default function MobileNav({ role }: { role: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  return (
-    <>
-      <button 
-        onClick={() => setIsOpen(true)}
-        className="lg:hidden p-2 -ml-2 text-[#554093] hover:bg-[#554093]/10 rounded-xl"
-      >
-        <Menu size={24} />
-      </button>
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] flex lg:hidden">
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-          
-          <div className="relative w-[280px] h-full bg-white flex flex-col justify-between shadow-2xl p-6 overflow-y-auto">
+  const overlay = (
+    <div className="fixed inset-0 z-[100] flex lg:hidden">
+      <div className="fixed inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
+      
+      <div className="relative w-[280px] h-full bg-white flex flex-col justify-between shadow-2xl p-6 overflow-y-auto">
             <button 
               onClick={() => setIsOpen(false)}
               className="absolute top-6 right-6 p-2 text-[#554093] hover:bg-[#554093]/10 rounded-xl"
@@ -106,7 +103,19 @@ export default function MobileNav({ role }: { role: string }) {
 
           </div>
         </div>
-      )}
+    </div>
+  );
+
+  return (
+    <>
+      <button 
+        onClick={() => setIsOpen(true)}
+        className="lg:hidden p-2 -ml-2 text-[#554093] hover:bg-[#554093]/10 rounded-xl"
+      >
+        <Menu size={24} />
+      </button>
+
+      {isOpen && mounted && createPortal(overlay, document.body)}
     </>
   );
 }
