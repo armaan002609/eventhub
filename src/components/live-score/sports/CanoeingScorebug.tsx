@@ -17,56 +17,79 @@ export default function CanoeingScorebug({ data, status }: { data: Partial<Canoe
   const sortedRacers = [...d.racers].sort((a, b) => a.position - b.position);
 
   return (
-    <div className="w-full max-w-[600px] flex flex-col mt-auto pb-4 font-sans drop-shadow-2xl mx-auto">
+    <div className="relative w-full h-[450px] md:h-[550px] rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans">
+      {/* Background Image (Placeholder for canoeing/rowing) */}
+      <img 
+        src="https://images.unsplash.com/photo-1541846434444-245f7bd0076a?auto=format&fit=crop&q=80&w=1600" 
+        alt="Race Background" 
+        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      />
       
-      <div className="flex items-center gap-3 mb-2 px-2 drop-shadow-md">
-        {status === 'LIVE' && (
-          <div className="bg-rose-600 text-white text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-sm flex items-center gap-1.5 animate-pulse">
-            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+      {/* Dark Gradient Overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent"></div>
+
+      {/* Match Status Badge (Top Right) */}
+      <div className="absolute top-6 right-6 z-10">
+        {status === 'LIVE' ? (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest flex items-center gap-2 bg-rose-600 text-white shadow-lg shadow-rose-600/30">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
             LIVE
           </div>
+        ) : (
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
+            {status}
+          </div>
         )}
-        <h2 className="text-sm font-black text-white uppercase tracking-widest bg-black/50 px-3 py-0.5 rounded-sm backdrop-blur-sm border border-white/10">{d.eventName}</h2>
       </div>
 
-      <div className="bg-[#0A0B10]/95 backdrop-blur-md rounded-lg overflow-hidden border border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.5)]">
+      {/* Race Information & Leaderboard (Bottom Aligned) */}
+      <div className="absolute bottom-12 left-0 w-full px-6 md:px-12 flex flex-col items-start gap-4 z-10">
+        <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight drop-shadow-md">
+          {d.eventName}
+        </h2>
         
-        {/* Table Header */}
-        <div className="flex bg-[#1A1A24] border-b border-white/10 text-[9px] font-bold text-white/50 uppercase tracking-widest py-1.5">
-          <div className="w-10 text-center">POS</div>
-          <div className="w-10 text-center">LANE</div>
-          <div className="w-16 text-center">NAT</div>
-          <div className="flex-1">NAME</div>
-          <div className="w-24 text-right pr-4">TIME</div>
-        </div>
-
-        {/* Racers */}
-        <div className="flex flex-col">
-          {sortedRacers.length === 0 ? (
-            <div className="flex items-center border-b border-white/5 py-4 relative overflow-hidden bg-[#15161E]">
-              <div className="w-full text-center text-xs font-bold text-white/30 uppercase tracking-widest">
-                Awaiting Racers & Splits...
-              </div>
+        {/* Sleek Leaderboard Table */}
+        <div className="w-full max-w-3xl bg-black/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 mt-2">
+            <div className="flex bg-white/10 border-b border-white/10 text-[10px] md:text-xs font-bold text-white/70 uppercase tracking-widest py-2">
+              <div className="w-12 text-center">POS</div>
+              <div className="w-12 text-center">LANE</div>
+              <div className="w-20 text-center">NAT</div>
+              <div className="flex-1">NAME</div>
+              <div className="w-24 md:w-32 text-right pr-6">TIME</div>
             </div>
-          ) : (
-            sortedRacers.map((racer, idx) => (
-              <div key={idx} className="flex items-center border-b border-white/5 py-1.5 relative overflow-hidden bg-gradient-to-r from-transparent hover:from-white/5">
-                {idx === 0 && <div className="absolute top-0 left-0 w-[2px] h-full bg-amber-400"></div>}
-                {idx === 1 && <div className="absolute top-0 left-0 w-[2px] h-full bg-gray-300"></div>}
-                {idx === 2 && <div className="absolute top-0 left-0 w-[2px] h-full bg-orange-600"></div>}
-                
-                <div className="w-10 text-center text-sm font-black text-white">{racer.position}</div>
-                <div className="w-10 text-center text-xs font-bold text-white/40">{racer.lane}</div>
-                <div className="w-16 text-center text-xs font-black text-white/80">{racer.country}</div>
-                <div className="flex-1 text-sm font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
-                <div className="w-24 text-right pr-4 text-sm font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
-              </div>
-            ))
-          )}
+            
+            <div className="flex flex-col">
+              {sortedRacers.length === 0 ? (
+                <div className="py-6 text-center text-sm font-bold text-white/50 uppercase tracking-widest">
+                  Awaiting Racers...
+                </div>
+              ) : (
+                sortedRacers.slice(0, 3).map((racer, idx) => (
+                  <div key={idx} className="flex items-center border-b border-white/5 py-2 md:py-3 relative hover:bg-white/5 transition-colors">
+                    {idx === 0 && <div className="absolute top-0 left-0 w-1 h-full bg-amber-400"></div>}
+                    {idx === 1 && <div className="absolute top-0 left-0 w-1 h-full bg-gray-300"></div>}
+                    {idx === 2 && <div className="absolute top-0 left-0 w-1 h-full bg-orange-600"></div>}
+                    
+                    <div className="w-12 text-center text-lg md:text-xl font-black text-white">{racer.position}</div>
+                    <div className="w-12 text-center text-sm md:text-base font-bold text-white/50">{racer.lane}</div>
+                    <div className="w-20 text-center text-sm md:text-base font-black text-white/90">{racer.country}</div>
+                    <div className="flex-1 text-lg md:text-xl font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
+                    <div className="w-24 md:w-32 text-right pr-6 text-lg md:text-xl font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
+                  </div>
+                ))
+              )}
+            </div>
         </div>
-
       </div>
 
+      {/* Carousel Dots (for visual similarity to reference) */}
+      <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
+        <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+        <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+      </div>
     </div>
   );
 }
