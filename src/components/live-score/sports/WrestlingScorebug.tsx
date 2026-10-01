@@ -22,7 +22,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
   };
 
   return (
-    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-[#130E24] p-6 md:p-10 border border-white/5 pb-16">
+    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-white to-gray-50 p-6 md:p-10 border border-gray-200 shadow-xl pb-16">
       {/* Match Status Badge (Top Right) */}
       <div className="absolute top-6 right-6 z-10">
         {status === 'LIVE' ? (
@@ -31,7 +31,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
             LIVE
           </div>
         ) : (
-          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-white/80 backdrop-blur-md text-gray-700 border border-gray-200">
             {status}
           </div>
         )}
@@ -42,7 +42,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
          <span className="bg-amber-500 text-black px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest">
            {d.weightClass}
          </span>
-         <span className="bg-black/50 backdrop-blur-md border border-white/10 text-white px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest">
+         <span className="bg-white/90 backdrop-blur-md border border-gray-200 text-gray-900 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest">
            {d.period}
          </span>
       </div>
@@ -51,7 +51,7 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
       <div className="w-full flex flex-col items-center gap-4 z-10">
         
         {/* Timer */}
-        <div className="text-3xl md:text-5xl font-black text-amber-400 tabular-nums tracking-tighter drop-shadow-lg mb-2">
+        <div className="text-3xl md:text-5xl font-black text-amber-600 tabular-nums tracking-tighter  mb-2">
           {d.periodTimer}
         </div>
 
@@ -60,22 +60,22 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
           {/* Red Corner */}
           <div className="flex flex-col items-start w-[40%]">
              <div className="w-full flex items-center gap-4">
-               <span className="text-5xl md:text-7xl font-black text-white tabular-nums drop-shadow-xl bg-red-600 px-4 rounded-xl">{d.redScore}</span>
-               <span className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md truncate max-w-full">
+               <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums  bg-red-600 px-4 rounded-xl">{d.redScore}</span>
+               <span className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight  truncate max-w-full">
                  {d.redName}
                </span>
              </div>
           </div>
           
-          <span className="text-3xl font-black text-white/40 mb-2">VS</span>
+          <span className="text-3xl font-black text-gray-400 mb-2">VS</span>
 
           {/* Blue Corner */}
           <div className="flex flex-col items-end w-[40%]">
              <div className="w-full flex items-center justify-end gap-4">
-               <span className="text-3xl md:text-5xl font-black text-white tracking-tight drop-shadow-md truncate max-w-full text-right">
+               <span className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight  truncate max-w-full text-right">
                  {d.blueName}
                </span>
-               <span className="text-5xl md:text-7xl font-black text-white tabular-nums drop-shadow-xl bg-blue-600 px-4 rounded-xl">{d.blueScore}</span>
+               <span className="text-5xl md:text-7xl font-black text-gray-900 tabular-nums  bg-blue-600 px-4 rounded-xl">{d.blueScore}</span>
              </div>
           </div>
         </div>
@@ -85,11 +85,11 @@ export default function WrestlingScorebug({ data, status, showCarouselDots = tru
       {/* Carousel Dots */}
       {showCarouselDots && (
         <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-8 h-1.5 rounded-full bg-gray-900 shadow-sm"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
         </div>
       )}
     </div>

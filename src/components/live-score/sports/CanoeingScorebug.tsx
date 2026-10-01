@@ -17,7 +17,7 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
   const sortedRacers = [...d.racers].sort((a, b) => a.position - b.position);
 
   return (
-    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-[#130E24] p-6 md:p-10 border border-white/5 pb-16">
+    <div className="relative w-full rounded-[32px] overflow-hidden group cursor-pointer drop-shadow-2xl max-w-5xl mx-auto font-sans bg-gradient-to-br from-white to-gray-50 p-6 md:p-10 border border-gray-200 shadow-xl pb-16">
       {/* Match Status Badge (Top Right) */}
       <div className="absolute top-6 right-6 z-10">
         {status === 'LIVE' ? (
@@ -26,7 +26,7 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
             LIVE
           </div>
         ) : (
-          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-black/40 backdrop-blur-md text-white/80 border border-white/10">
+          <div className="px-4 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest bg-white/80 backdrop-blur-md text-gray-700 border border-gray-200">
             {status}
           </div>
         )}
@@ -34,13 +34,13 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
 
       {/* Race Information & Leaderboard */}
       <div className="w-full flex flex-col items-start gap-4 pr-24">
-        <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight drop-shadow-md">
+        <h2 className="text-3xl md:text-5xl font-black text-gray-900 uppercase tracking-tight ">
           {d.eventName}
         </h2>
         
         {/* Sleek Leaderboard Table */}
-        <div className="w-full max-w-3xl bg-black/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 mt-2">
-            <div className="flex bg-white/10 border-b border-white/10 text-[10px] md:text-xs font-bold text-white/70 uppercase tracking-widest py-2">
+        <div className="w-full max-w-3xl bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 mt-2">
+            <div className="flex bg-gray-100 border-b border-gray-200 text-[10px] md:text-xs font-bold text-gray-600 uppercase tracking-widest py-2">
               <div className="w-12 text-center">POS</div>
               <div className="w-12 text-center">LANE</div>
               <div className="w-20 text-center">NAT</div>
@@ -50,21 +50,21 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
             
             <div className="flex flex-col">
               {sortedRacers.length === 0 ? (
-                <div className="py-6 text-center text-sm font-bold text-white/50 uppercase tracking-widest">
+                <div className="py-6 text-center text-sm font-bold text-gray-500 uppercase tracking-widest">
                   Awaiting Racers...
                 </div>
               ) : (
                 sortedRacers.slice(0, 3).map((racer, idx) => (
-                  <div key={idx} className="flex items-center border-b border-white/5 py-2 md:py-3 relative hover:bg-white/5 transition-colors">
+                  <div key={idx} className="flex items-center border-b border-gray-200 shadow-xl py-2 md:py-3 relative hover:bg-gray-50 transition-colors">
                     {idx === 0 && <div className="absolute top-0 left-0 w-1 h-full bg-amber-400"></div>}
                     {idx === 1 && <div className="absolute top-0 left-0 w-1 h-full bg-gray-300"></div>}
                     {idx === 2 && <div className="absolute top-0 left-0 w-1 h-full bg-orange-600"></div>}
                     
-                    <div className="w-12 text-center text-lg md:text-xl font-black text-white">{racer.position}</div>
-                    <div className="w-12 text-center text-sm md:text-base font-bold text-white/50">{racer.lane}</div>
-                    <div className="w-20 text-center text-sm md:text-base font-black text-white/90">{racer.country}</div>
-                    <div className="flex-1 text-lg md:text-xl font-bold text-white uppercase tracking-tight truncate pr-2">{racer.name}</div>
-                    <div className="w-24 md:w-32 text-right pr-6 text-lg md:text-xl font-black text-emerald-400 tabular-nums">{racer.splitTime}</div>
+                    <div className="w-12 text-center text-lg md:text-xl font-black text-gray-900">{racer.position}</div>
+                    <div className="w-12 text-center text-sm md:text-base font-bold text-gray-500">{racer.lane}</div>
+                    <div className="w-20 text-center text-sm md:text-base font-black text-gray-800">{racer.country}</div>
+                    <div className="flex-1 text-lg md:text-xl font-bold text-gray-900 uppercase tracking-tight truncate pr-2">{racer.name}</div>
+                    <div className="w-24 md:w-32 text-right pr-6 text-lg md:text-xl font-black text-emerald-600 tabular-nums">{racer.splitTime}</div>
                   </div>
                 ))
               )}
@@ -75,11 +75,11 @@ export default function CanoeingScorebug({ data, status, showCarouselDots = true
       {/* Carousel Dots (for visual similarity to reference) */}
       {showCarouselDots && (
         <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2 z-10">
-          <div className="w-8 h-1.5 rounded-full bg-white shadow-md"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
-          <div className="w-2 h-1.5 rounded-full bg-white/40 transition-colors hover:bg-white/60"></div>
+          <div className="w-8 h-1.5 rounded-full bg-gray-900 shadow-sm"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
+          <div className="w-2 h-1.5 rounded-full bg-gray-300 transition-colors hover:bg-gray-500"></div>
         </div>
       )}
     </div>
