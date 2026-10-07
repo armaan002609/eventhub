@@ -11,32 +11,31 @@ export default async function Home() {
   let userRole = 'PARTICIPANT';
   let dashboardPath = '/participant';
   
-  if (user) {
-    const dbUser = await prisma.user.findUnique({
+  // Parallelize the independent DB queries to significantly improve load time
+  const [dbUser, hackathons, liveMatchCount, liveMatch] = await Promise.all([
+    user ? prisma.user.findUnique({
       where: { id: user.id },
       select: { role: true }
-    });
-    if (dbUser?.role) {
-      userRole = dbUser.role;
-      if (userRole === 'SUPER_ADMIN') dashboardPath = '/super-admin';
-      if (userRole === 'COORDINATOR') dashboardPath = '/coordinator';
-      if (userRole === 'VOLUNTEER') dashboardPath = '/volunteer';
-    }
+    }) : Promise.resolve(null),
+    prisma.hackathon.findMany({
+      where: { isPublished: true },
+      orderBy: { startsAt: 'asc' }
+    }),
+    prisma.match.count({
+      where: { status: 'LIVE' }
+    }),
+    prisma.match.findFirst({
+      where: { status: 'LIVE' },
+      orderBy: { updatedAt: 'desc' }
+    })
+  ]);
+
+  if (dbUser?.role) {
+    userRole = dbUser.role;
+    if (userRole === 'SUPER_ADMIN') dashboardPath = '/super-admin';
+    if (userRole === 'COORDINATOR') dashboardPath = '/coordinator';
+    if (userRole === 'VOLUNTEER') dashboardPath = '/volunteer';
   }
-
-  const hackathons = await prisma.hackathon.findMany({
-    where: { isPublished: true },
-    orderBy: { startsAt: 'asc' }
-  });
-
-  const liveMatchCount = await prisma.match.count({
-    where: { status: 'LIVE' }
-  });
-
-  const liveMatch = await prisma.match.findFirst({
-    where: { status: 'LIVE' },
-    orderBy: { updatedAt: 'desc' }
-  });
 
   return (
     <>
@@ -73,7 +72,7 @@ export default async function Home() {
         <section className="relative pt-16 md:pt-24 pb-20 md:pb-32 flex flex-col items-center text-center overflow-hidden mb-16 rounded-3xl">
           
           {/* Background Glows */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-[#554093]/15 to-transparent rounded-full blur-3xl -z-10"></div>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full -z-10" style={{ background: 'radial-gradient(50% 50% at 50% 50%, rgba(85,64,147,0.15) 0%, transparent 100%)' }}></div>
 
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[#554093]/10 text-[#554093] text-[13px] font-bold mb-8 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-700">
