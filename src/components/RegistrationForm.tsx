@@ -6,6 +6,10 @@ import { registerParticipant } from '@/app/events/[id]/register/actions';
 export default function RegistrationForm({ hackathonId }: { hackathonId: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const [needsTransport, setNeedsTransport] = useState(false);
+  const [needsAccommodation, setNeedsAccommodation] = useState(false);
+  const [needsFood, setNeedsFood] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
