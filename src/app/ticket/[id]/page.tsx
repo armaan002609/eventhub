@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-export default async function TicketVerificationPage({ params }: { params: { id: string } }) {
+export default async function TicketVerificationPage({ params }: { params: Promise<{ id: string }> }) {
   // Await the params object before accessing properties
   const resolvedParams = await params;
   const regId = resolvedParams.id;
