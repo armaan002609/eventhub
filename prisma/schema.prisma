@@ -119,6 +119,12 @@ model Registration {
   studentName  String
   phone        String
   email        String
+  fathersName  String?
+  fathersPhone String?
+  rollNumber   String?
+  department   String?
+  address      String?
+  teamSize     Int            @default(1)
   universityId String
   university   University @relation(fields: [universityId], references: [id])
 

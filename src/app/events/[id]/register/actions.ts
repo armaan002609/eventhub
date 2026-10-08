@@ -16,9 +16,22 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
   const studentName = formData.get('studentName') as string;
   const phone = formData.get('phone') as string;
   const universityName = formData.get('universityName') as string;
+  const fathersName = formData.get('fathersName') as string;
+  const fathersPhone = formData.get('fathersPhone') as string;
+  const rollNumber = formData.get('rollNumber') as string;
+  const department = formData.get('department') as string;
+  const address = formData.get('address') as string;
+  const teamSize = parseInt(formData.get('teamSize') as string || '1', 10);
+  
   const needsTransport = formData.get('needsTransport') === 'true';
+  const boardingPointName = formData.get('boardingPointName') as string;
+  
   const needsAccommodation = formData.get('needsAccommodation') === 'true';
+  const accommodationDays = parseInt(formData.get('accommodationDays') as string || '1', 10);
+  
   const needsFood = formData.get('needsFood') === 'true';
+  const mealsPerDay = parseInt(formData.get('mealsPerDay') as string || '3', 10);
+
   const file = formData.get('idProof') as File;
   const teamName = formData.get('teamName') as string | null;
   const teamMembers = formData.get('teamMembers') as string | null;
@@ -46,7 +59,6 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
     .getPublicUrl(fileName);
 
   // Find or Create University
-  // We'll create a simple hash/slug for the UID if it doesn't exist
   const uid = universityName.toLowerCase().replace(/[^a-z0-9]/g, '-');
   
   let university = await prisma.university.findFirst({
@@ -61,17 +73,29 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
       }
     });
   }
+
+  // Find or Create Boarding Point
+  let boardingPointId = null;
+  if (needsTransport && boardingPointName) {
+    let bp = await prisma.boardingPoint.findUnique({ where: { name: boardingPointName } });
+    if (!bp) {
+      bp = await prisma.boardingPoint.create({ data: { name: boardingPointName, charge: 0 } });
+    }
+    boardingPointId = bp.id;
+  }
+
   // Fetch Hackathon to get fees
   const hackathon = await prisma.hackathon.findUnique({ where: { id: hackathonId } });
   if (!hackathon) {
     return { error: 'Event not found' };
   }
 
-  // Calculate fees
-  const baseFee = hackathon.baseFee;
-  const transportFee = needsTransport ? hackathon.transportFee : 0;
-  const accommodationFee = needsAccommodation ? hackathon.accommodationFee : 0;
-  const foodFee = needsFood ? hackathon.foodFee : 0;
+  // Calculate fees (multiply by days/meals/teamSize if appropriate, but keeping it simple for now based on base schemas)
+  // According to previous logic, it's flat fees, but we can multiply by teamSize for base fee.
+  const baseFee = hackathon.baseFee * teamSize;
+  const transportFee = needsTransport ? hackathon.transportFee : 0; // Or multiply by teamSize?
+  const accommodationFee = needsAccommodation ? (hackathon.accommodationFee * accommodationDays) : 0;
+  const foodFee = needsFood ? (hackathon.foodFee * mealsPerDay * accommodationDays) : 0;
   const totalFee = baseFee + transportFee + accommodationFee + foodFee;
 
   // Check if already registered
@@ -95,16 +119,25 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
       hackathonId,
       studentName,
       phone,
+      fathersName,
+      fathersPhone,
+      rollNumber,
+      department,
+      address,
+      teamSize,
       email: user.email || '',
       universityId: university.id,
       idProofPath: publicUrl,
       teamName,
       teamMembers,
       needsTransport,
+      boardingPointId,
       transportFee,
       needsAccommodation,
+      accommodationDays,
       accommodationFee,
       needsFood,
+      mealsPerDay,
       foodFee,
       totalFee
     }
