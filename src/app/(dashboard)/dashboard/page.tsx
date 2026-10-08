@@ -27,7 +27,7 @@ export default async function DashboardPage() {
   });
 
   // Fetch Coordinator Data
-  let pendingRegistrations = [];
+  let pendingRegistrations: any[] = [];
   let approvedRegistrationsCount = 0;
   let rejectedRegistrationsCount = 0;
 
