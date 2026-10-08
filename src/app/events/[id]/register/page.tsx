@@ -12,7 +12,7 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login');
+    redirect(`/login?callbackUrl=/events/${resolvedParams.id}/register`);
   }
 
   const hackathon = await prisma.hackathon.findUnique({
@@ -40,7 +40,7 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
         
         {/* Breadcrumb */}
         <div className="mb-6">
-          <Link href={`/hackathon/${hackathon.id}`} className="text-[#554093]/70 hover:text-[#554093] text-sm font-medium flex items-center gap-1">
+          <Link href={`/events/${hackathon.id}`} className="text-[#554093]/70 hover:text-[#554093] text-sm font-medium flex items-center gap-1">
             &larr; Back to {hackathon.title}
           </Link>
         </div>
@@ -57,7 +57,7 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
              </div>
              <h2 className="text-2xl font-bold text-emerald-800 mb-2">You're Registered!</h2>
              <p className="text-emerald-700/80 mb-6">Your application for {hackathon.title} has been submitted successfully.</p>
-             <Link href="/participant" className="inline-block bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow hover:bg-emerald-700 transition">
+             <Link href="/dashboard" className="inline-block bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl shadow hover:bg-emerald-700 transition">
                Go to Dashboard
              </Link>
            </div>

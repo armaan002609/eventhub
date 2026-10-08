@@ -34,7 +34,6 @@ export default function MobileMenu({ userEmail, dashboardPath }: { userEmail?: s
           
           <div className="flex flex-col gap-6 text-xl font-bold text-[#554093] overflow-y-auto pb-8 custom-scrollbar">
             <Link href="/events" onClick={() => setIsOpen(false)} className="hover:translate-x-2 transition-transform">Events</Link>
-            <Link href="/hackathon" onClick={() => setIsOpen(false)} className="hover:translate-x-2 transition-transform">Hackathon</Link>
             <Link href="/leaderboard" onClick={() => setIsOpen(false)} className="hover:translate-x-2 transition-transform">Leaderboard</Link>
             
             <div className="flex flex-col gap-4 mt-2">

@@ -32,7 +32,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const path = request.nextUrl.pathname
-  const isDashboardRoute = path.startsWith('/participant') || 
+  const isDashboardRoute = path.startsWith('/dashboard') || 
                            path.startsWith('/volunteer') ||
                            path.startsWith('/coordinator') ||
                            path.startsWith('/super-admin');
@@ -50,13 +50,9 @@ export async function updateSession(request: NextRequest) {
     if (dbUser?.role) role = dbUser.role;
   }
 
-  // 1. If logged in and on an auth page, bounce them to their specific dashboard
+  // 1. If logged in and on an auth page, bounce them to dashboard
   if (user && isAuthRoute) {
-    let target = '/participant';
-    if (role === 'SUPER_ADMIN') target = '/super-admin';
-    if (role === 'COORDINATOR') target = '/coordinator';
-    if (role === 'VOLUNTEER') target = '/volunteer';
-    return NextResponse.redirect(new URL(target, request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   // 2. Dashboard Protection logic
@@ -66,13 +62,13 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (path.startsWith('/super-admin') && role !== 'SUPER_ADMIN') {
-      return NextResponse.redirect(new URL('/participant', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     if (path.startsWith('/coordinator') && role !== 'COORDINATOR' && role !== 'SUPER_ADMIN') {
-      return NextResponse.redirect(new URL('/participant', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
     if (path.startsWith('/volunteer') && role !== 'VOLUNTEER' && role !== 'COORDINATOR' && role !== 'SUPER_ADMIN') {
-      return NextResponse.redirect(new URL('/participant', request.url))
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
   }
 

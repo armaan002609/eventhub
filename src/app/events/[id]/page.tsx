@@ -27,7 +27,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
         
         {/* Breadcrumb */}
         <div className="mb-6">
-          <Link href="/hackathon" className="text-[#554093]/70 hover:text-[#554093] text-sm font-medium flex items-center gap-1">
+          <Link href="/events" className="text-[#554093]/70 hover:text-[#554093] text-sm font-medium flex items-center gap-1">
             &larr; Back to Events
           </Link>
         </div>
@@ -90,7 +90,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ i
               </div>
               <div className="mt-8 pt-6 border-t border-[#554093]/10">
                 {!isClosed ? (
-                  <Link href={`/hackathon/${hackathon.id}/register`} className="block w-full bg-[#554093] text-white text-center font-bold py-3.5 rounded-xl shadow-[0_2px_8px_rgba(85,64,147,0.2)] hover:bg-[#3B2C66] transition-colors">
+                  <Link href={`/events/${hackathon.id}/register`} className="block w-full bg-[#554093] text-white text-center font-bold py-3.5 rounded-xl shadow-[0_2px_8px_rgba(85,64,147,0.2)] hover:bg-[#3B2C66] transition-colors">
                     Apply Now
                   </Link>
                 ) : (

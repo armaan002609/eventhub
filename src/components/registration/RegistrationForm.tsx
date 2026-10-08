@@ -105,7 +105,7 @@ export default function RegistrationForm({ universities, boardingPoints }: Props
         throw new Error(data.error ?? 'Registration failed');
       }
       setStatus('done');
-      window.location.href = '/participant';
+      window.location.href = '/dashboard';
     } catch (e) {
       setStatus('idle');
       setServerError(e instanceof Error ? e.message : 'Something went wrong');

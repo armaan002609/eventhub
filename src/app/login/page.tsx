@@ -2,7 +2,9 @@ import Link from "next/link";
 import { login, loginWithGoogle } from "./actions";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ callbackUrl?: string }> }) {
+  const { callbackUrl } = await searchParams;
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[440px] w-full">
@@ -23,6 +25,7 @@ export default function LoginPage() {
         </div>
         
         <form className="space-y-6" action={login}>
+          <input type="hidden" name="callbackUrl" value={callbackUrl || '/dashboard'} />
           <div className="space-y-5">
             <div>
               <label htmlFor="email-address" className="block text-[13px] font-bold tracking-widest uppercase text-[#554093] mb-2">

@@ -15,14 +15,14 @@ export async function login(formData: FormData) {
     password,
   })
 
+  const callbackUrl = formData.get('callbackUrl') as string || '/dashboard'
+
   if (error) {
     redirect('/login?error=' + encodeURIComponent(error.message))
   }
 
   revalidatePath('/', 'layout')
-  // We default to the participant dashboard for now. 
-  // We can add RBAC logic here later based on user metadata.
-  redirect('/')
+  redirect(callbackUrl)
 }
 
 export async function loginWithGoogle() {

@@ -110,7 +110,7 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
     }
   });
 
-  revalidatePath(`/hackathon/${hackathonId}`);
-  revalidatePath('/participant');
+  revalidatePath(`/events/${hackathonId}`);
+  revalidatePath('/dashboard');
   return { success: true };
 }

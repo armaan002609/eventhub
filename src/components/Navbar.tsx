@@ -8,7 +8,7 @@ export default async function Navbar() {
   const { data: { user } } = await supabase.auth.getUser();
   
   let userRole = 'PARTICIPANT';
-  let dashboardPath = '/participant';
+  let dashboardPath = '/dashboard';
   
   if (user) {
     const dbUser = await prisma.user.findUnique({
@@ -17,9 +17,6 @@ export default async function Navbar() {
     });
     if (dbUser?.role) {
       userRole = dbUser.role;
-      if (userRole === 'SUPER_ADMIN') dashboardPath = '/super-admin';
-      if (userRole === 'COORDINATOR') dashboardPath = '/coordinator';
-      if (userRole === 'VOLUNTEER') dashboardPath = '/volunteer';
     }
   }
 
@@ -38,8 +35,7 @@ export default async function Navbar() {
         
         {/* Desktop Nav Links */}
         <nav className="hidden lg:flex items-center gap-6 text-[15px] font-medium text-[#554093]">
-          <Link href="/events" className="hover:opacity-70 transition-opacity">Events</Link>
-          <Link href="/hackathon" className="hover:opacity-70 transition-opacity">Hackathon</Link>
+          <Link href="/events" className="hover:opacity-70 transition-opacity">Discover Events</Link>
           <Link href="/leaderboard" className="hover:opacity-70 transition-opacity">Leaderboard</Link>
           <div className="relative group">
             <button className="flex items-center gap-1 hover:opacity-70 transition-opacity">
@@ -60,12 +56,17 @@ export default async function Navbar() {
       <div className="hidden lg:flex items-center gap-6">
         {user ? (
           <>
-            <Link href={dashboardPath} className="flex items-center gap-2 font-medium text-[15px] hover:opacity-70 transition-opacity bg-[#554093]/10 px-4 py-2 rounded-full">
-              <div className="w-6 h-6 rounded-full bg-[#554093] text-white flex items-center justify-center text-[10px] font-bold">
-                {user.email?.charAt(0).toUpperCase()}
-              </div>
-              <span>Dashboard</span>
-            </Link>
+            <div className="flex items-center gap-2">
+              <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider">
+                {userRole}
+              </span>
+              <Link href={dashboardPath} className="flex items-center gap-2 font-medium text-[15px] hover:opacity-70 transition-opacity bg-[#554093]/10 px-4 py-2 rounded-full">
+                <div className="w-6 h-6 rounded-full bg-[#554093] text-white flex items-center justify-center text-[10px] font-bold">
+                  {user.email?.charAt(0).toUpperCase()}
+                </div>
+                <span>Dashboard</span>
+              </Link>
+            </div>
           </>
         ) : (
           <>

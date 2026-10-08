@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { registerParticipant } from '@/app/hackathon/[id]/register/actions';
+import { registerParticipant } from '@/app/events/[id]/register/actions';
 
 export default function RegistrationForm({ hackathonId }: { hackathonId: string }) {
   const [loading, setLoading] = useState(false);

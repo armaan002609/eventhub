@@ -29,7 +29,7 @@ export async function signup(formData: FormData) {
   // Optionally, you can insert the user into a public.users table or just rely on auth.users
   // If no email confirmation is required, they will be logged in. 
   revalidatePath('/', 'layout')
-  redirect('/participant')
+  redirect('/dashboard')
 }
 
 export async function loginWithGoogle() {
