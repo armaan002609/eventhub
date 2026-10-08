@@ -57,9 +57,11 @@ export default async function Navbar() {
         {user ? (
           <>
             <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider">
-                {userRole}
-              </span>
+              {userRole !== 'PARTICIPANT' && (
+                <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider">
+                  {userRole}
+                </span>
+              )}
               <Link href={dashboardPath} className="flex items-center gap-2 font-medium text-[15px] hover:opacity-70 transition-opacity bg-[#554093]/10 px-4 py-2 rounded-full">
                 <div className="w-6 h-6 rounded-full bg-[#554093] text-white flex items-center justify-center text-[10px] font-bold">
                   {user.email?.charAt(0).toUpperCase()}
