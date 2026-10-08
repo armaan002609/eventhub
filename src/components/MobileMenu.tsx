@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-export default function MobileMenu({ userEmail, dashboardPath }: { userEmail?: string, dashboardPath?: string }) {
+export default function MobileMenu({ userEmail, dashboardPath, userRole }: { userEmail?: string, dashboardPath?: string, userRole?: string }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -47,12 +47,16 @@ export default function MobileMenu({ userEmail, dashboardPath }: { userEmail?: s
 
             {userEmail ? (
               <Link href={dashboardPath || '/'} onClick={() => setIsOpen(false)} className="flex items-center gap-4 bg-[#554093]/5 p-4 rounded-2xl hover:bg-[#554093]/10 transition-colors">
-                <div className="w-10 h-10 rounded-full bg-[#554093] text-white flex items-center justify-center text-lg font-bold">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#554093] to-[#7B61C8] text-white flex items-center justify-center text-xl font-bold shadow-sm ring-2 ring-white">
                   {userEmail.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm opacity-60 font-medium">Logged in as</span>
-                  <span>Dashboard</span>
+                  <span className="text-lg font-bold text-[#554093] leading-tight">Dashboard</span>
+                  {userRole && userRole !== 'PARTICIPANT' ? (
+                    <span className="text-xs font-bold text-rose-500 uppercase tracking-widest leading-tight mt-1">{userRole.replace('_', ' ')}</span>
+                  ) : (
+                    <span className="text-sm opacity-60 font-medium">Logged in</span>
+                  )}
                 </div>
               </Link>
             ) : (

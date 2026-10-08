@@ -57,16 +57,18 @@ export default async function Navbar() {
         {user ? (
           <>
             <div className="flex items-center gap-2">
-              {userRole !== 'PARTICIPANT' && (
-                <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider">
-                  {userRole}
-                </span>
-              )}
-              <Link href={dashboardPath} className="flex items-center gap-2 font-medium text-[15px] hover:opacity-70 transition-opacity bg-[#554093]/10 px-4 py-2 rounded-full">
-                <div className="w-6 h-6 rounded-full bg-[#554093] text-white flex items-center justify-center text-[10px] font-bold">
+              <Link href={dashboardPath} className="flex items-center gap-3 hover:bg-[#554093]/5 p-1.5 pr-5 rounded-full transition-all border border-transparent hover:border-[#554093]/10">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#554093] to-[#7B61C8] text-white flex items-center justify-center text-[14px] font-bold shadow-sm ring-2 ring-white">
                   {user.email?.charAt(0).toUpperCase()}
                 </div>
-                <span>Dashboard</span>
+                <div className="flex flex-col">
+                  <span className="text-[14px] font-bold text-[#554093] leading-tight">Dashboard</span>
+                  {userRole !== 'PARTICIPANT' && (
+                    <span className="text-[10px] font-bold text-rose-500 uppercase tracking-widest leading-tight mt-0.5">
+                      {userRole.replace('_', ' ')}
+                    </span>
+                  )}
+                </div>
               </Link>
             </div>
           </>
@@ -81,7 +83,7 @@ export default async function Navbar() {
       </div>
 
       <div className="lg:hidden flex items-center">
-        <MobileMenu userEmail={user?.email} dashboardPath={dashboardPath} />
+        <MobileMenu userEmail={user?.email} dashboardPath={dashboardPath} userRole={userRole} />
       </div>
     </header>
   );
