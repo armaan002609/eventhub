@@ -8,7 +8,7 @@ export default async function Navbar() {
   const { data: { user } } = await supabase.auth.getUser();
   
   let userRole = 'PARTICIPANT';
-  let dashboardPath = '/dashboard';
+  let dashboardPath = '/participant';
   
   if (user) {
     const dbUser = await prisma.user.findUnique({
@@ -17,6 +17,9 @@ export default async function Navbar() {
     });
     if (dbUser?.role) {
       userRole = dbUser.role;
+      if (userRole === 'SUPER_ADMIN') dashboardPath = '/super-admin';
+      else if (userRole === 'COORDINATOR') dashboardPath = '/coordinator';
+      else if (userRole === 'VOLUNTEER') dashboardPath = '/volunteer';
     }
   }
 
