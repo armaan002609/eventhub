@@ -58,6 +58,12 @@ enum MatchStatus {
   COMPLETED
 }
 
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model University {
   id            String         @id @default(cuid())
   uid           String         @unique // College/University UID used for coordinator assignment
@@ -76,10 +82,26 @@ model User {
   role         Role        @default(PARTICIPANT)
   isActive     Boolean     @default(true)
   tokenVersion Int         @default(0) // bump to revoke every issued JWT for this user
+  
+  // Permanent Profile Details
+  username     String?     @unique
+  phone        String?
+  fathersName  String?
+  fathersPhone String?
+  rollNumber   String?
+  department   String?
+  address      String?
+  
+  idProofPath   String?
+  idProofStatus IdProofStatus @default(PENDING)
+
   universityId String?
   university   University? @relation(fields: [universityId], references: [id])
 
   registrations    Registration[]
+  teamsLed         Team[]          @relation("TeamLeader")
+  teamMemberships  TeamMember[]
+
   dutiesCreated    Duty[]          @relation("DutyCreator")
   dutiesAssigned   Duty[]          @relation("DutyAssignee")
   attendance       AttendanceLog[] @relation("AttendanceVolunteer")
@@ -96,6 +118,41 @@ model User {
   @@index([role, universityId])
 }
 
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  
+  hackathonId String
+  hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
+  
+  leaderId    String
+  leader      User      @relation("TeamLeader", fields: [leaderId], references: [id], onDelete: Cascade)
+  
+  members     TeamMember[]
+  registration Registration?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([name, hackathonId])
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  status    InvitationStatus @default(PENDING)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([teamId, userId])
+}
+
 model BoardingPoint {
   id            String         @id @default(cuid())
   name          String         @unique
@@ -106,31 +163,20 @@ model BoardingPoint {
 
 model Registration {
   id     String @id @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // A registration belongs to a solo user OR a team
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  teamId String? @unique
+  team   Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   hackathonId String
   hackathon   Hackathon @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
 
-  teamName    String?
-  teamMembers String?
-
-  // Basic info
-  studentName  String
-  phone        String
-  email        String
-  fathersName  String?
-  fathersPhone String?
-  rollNumber   String?
-  department   String?
-  address      String?
   teamSize     Int            @default(1)
   universityId String
   university   University @relation(fields: [universityId], references: [id])
-
-  // ID proof: private storage object path, NEVER a public URL
-  idProofPath   String
-  idProofStatus IdProofStatus @default(PENDING)
 
   // Transport
   needsTransport  Boolean        @default(false)
@@ -160,7 +206,6 @@ model Registration {
 
   @@index([universityId])
   @@index([paymentStatus])
-  @@unique([userId, hackathonId])
 }
 
 model Duty {
@@ -272,6 +317,7 @@ model Hackathon {
 
   committees  Committee[]
   registrations Registration[]
+  teams       Team[]
   matches     Match[]
 }
 

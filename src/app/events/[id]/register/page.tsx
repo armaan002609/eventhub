@@ -15,6 +15,15 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
     redirect(`/login?callbackUrl=/events/${resolvedParams.id}/register`);
   }
 
+  // Check if profile is complete
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.id }
+  });
+
+  if (!dbUser?.username) {
+    redirect('/profile/setup');
+  }
+
   const hackathon = await prisma.hackathon.findUnique({
     where: { id: resolvedParams.id },
   });
@@ -23,8 +32,8 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
     return notFound();
   }
 
-  // Check if already registered
-  const existingRegistration = await prisma.registration.findUnique({
+  // Check if already registered (Solo or part of a Team)
+  const existingSolo = await prisma.registration.findUnique({
     where: {
       userId_hackathonId: {
         userId: user.id,
@@ -32,6 +41,17 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
       }
     }
   });
+
+  const existingTeam = await prisma.teamMember.findFirst({
+    where: {
+      userId: user.id,
+      team: {
+        hackathonId: hackathon.id
+      }
+    }
+  });
+
+  const isRegistered = !!existingSolo || !!existingTeam;
 
   return (
     <div className="min-h-screen bg-[#FDFBF7]">
@@ -50,7 +70,7 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
           <p className="text-[#554093]/70 font-medium text-[16px] mt-2">by {hackathon.organizer}</p>
         </div>
 
-        {existingRegistration ? (
+        {isRegistered ? (
            <div className="max-w-2xl mx-auto bg-emerald-50 rounded-3xl p-8 border border-emerald-100 text-center">
              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600">
                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>

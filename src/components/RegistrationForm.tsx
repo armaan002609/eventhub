@@ -7,6 +7,8 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
+  const [registrationType, setRegistrationType] = useState<'SOLO' | 'TEAM'>('SOLO');
+  
   const [needsTransport, setNeedsTransport] = useState(false);
   const [needsAccommodation, setNeedsAccommodation] = useState(false);
   const [needsFood, setNeedsFood] = useState(false);
@@ -17,6 +19,7 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
     setError(null);
     
     const formData = new FormData(e.currentTarget);
+    formData.set('registrationType', registrationType);
     
     try {
       const res = await registerParticipant(hackathonId, formData);
@@ -34,7 +37,7 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
     <div className="max-w-2xl mx-auto bg-[#FDFBF7] rounded-3xl p-8 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 mt-6">
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-[#554093]">Complete Your Registration</h2>
-        <p className="text-sm text-[#554093]/60 mt-1 font-medium">Please fill out the details below to complete your registration process.</p>
+        <p className="text-sm text-[#554093]/60 mt-1 font-medium">Your personal details will be fetched automatically from your profile.</p>
       </div>
 
       {error && (
@@ -44,79 +47,49 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Full Name</label>
-            <input name="studentName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Jane Doe" />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Phone Number</label>
-            <input name="phone" required type="tel" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. +91 9876543210" />
-          </div>
+        
+        {/* Solo vs Team Selection */}
+        <div className="flex gap-4 p-1 bg-white border border-[#554093]/10 rounded-xl mb-6">
+          <button 
+            type="button"
+            onClick={() => setRegistrationType('SOLO')}
+            className={`flex-1 py-3 rounded-lg text-sm font-bold transition-all ${registrationType === 'SOLO' ? 'bg-[#554093] text-white shadow-md' : 'text-[#554093]/60 hover:text-[#554093]'}`}
+          >
+            Solo Participant
+          </button>
+          <button 
+            type="button"
+            onClick={() => setRegistrationType('TEAM')}
+            className={`flex-1 py-3 rounded-lg text-sm font-bold transition-all ${registrationType === 'TEAM' ? 'bg-[#554093] text-white shadow-md' : 'text-[#554093]/60 hover:text-[#554093]'}`}
+          >
+            Register a Team
+          </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Father's Name</label>
-            <input name="fathersName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. John Doe" />
+        {registrationType === 'TEAM' && (
+          <div className="space-y-4 animate-in fade-in slide-in-from-top-2 p-6 bg-[#554093]/5 border border-[#554093]/10 rounded-2xl">
+            <h3 className="text-[15px] font-bold text-[#554093]">Team Details</h3>
+            
+            <div className="space-y-2">
+              <label className="text-[13px] font-bold text-[#554093]">Team Name</label>
+              <input name="teamName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. Code Ninjas" />
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-[13px] font-bold text-[#554093]">Teammate Usernames (Comma separated)</label>
+              <input name="teamUsernames" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. janesmith01, alex_dev" />
+              <p className="text-[11px] text-[#554093]/60 font-medium mt-1">Your teammates must have already created their accounts and completed their profiles. Do not include your own username here.</p>
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Father's Phone Number</label>
-            <input name="fathersPhone" required type="tel" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. +91 9876543210" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">University / College Name</label>
-            <input name="universityName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. State Tech University" />
-          </div>
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Roll Number</label>
-            <input name="rollNumber" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. 21CS001" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Department</label>
-            <input name="department" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Computer Science" />
-          </div>
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Full Address</label>
-            <input name="address" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. 123 Main St, City, State" />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-[13px] font-bold text-[#554093]">Student ID Proof (Image or PDF)</label>
-          <input name="idProof" required type="file" accept="image/*,.pdf" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-[13px] font-medium text-[#554093] focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors shadow-[0_2px_8px_rgba(85,64,147,0.04)] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-[#554093]/5 file:text-[#554093] hover:file:bg-[#554093]/10" />
-          <p className="text-[11px] text-[#554093]/60 font-medium">Please upload a valid college ID card.</p>
-        </div>
+        )}
 
         <hr className="border-[#554093]/10 my-6" />
-        <h3 className="text-[15px] font-bold text-[#554093] mb-4">Team Details (Optional)</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Team Name</label>
-            <input name="teamName" type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Code Ninjas" />
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Team Members (Names)</label>
-            <input name="teamMembers" type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" placeholder="e.g. Alice, Bob" />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[13px] font-bold text-[#554093]">Total Team Size</label>
-            <input name="teamSize" type="number" min="1" defaultValue="1" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] shadow-[0_2px_8px_rgba(85,64,147,0.04)]" />
-          </div>
-        </div>
-
-        <hr className="border-[#554093]/10 my-6" />
-        <h3 className="text-[15px] font-bold text-[#554093] mb-4">Additional Requirements</h3>
+        <h3 className="text-[15px] font-bold text-[#554093] mb-4">Logistics & Additional Requirements</h3>
+        {registrationType === 'TEAM' && (
+          <p className="text-xs text-[#554093]/60 mb-4 bg-amber-50 text-amber-800 p-3 rounded-lg font-medium border border-amber-200/50">
+            <strong>Note:</strong> As the Team Leader, you are responsible for paying the total combined fees and selecting logistics for your entire team. Please select quantities covering all members.
+          </p>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
@@ -127,9 +100,13 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
               <span className="text-[13px] font-bold text-[#554093]">Transport</span>
             </label>
             {needsTransport && (
-              <div className="animate-in fade-in slide-in-from-top-2 p-1">
-                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mb-1">Pickup Point</label>
-                <input name="boardingPointName" type="text" placeholder="e.g. City Center Bus Stop" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+              <div className="animate-in fade-in slide-in-from-top-2 p-1 space-y-2">
+                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block">Pickup Point</label>
+                <input name="boardingPointName" type="text" placeholder="e.g. City Center" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+                
+                {registrationType === 'TEAM' && (
+                   <input name="transportCount" type="number" min="1" max="10" placeholder="Qty" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+                )}
               </div>
             )}
           </div>
@@ -141,9 +118,16 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
               <span className="text-[13px] font-bold text-[#554093]">Accommodation</span>
             </label>
             {needsAccommodation && (
-              <div className="animate-in fade-in slide-in-from-top-2 p-1">
-                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mb-1">How many days?</label>
+              <div className="animate-in fade-in slide-in-from-top-2 p-1 space-y-2">
+                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block">How many days?</label>
                 <input name="accommodationDays" type="number" min="1" max="14" defaultValue="1" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+                
+                {registrationType === 'TEAM' && (
+                  <>
+                   <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mt-2">For how many members?</label>
+                   <input name="accommodationCount" type="number" min="1" max="10" defaultValue="1" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+                  </>
+                )}
               </div>
             )}
           </div>
@@ -155,10 +139,16 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
               <span className="text-[13px] font-bold text-[#554093]">Food / Meals</span>
             </label>
             {needsFood && (
-              <div className="animate-in fade-in slide-in-from-top-2 p-1">
-                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mb-1">Meals per day (Max 4)</label>
+              <div className="animate-in fade-in slide-in-from-top-2 p-1 space-y-2">
+                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block">Meals per day (Max 4)</label>
                 <input name="mealsPerDay" type="number" min="1" max="4" defaultValue="3" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
-                <p className="text-[10px] text-[#554093]/50 mt-1">Breakfast, Lunch, Snacks, Dinner</p>
+                
+                {registrationType === 'TEAM' && (
+                  <>
+                   <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mt-2">For how many members?</label>
+                   <input name="foodCount" type="number" min="1" max="10" defaultValue="1" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
+                  </>
+                )}
               </div>
             )}
           </div>
