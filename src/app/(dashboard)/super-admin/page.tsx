@@ -25,7 +25,16 @@ export default async function SuperAdminDashboard() {
   const registrations = await prisma.registration.findMany({
     orderBy: { createdAt: 'desc' },
     include: {
-      university: true,
+      user: {
+        include: { university: true }
+      },
+      team: {
+        include: {
+          leader: {
+            include: { university: true }
+          }
+        }
+      },
       hackathon: true
     }
   });

@@ -33,12 +33,10 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
   }
 
   // Check if already registered (Solo or part of a Team)
-  const existingSolo = await prisma.registration.findUnique({
+  const existingSolo = await prisma.registration.findFirst({
     where: {
-      userId_hackathonId: {
-        userId: user.id,
-        hackathonId: hackathon.id,
-      }
+      userId: user.id,
+      hackathonId: hackathon.id,
     }
   });
 
