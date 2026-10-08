@@ -3,21 +3,24 @@ import VerificationQueue from "../super-admin/VerificationQueue";
 
 export default async function CoordinatorDashboard() {
   // Fetch pending and rejected ID proofs for Verification Queue
-  const pendingRegistrations = await prisma.registration.findMany({
+  const pendingUsers = await prisma.user.findMany({
     where: { 
       idProofStatus: {
         in: ['PENDING', 'REJECTED']
+      },
+      idProofPath: {
+        not: null
       }
     },
     include: { university: true },
     orderBy: { createdAt: 'desc' }
   });
 
-  const approvedRegistrationsCount = await prisma.registration.count({
+  const approvedUsersCount = await prisma.user.count({
     where: { idProofStatus: 'VERIFIED' }
   });
   
-  const rejectedRegistrationsCount = await prisma.registration.count({
+  const rejectedUsersCount = await prisma.user.count({
     where: { idProofStatus: 'REJECTED' }
   });
 
@@ -32,9 +35,9 @@ export default async function CoordinatorDashboard() {
       {/* Stats row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: "Pending Verifications", value: pendingRegistrations.length, bg: "bg-amber-100/50", trendColor: "text-amber-600" },
-          { label: "Approved Participants", value: approvedRegistrationsCount, bg: "bg-emerald-100/50", trendColor: "text-emerald-600" },
-          { label: "Rejected Applications", value: rejectedRegistrationsCount, bg: "bg-rose-100/50", trendColor: "text-rose-600" },
+          { label: "Pending Verifications", value: pendingUsers.length, bg: "bg-amber-100/50", trendColor: "text-amber-600" },
+          { label: "Approved Participants", value: approvedUsersCount, bg: "bg-emerald-100/50", trendColor: "text-emerald-600" },
+          { label: "Rejected Applications", value: rejectedUsersCount, bg: "bg-rose-100/50", trendColor: "text-rose-600" },
         ].map((stat, i) => (
           <div key={i} className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 flex flex-col justify-between">
             <p className="text-[11px] uppercase tracking-wider font-bold text-[#554093]/60 mb-4">{stat.label}</p>
@@ -48,7 +51,7 @@ export default async function CoordinatorDashboard() {
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch flex-1">
         {/* We place the Verification Queue here! */}
-        <VerificationQueue registrations={pendingRegistrations} />
+        <VerificationQueue users={pendingUsers} />
         
         {/* Placeholder for future Coordinator Tools */}
         <div className="lg:col-span-2 bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 flex flex-col items-center justify-center min-h-[400px]">

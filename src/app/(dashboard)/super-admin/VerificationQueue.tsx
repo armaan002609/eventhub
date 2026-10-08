@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { updateIdProofStatus } from './actions';
 
-type Registration = {
+type VerificationUser = {
   id: string;
-  studentName: string;
-  university: { name: string };
-  idProofPath: string;
+  name: string;
+  university: { name: string } | null;
+  idProofPath: string | null;
   idProofStatus: string;
 };
 
-export default function VerificationQueue({ registrations }: { registrations: Registration[] }) {
+export default function VerificationQueue({ users }: { users: VerificationUser[] }) {
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   async function handleStatus(id: string, status: 'VERIFIED' | 'REJECTED') {
@@ -33,7 +33,7 @@ export default function VerificationQueue({ registrations }: { registrations: Re
           <p className="text-[12px] font-medium text-[#554093]/60 mt-0.5">Review and approve uploaded ID proofs.</p>
         </div>
         <span className="bg-amber-50 border border-amber-200/60 text-amber-600 text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
-          {registrations.length} Pending
+          {users.length} Pending
         </span>
       </div>
       <div className="overflow-x-auto flex-1">
@@ -47,24 +47,24 @@ export default function VerificationQueue({ registrations }: { registrations: Re
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-[#554093]/10">
-            {registrations.length === 0 ? (
+            {users.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-6 py-12 text-center text-[#554093]/60 font-medium">
                   Queue is empty! All ID proofs are verified.
                 </td>
               </tr>
             ) : (
-              registrations.map((reg) => (
-                <tr key={reg.id} className="hover:bg-[#554093]/5 transition-colors group">
+              users.map((user) => (
+                <tr key={user.id} className="hover:bg-[#554093]/5 transition-colors group">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-[14px] font-bold text-[#554093]">{reg.studentName}</div>
+                    <div className="text-[14px] font-bold text-[#554093]">{user.name}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-[13px] font-medium text-[#554093]/60">
-                    {reg.university?.name || 'Unknown'}
+                    {user.university?.name || 'Unknown'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <a 
-                      href={reg.idProofPath} 
+                      href={user.idProofPath!} 
                       target="_blank"
                       rel="noreferrer"
                       className="inline-flex items-center gap-1.5 text-[12px] font-bold text-[#554093] bg-[#554093]/5 border border-[#554093]/10 px-3 py-1.5 rounded-lg hover:bg-[#554093]/10 transition-colors shadow-[0_2px_8px_rgba(85,64,147,0.04)]"
@@ -77,27 +77,27 @@ export default function VerificationQueue({ registrations }: { registrations: Re
                     </a>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
-                    {loadingId === reg.id ? (
+                    {loadingId === user.id ? (
                       <span className="text-[12px] font-bold text-[#554093]/40">Updating...</span>
                     ) : (
                       <div className="flex items-center justify-end gap-3">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                          reg.idProofStatus === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'
+                          user.idProofStatus === 'REJECTED' ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-700'
                         }`}>
-                          {reg.idProofStatus}
+                          {user.idProofStatus}
                         </span>
                         
                         <div className="flex items-center gap-1">
                           <button 
-                            onClick={() => handleStatus(reg.id, 'VERIFIED')}
+                            onClick={() => handleStatus(user.id, 'VERIFIED')}
                             className="p-1.5 text-emerald-600 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-md transition-colors shadow-sm" 
                             title="Approve"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
                           </button>
-                          {reg.idProofStatus !== 'REJECTED' && (
+                          {user.idProofStatus !== 'REJECTED' && (
                             <button 
-                              onClick={() => handleStatus(reg.id, 'REJECTED')}
+                              onClick={() => handleStatus(user.id, 'REJECTED')}
                               className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors shadow-sm" 
                               title="Reject"
                             >

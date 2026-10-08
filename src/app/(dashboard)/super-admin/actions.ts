@@ -38,7 +38,7 @@ export async function updateIdProofStatus(registrationId: string, status: 'VERIF
     throw new Error('Not authorized');
   }
 
-  await prisma.registration.update({
+  await prisma.user.update({
     where: { id: registrationId },
     data: { idProofStatus: status }
   });
