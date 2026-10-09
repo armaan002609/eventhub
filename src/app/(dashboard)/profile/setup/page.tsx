@@ -13,10 +13,11 @@ export default async function ProfileSetupPage() {
 
   // Check if profile already set up (has username)
   const dbUser = await prisma.user.findUnique({
-    where: { email: user.email! }
+    where: { email: user.email! },
+    include: { university: true }
   });
 
-  if (dbUser?.username) {
+  if (dbUser?.username && dbUser?.idProofPath) {
     // Already setup
     redirect('/dashboard');
   }
@@ -28,7 +29,7 @@ export default async function ProfileSetupPage() {
         <p className="text-[#554093]/70 font-medium mt-2">Before you can participate in events or join teams, we need a few more details.</p>
       </div>
 
-      <ProfileSetupForm userId={dbUser?.id || ''} />
+      <ProfileSetupForm userId={dbUser?.id || ''} initialData={dbUser} />
     </div>
   );
 }

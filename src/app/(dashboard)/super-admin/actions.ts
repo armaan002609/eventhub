@@ -281,7 +281,10 @@ export async function deleteRegistration(id: string) {
     if (userIdsToReset.length > 0) {
       await prisma.user.updateMany({
         where: { id: { in: userIdsToReset } },
-        data: { idProofStatus: 'PENDING' }
+        data: { 
+          idProofStatus: 'PENDING',
+          idProofPath: null 
+        }
       });
     }
 

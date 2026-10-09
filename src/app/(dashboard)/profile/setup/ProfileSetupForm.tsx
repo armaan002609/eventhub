@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { updateProfile } from './actions';
 
-export default function ProfileSetupForm({ userId }: { userId: string }) {
+export default function ProfileSetupForm({ userId, initialData }: { userId: string, initialData?: any }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,13 +39,13 @@ export default function ProfileSetupForm({ userId }: { userId: string }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Choose a Username *</label>
-            <input name="username" required type="text" pattern="[a-zA-Z0-9_]+" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. janesmith_01" title="Only letters, numbers, and underscores are allowed" />
+            <input name="username" required type="text" defaultValue={initialData?.username || ''} pattern="[a-zA-Z0-9_]+" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. janesmith_01" title="Only letters, numbers, and underscores are allowed" />
             <p className="text-[11px] text-[#554093]/60 font-medium">This will be used to invite you to teams.</p>
           </div>
           
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Phone Number *</label>
-            <input name="phone" required type="tel" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. +91 9876543210" />
+            <input name="phone" required type="tel" defaultValue={initialData?.phone || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. +91 9876543210" />
           </div>
         </div>
       </div>
@@ -58,18 +58,18 @@ export default function ProfileSetupForm({ userId }: { userId: string }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Father's Name *</label>
-            <input name="fathersName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. John Doe" />
+            <input name="fathersName" required type="text" defaultValue={initialData?.fathersName || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. John Doe" />
           </div>
           
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Father's Phone Number *</label>
-            <input name="fathersPhone" required type="tel" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. +91 9876543210" />
+            <input name="fathersPhone" required type="tel" defaultValue={initialData?.fathersPhone || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. +91 9876543210" />
           </div>
         </div>
         
         <div className="space-y-2">
           <label className="text-[13px] font-bold text-[#554093]">Full Residential Address *</label>
-          <input name="address" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. 123 Main St, City, State" />
+          <input name="address" required type="text" defaultValue={initialData?.address || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. 123 Main St, City, State" />
         </div>
       </div>
 
@@ -81,18 +81,18 @@ export default function ProfileSetupForm({ userId }: { userId: string }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">University / College Name *</label>
-            <input name="universityName" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. State Tech University" />
+            <input name="universityName" required type="text" defaultValue={initialData?.university?.name || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. State Tech University" />
           </div>
           
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Roll Number *</label>
-            <input name="rollNumber" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. 21CS001" />
+            <input name="rollNumber" required type="text" defaultValue={initialData?.rollNumber || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. 21CS001" />
           </div>
         </div>
 
         <div className="space-y-2">
           <label className="text-[13px] font-bold text-[#554093]">Department *</label>
-          <input name="department" required type="text" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. Computer Science" />
+          <input name="department" required type="text" defaultValue={initialData?.department || ''} className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. Computer Science" />
         </div>
       </div>
 

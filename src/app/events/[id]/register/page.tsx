@@ -20,7 +20,7 @@ export default async function HackathonRegistrationPage({ params }: { params: Pr
     where: { id: user.id }
   });
 
-  if (!dbUser?.username) {
+  if (!dbUser?.username || !dbUser?.idProofPath) {
     redirect('/profile/setup');
   }
 
