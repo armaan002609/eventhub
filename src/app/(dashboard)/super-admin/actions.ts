@@ -264,9 +264,31 @@ export async function deleteRegistration(id: string) {
   const requester = await prisma.user.findUnique({ where: { id: user.id } });
   if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
 
-  await prisma.registration.delete({
-    where: { id }
+  const registration = await prisma.registration.findUnique({
+    where: { id },
+    include: { team: { include: { members: true } } }
   });
+
+  if (registration) {
+    const userIdsToReset: string[] = [];
+    if (registration.userId) {
+      userIdsToReset.push(registration.userId);
+    } else if (registration.teamId && registration.team) {
+      userIdsToReset.push(registration.team.leaderId);
+      registration.team.members.forEach(m => userIdsToReset.push(m.userId));
+    }
+
+    if (userIdsToReset.length > 0) {
+      await prisma.user.updateMany({
+        where: { id: { in: userIdsToReset } },
+        data: { idProofStatus: 'PENDING' }
+      });
+    }
+
+    await prisma.registration.delete({
+      where: { id }
+    });
+  }
 
   revalidatePath('/super-admin');
 }
