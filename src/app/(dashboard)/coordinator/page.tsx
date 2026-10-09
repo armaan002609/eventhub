@@ -10,18 +10,34 @@ export default async function CoordinatorDashboard() {
       },
       idProofPath: {
         not: null
-      }
+      },
+      OR: [
+        { registrations: { some: {} } },
+        { teamMemberships: { some: {} } }
+      ]
     },
     include: { university: true },
     orderBy: { createdAt: 'desc' }
   });
 
   const approvedUsersCount = await prisma.user.count({
-    where: { idProofStatus: 'VERIFIED' }
+    where: { 
+      idProofStatus: 'VERIFIED',
+      OR: [
+        { registrations: { some: {} } },
+        { teamMemberships: { some: {} } }
+      ]
+    }
   });
   
   const rejectedUsersCount = await prisma.user.count({
-    where: { idProofStatus: 'REJECTED' }
+    where: { 
+      idProofStatus: 'REJECTED',
+      OR: [
+        { registrations: { some: {} } },
+        { teamMemberships: { some: {} } }
+      ]
+    }
   });
 
   return (
