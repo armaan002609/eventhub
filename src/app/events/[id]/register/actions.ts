@@ -154,10 +154,16 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
           hackathonId,
           leaderId: user.id,
           members: {
-            create: teammates.map(t => ({
-              userId: t.id,
-              status: 'PENDING'
-            }))
+            create: [
+              {
+                userId: user.id,
+                status: 'ACCEPTED' // Leader is automatically accepted
+              },
+              ...teammates.map(t => ({
+                userId: t.id,
+                status: 'PENDING'
+              }))
+            ]
           }
         }
       });
