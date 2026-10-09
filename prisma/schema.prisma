@@ -97,7 +97,7 @@ model User {
   idProofStatus IdProofStatus @default(PENDING)
 
   universityId String?
-  university   University? @relation(fields: [universityId], references: [id])
+  university   University? @relation(fields: [universityId], references: [id], onDelete: SetNull)
 
   registrations    Registration[]
   teamsLed         Team[]          @relation("TeamLeader")
@@ -182,7 +182,7 @@ model Registration {
   // Transport
   needsTransport  Boolean        @default(false)
   boardingPointId String?
-  boardingPoint   BoardingPoint? @relation(fields: [boardingPointId], references: [id])
+  boardingPoint   BoardingPoint? @relation(fields: [boardingPointId], references: [id], onDelete: SetNull)
   transportFee    Int            @default(0)
 
   // Accommodation
@@ -218,11 +218,11 @@ model Duty {
   startsAt     DateTime
   endsAt       DateTime
   universityId String?
-  university   University? @relation(fields: [universityId], references: [id])
+  university   University? @relation(fields: [universityId], references: [id], onDelete: Cascade)
   createdById  String
-  createdBy    User        @relation("DutyCreator", fields: [createdById], references: [id])
+  createdBy    User        @relation("DutyCreator", fields: [createdById], references: [id], onDelete: Cascade)
   assignedToId String
-  assignedTo   User        @relation("DutyAssignee", fields: [assignedToId], references: [id])
+  assignedTo   User        @relation("DutyAssignee", fields: [assignedToId], references: [id], onDelete: Cascade)
   attendance   AttendanceLog[]
   createdAt    DateTime    @default(now())
 
@@ -234,11 +234,11 @@ model AttendanceLog {
   dutyId      String
   duty        Duty             @relation(fields: [dutyId], references: [id], onDelete: Cascade)
   volunteerId String
-  volunteer   User             @relation("AttendanceVolunteer", fields: [volunteerId], references: [id])
+  volunteer   User             @relation("AttendanceVolunteer", fields: [volunteerId], references: [id], onDelete: Cascade)
   status      AttendanceStatus
   markedAt    DateTime         @default(now()) // exact timestamp of the mark
   markedById  String
-  markedBy    User             @relation("AttendanceMarker", fields: [markedById], references: [id])
+  markedBy    User             @relation("AttendanceMarker", fields: [markedById], references: [id], onDelete: Cascade)
   note        String?
 
   @@index([dutyId, volunteerId, markedAt])
@@ -264,7 +264,7 @@ model ScoreEntry {
   points        Int?
   metrics       Json? // event-specific extras
   updatedById   String
-  updatedBy     User        @relation(fields: [updatedById], references: [id])
+  updatedBy     User        @relation(fields: [updatedById], references: [id], onDelete: Cascade)
   updatedAt     DateTime    @updatedAt
 
   // Rank is computed at read time (ORDER BY per competition.metric), never stored, so it can't go stale.
@@ -283,7 +283,7 @@ model Announcement {
 model AuditLog {
   id        String   @id @default(cuid())
   actorId   String?
-  actor     User?    @relation(fields: [actorId], references: [id])
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
   action    String // e.g. IDPROOF_VIEWED, COORDINATOR_ASSIGNED
   target    String?
   ip        String?
@@ -352,7 +352,7 @@ model Match {
   scoreData   Json        @default("{}")
   
   hackathonId String?
-  hackathon   Hackathon?  @relation(fields: [hackathonId], references: [id])
+  hackathon   Hackathon?  @relation(fields: [hackathonId], references: [id], onDelete: Cascade)
   
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -369,7 +369,7 @@ model MatchLog {
   payload     Json?    
   
   createdById String
-  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
   
   createdAt   DateTime @default(now())
 }
