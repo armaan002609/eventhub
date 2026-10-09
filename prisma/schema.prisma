@@ -93,6 +93,7 @@ model User {
   address      String?
   
   idProofPath   String?
+  profilePicturePath String?
   idProofStatus IdProofStatus @default(PENDING)
 
   universityId String?

@@ -39,6 +39,19 @@ export default function SignupPage() {
               />
             </div>
             <div>
+              <label htmlFor="profilePicture" className="block text-[13px] font-bold tracking-widest uppercase text-[#554093] mb-2">
+                Profile Picture
+              </label>
+              <input
+                id="profilePicture"
+                name="profilePicture"
+                type="file"
+                accept="image/*"
+                required
+                className="appearance-none block w-full px-5 py-3 border-2 border-[#554093]/20 bg-white placeholder-[#554093]/40 text-[#554093] rounded-2xl focus:outline-none focus:border-[#554093] focus:ring-0 transition-colors text-[15px] file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[13px] file:font-bold file:bg-[#554093]/10 file:text-[#554093] hover:file:bg-[#554093]/20"
+              />
+            </div>
+            <div>
               <label htmlFor="email-address" className="block text-[13px] font-bold tracking-widest uppercase text-[#554093] mb-2">
                 Work Email
               </label>

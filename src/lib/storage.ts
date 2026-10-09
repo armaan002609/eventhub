@@ -48,3 +48,25 @@ export async function uploadHackathonImage(file: File): Promise<string> {
   const { data: { publicUrl } } = supabase.storage.from('public-images').getPublicUrl(path);
   return publicUrl;
 }
+
+/** Upload profile picture to public bucket */
+export async function uploadProfilePicture(file: File): Promise<string> {
+  const supabase = admin();
+  
+  // Ensure bucket exists and is public
+  await supabase.storage.createBucket('public-images', { public: true }).catch(() => {});
+  
+  const ext = file.name.split('.').pop() || 'jpg';
+  const path = `profiles/${randomUUID()}.${ext}`;
+  
+  const buffer = await file.arrayBuffer();
+  const { data, error } = await supabase.storage.from('public-images').upload(path, buffer, {
+    contentType: file.type,
+    upsert: false
+  });
+  
+  if (error || !data) throw new Error('Could not upload image');
+  
+  const { data: { publicUrl } } = supabase.storage.from('public-images').getPublicUrl(path);
+  return publicUrl;
+}
