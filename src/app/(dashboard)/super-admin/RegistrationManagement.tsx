@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { deleteRegistration } from './actions';
 
 type Registration = {
@@ -41,11 +42,14 @@ export default function RegistrationManagement({ registrations }: { registration
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
+  const router = useRouter();
+
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this registration?')) return;
     setLoadingId(id);
     try {
       await deleteRegistration(id);
+      router.refresh();
     } catch (err) {
       console.error(err);
       alert('Failed to delete registration');

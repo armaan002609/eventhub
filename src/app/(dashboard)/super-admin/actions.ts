@@ -282,9 +282,15 @@ export async function deleteRegistration(id: string) {
       });
     }
 
-    await prisma.registration.delete({
-      where: { id }
-    });
+    if (registration.teamId) {
+      await prisma.team.delete({
+        where: { id: registration.teamId }
+      });
+    } else {
+      await prisma.registration.delete({
+        where: { id }
+      });
+    }
   }
 
   revalidatePath('/', 'layout');
