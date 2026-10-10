@@ -9,17 +9,21 @@ export default async function Navbar() {
   
   let userRole = 'PARTICIPANT';
   let dashboardPath = '/participant';
+  let username = user?.email?.split('@')[0] || 'User';
   
   if (user) {
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { role: true }
+      select: { role: true, username: true }
     });
     if (dbUser?.role) {
       userRole = dbUser.role;
       if (userRole === 'SUPER_ADMIN') dashboardPath = '/super-admin';
       else if (userRole === 'COORDINATOR') dashboardPath = '/coordinator';
       else if (userRole === 'VOLUNTEER') dashboardPath = '/volunteer';
+    }
+    if (dbUser?.username) {
+      username = dbUser.username;
     }
   }
 
@@ -62,10 +66,10 @@ export default async function Navbar() {
             <div className="flex items-center gap-2">
               <Link href={dashboardPath} className="flex items-center gap-3 hover:bg-[#554093]/5 p-1.5 pr-5 rounded-full transition-all border border-transparent hover:border-[#554093]/10">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#554093] to-[#7B61C8] text-white flex items-center justify-center text-[14px] font-bold shadow-sm ring-2 ring-white">
-                  {user.email?.charAt(0).toUpperCase()}
+                  {username.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-[#554093] leading-tight">Dashboard</span>
+                  <span className="text-[14px] font-bold text-[#554093] leading-tight">@{username}</span>
                   {userRole !== 'PARTICIPANT' && (
                     <span className="text-[10px] font-bold text-rose-500 uppercase tracking-widest leading-tight mt-0.5">
                       {userRole.replace('_', ' ')}
@@ -86,7 +90,7 @@ export default async function Navbar() {
       </div>
 
       <div className="lg:hidden flex items-center">
-        <MobileMenu userEmail={user?.email} dashboardPath={dashboardPath} userRole={userRole} />
+        <MobileMenu userEmail={user?.email} username={username} dashboardPath={dashboardPath} userRole={userRole} />
       </div>
     </header>
   );

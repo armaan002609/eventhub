@@ -15,16 +15,20 @@ export default async function DashboardLayout({
   let role = 'PARTICIPANT';
   let userName = 'User';
   let userEmail = '';
+  let username = 'User';
 
   if (user) {
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { role: true, name: true, email: true }
+      select: { role: true, name: true, email: true, username: true }
     });
     if (dbUser) {
       role = dbUser.role;
       userName = dbUser.name;
       userEmail = dbUser.email;
+      if (dbUser.username) {
+        username = dbUser.username;
+      }
     }
   }
 
@@ -113,10 +117,10 @@ export default async function DashboardLayout({
 
               <div className="flex items-center gap-3 pl-2 sm:pl-4 sm:border-l border-[#554093]/10">
                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#554093] to-[#7B61C8] overflow-hidden shrink-0 shadow-sm flex items-center justify-center text-white font-black text-sm">
-                  {userName.charAt(0).toUpperCase()}
+                  {username.charAt(0).toUpperCase()}
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-[13px] font-bold text-[#554093] leading-tight">{userName}</p>
+                  <p className="text-[13px] font-bold text-[#554093] leading-tight">@{username}</p>
                   <p className="text-[11px] text-[#554093]/60 font-bold uppercase tracking-wider">{role.replace('_', ' ')}</p>
                 </div>
               </div>
