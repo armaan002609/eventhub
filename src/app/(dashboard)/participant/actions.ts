@@ -23,6 +23,11 @@ export async function handleInviteAction(teamId: string, userId: string, action:
       }
     });
   } else if (action === 'ACCEPT') {
+    const dbUser = await prisma.user.findUnique({ where: { id: userId } });
+    if (!dbUser?.idProofPath) {
+      throw new Error("You must upload an ID proof in Profile Setup before accepting this invitation.");
+    }
+
     await prisma.teamMember.update({
       where: {
         teamId_userId: {

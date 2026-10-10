@@ -17,7 +17,7 @@ export default async function ParticipantDashboard() {
     where: { id: user.id }
   });
 
-  if (!dbUser || !dbUser.username) {
+  if (!dbUser || !dbUser.username || !dbUser.idProofPath) {
     redirect('/profile/setup');
   }
 
