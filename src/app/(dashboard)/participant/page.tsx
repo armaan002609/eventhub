@@ -83,7 +83,7 @@ export default async function ParticipantDashboard() {
               : "bg-amber-50 border-amber-200/60 text-amber-600";
               
             const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://eventhub-armaan6.vercel.app';
-            const qrData = `${baseUrl}/ticket/${reg.id}`;
+            const qrData = `${baseUrl}/ticket/${reg.id}?user=${user.id}`;
               
             return (
               <div key={reg.id} className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 relative overflow-hidden">
@@ -140,7 +140,7 @@ export default async function ParticipantDashboard() {
               : "bg-amber-50 border-amber-200/60 text-amber-600";
               
             const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://eventhub-armaan6.vercel.app';
-            const qrData = `${baseUrl}/ticket/${reg.id}`;
+            const qrData = `${baseUrl}/ticket/${reg.id}?user=${user.id}`;
               
             return (
               <div key={team.id} className="bg-white rounded-3xl p-6 shadow-[0_4px_24px_rgba(85,64,147,0.05)] border border-[#554093]/10 relative overflow-hidden">

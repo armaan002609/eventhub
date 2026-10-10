@@ -2,10 +2,18 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-export default async function TicketVerificationPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function TicketVerificationPage({ 
+  params,
+  searchParams
+}: { 
+  params: Promise<{ id: string }>,
+  searchParams: Promise<{ user?: string }>
+}) {
   // Await the params object before accessing properties
   const resolvedParams = await params;
+  const resolvedSearchParams = await searchParams;
   const regId = resolvedParams.id;
+  const userId = resolvedSearchParams.user;
 
   const registration = await prisma.registration.findUnique({
     where: { id: regId },
@@ -18,6 +26,9 @@ export default async function TicketVerificationPage({ params }: { params: Promi
         include: {
           leader: {
             include: { university: true }
+          },
+          members: {
+            include: { user: { include: { university: true } } }
           }
         }
       }
@@ -44,12 +55,45 @@ export default async function TicketVerificationPage({ params }: { params: Promi
   }
 
   const isSolo = !!registration.user;
-  const participantName = isSolo ? registration.user!.name : registration.team!.leader.name;
-  const university = isSolo ? registration.user!.university?.name : registration.team!.leader.university?.name;
   const teamName = isSolo ? null : registration.team!.name;
+  
+  let participantName = '';
+  let university = '';
+  let participantIdProofStatus = 'PENDING';
+  
+  if (isSolo) {
+    participantName = registration.user!.name;
+    university = registration.user!.university?.name || '';
+    participantIdProofStatus = registration.user!.idProofStatus;
+  } else {
+    // It's a team. We need to find the specific user using `userId`
+    const leader = registration.team!.leader;
+    const members = registration.team!.members;
+    
+    if (userId && leader.id === userId) {
+      participantName = leader.name;
+      university = leader.university?.name || '';
+      participantIdProofStatus = leader.idProofStatus;
+    } else if (userId) {
+      const member = members.find(m => m.userId === userId);
+      if (member) {
+        participantName = member.user.name;
+        university = member.user.university?.name || '';
+        participantIdProofStatus = member.user.idProofStatus;
+      } else {
+        // Fallback if userId is invalid/not found in team
+        participantName = 'Unknown Team Member';
+      }
+    } else {
+      // Fallback if no userId provided
+      participantName = leader.name + " (Team)";
+      university = leader.university?.name || '';
+      participantIdProofStatus = leader.idProofStatus;
+    }
+  }
 
   const isPaid = registration.paymentStatus === 'PAID';
-  const isVerified = isSolo ? (registration.user!.idProofStatus === 'VERIFIED') : (registration.team!.leader.idProofStatus === 'VERIFIED');
+  const isVerified = participantIdProofStatus === 'VERIFIED';
 
   const isValid = isPaid && isVerified;
 
