@@ -142,7 +142,7 @@ export default async function TicketVerificationPage({
               <div>
                 <p className="text-[11px] font-bold text-[#554093]/40 uppercase tracking-widest mb-1">Team Details</p>
                 <p className="text-base font-bold text-[#554093]">{teamName}</p>
-                <p className="text-xs font-medium text-[#554093]/60">Leader: {participantName}</p>
+                <p className="text-xs font-medium text-[#554093]/60">Leader: {registration.team!.leader.name}</p>
               </div>
             )}
 
