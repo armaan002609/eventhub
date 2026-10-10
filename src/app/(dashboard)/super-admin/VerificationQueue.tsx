@@ -6,6 +6,7 @@ import { updateIdProofStatus } from './actions';
 type VerificationUser = {
   id: string;
   name: string;
+  username?: string | null;
   university: { name: string } | null;
   idProofPath: string | null;
   idProofStatus: string;
@@ -57,7 +58,7 @@ export default function VerificationQueue({ users }: { users: VerificationUser[]
               users.map((user) => (
                 <tr key={user.id} className="hover:bg-[#554093]/5 transition-colors group">
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-[14px] font-bold text-[#554093]">{user.name}</div>
+                    <div className="text-[14px] font-bold text-[#554093]">@{user.username || user.name.split(' ')[0]}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-[13px] font-medium text-[#554093]/60">
                     {user.university?.name || 'Unknown'}

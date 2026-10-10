@@ -15,11 +15,11 @@ export default async function VolunteerDashboard() {
   if (requester?.role === 'SUPER_ADMIN' || requester?.role === 'COORDINATOR') {
     const volunteers = await prisma.user.findMany({
       where: { role: 'VOLUNTEER' },
-      select: { id: true, name: true, email: true, role: true }
+      select: { id: true, name: true, username: true, email: true, role: true }
     });
 
     const allDuties = await prisma.duty.findMany({
-      include: { assignedTo: { select: { id: true, name: true } } },
+      include: { assignedTo: { select: { id: true, name: true, username: true } } },
       orderBy: { startsAt: 'asc' }
     });
 
@@ -41,7 +41,7 @@ export default async function VolunteerDashboard() {
   // Fetch coordinators for contact info
   const coordinators = await prisma.user.findMany({
     where: { role: 'COORDINATOR' },
-    select: { id: true, name: true, email: true }
+    select: { id: true, name: true, username: true, email: true }
   });
 
   return (
@@ -156,10 +156,10 @@ export default async function VolunteerDashboard() {
                 <div key={coordinator.id} className="flex items-center justify-between p-4 bg-[#554093]/5 rounded-[20px] border border-[#554093]/10">
                   <div className="flex items-center gap-3">
                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#554093] to-[#775BB3] text-white font-bold text-sm flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(85,64,147,0.2)]">
-                        {coordinator.name.charAt(0).toUpperCase()}
+                        {(coordinator.username || coordinator.name).charAt(0).toUpperCase()}
                      </div>
                      <div className="min-w-0">
-                       <p className="text-sm font-bold text-[#554093] truncate">{coordinator.name}</p>
+                       <p className="text-sm font-bold text-[#554093] truncate">@{coordinator.username || coordinator.name.split(' ')[0]}</p>
                        <p className="text-[11px] font-semibold text-[#554093]/60 truncate">{coordinator.email}</p>
                      </div>
                   </div>

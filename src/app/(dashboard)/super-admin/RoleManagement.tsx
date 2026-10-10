@@ -6,6 +6,7 @@ import RoleSelector from './RoleSelector';
 type User = {
   id: string;
   email: string;
+  username?: string | null;
   role: string;
 };
 
@@ -14,7 +15,8 @@ export default function RoleManagement({ initialUsers, currentUserId }: { initia
   const [roleFilter, setRoleFilter] = useState<string>('ALL');
 
   const filteredUsers = initialUsers.filter(u => {
-    const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase());
+    const displayUsername = u.username || u.email.split('@')[0];
+    const matchesSearch = displayUsername.toLowerCase().includes(search.toLowerCase()) || u.email.toLowerCase().includes(search.toLowerCase());
     const matchesRole = roleFilter === 'ALL' || u.role === roleFilter;
     return matchesSearch && matchesRole;
   });
@@ -32,7 +34,7 @@ export default function RoleManagement({ initialUsers, currentUserId }: { initia
           <div className="relative">
             <input 
               type="text" 
-              placeholder="Search users by email..." 
+              placeholder="Search users by username..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-white border border-[#554093]/20 rounded-2xl px-5 py-3 text-[13px] font-medium text-[#554093] placeholder-[#554093]/40 shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093]"
@@ -70,7 +72,7 @@ export default function RoleManagement({ initialUsers, currentUserId }: { initia
                 <div key={user.id} className="flex items-center justify-between bg-white p-4 rounded-2xl border border-[#554093]/10 shadow-[0_2px_8px_rgba(85,64,147,0.04)]">
                   <div className="truncate pr-3">
                     <p className="text-[13px] font-bold text-[#554093] truncate max-w-[150px] flex items-center gap-2">
-                      {user.email}
+                      @{user.username || user.email.split('@')[0]}
                       {isSelf && <span className="text-[9px] bg-[#554093]/10 text-[#554093] border border-[#554093]/20 px-1.5 py-0.5 rounded uppercase tracking-wider">You</span>}
                     </p>
                     <p className="text-[11px] font-semibold text-[#554093]/60 mt-0.5">Current: {user.role}</p>

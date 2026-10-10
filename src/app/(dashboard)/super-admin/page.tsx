@@ -41,12 +41,12 @@ export default async function SuperAdminDashboard() {
 
   const coordinators = await prisma.user.findMany({
     where: { role: 'COORDINATOR' },
-    select: { id: true, name: true, email: true, role: true }
+    select: { id: true, name: true, username: true, email: true, role: true }
   });
 
   const coordinatorDuties = await prisma.duty.findMany({
     where: { level: 'HIGH_LEVEL' },
-    include: { assignedTo: { select: { id: true, name: true } } },
+    include: { assignedTo: { select: { id: true, name: true, username: true } } },
     orderBy: { startsAt: 'asc' }
   });
 

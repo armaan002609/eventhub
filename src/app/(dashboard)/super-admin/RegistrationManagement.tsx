@@ -8,6 +8,7 @@ type Registration = {
   hackathon: { title: string };
   user: {
     name: string;
+    username?: string | null;
     phone: string | null;
     university: { name: string } | null;
   } | null;
@@ -15,6 +16,7 @@ type Registration = {
     name: string;
     leader: {
       name: string;
+      username?: string | null;
       phone: string | null;
       university: { name: string } | null;
     }
@@ -41,7 +43,7 @@ export default function RegistrationManagement({ registrations }: { registration
   }
 
   const filteredRegistrations = registrations.filter(reg => {
-    const participantName = reg.user ? reg.user.name : (reg.team?.leader.name || '');
+    const participantName = reg.user ? (reg.user.username || reg.user.name) : (reg.team?.leader.username || reg.team?.leader.name || '');
     const teamName = reg.team ? reg.team.name : '';
     
     return participantName.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -92,14 +94,14 @@ export default function RegistrationManagement({ registrations }: { registration
             ) : (
               filteredRegistrations.map((reg) => {
                 const isSolo = !!reg.user;
-                const name = isSolo ? reg.user!.name : reg.team!.leader.name;
+                const name = isSolo ? (reg.user!.username || reg.user!.name) : (reg.team!.leader.username || reg.team!.leader.name);
                 const uni = isSolo ? reg.user!.university?.name : reg.team!.leader.university?.name;
                 const phone = isSolo ? reg.user!.phone : reg.team!.leader.phone;
 
                 return (
                   <tr key={reg.id} className="hover:bg-[#554093]/5 transition-colors">
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-[13px] font-bold text-[#554093]">{name}</div>
+                      <div className="text-[13px] font-bold text-[#554093]">@{name}</div>
                       <div className="text-[11px] font-medium text-[#554093]/60">{uni || 'Unknown'}</div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">

@@ -6,6 +6,7 @@ import { createDuty, deleteDuty } from '../coordinator/actions';
 type User = {
   id: string;
   name: string;
+  username?: string | null;
   email: string;
   role: string;
 };
@@ -19,6 +20,7 @@ type Duty = {
   assignedTo: {
     id: string;
     name: string;
+    username?: string | null;
   };
 };
 
@@ -63,7 +65,7 @@ export default function CoordinatorManagement({ coordinators, duties }: { coordi
   function handleDownloadCSV() {
     const header = ['Coordinator Name', 'Duty Title', 'Venue', 'Starts At', 'Ends At'];
     const rows = duties.map(d => [
-      `"${d.assignedTo.name}"`,
+      `"${d.assignedTo.username || d.assignedTo.name}"`,
       `"${d.title}"`,
       `"${d.venue}"`,
       `"${new Date(d.startsAt).toLocaleString()}"`,
@@ -111,7 +113,7 @@ export default function CoordinatorManagement({ coordinators, duties }: { coordi
               <select name="assignedToId" required className="w-full px-3 py-2 border border-[#554093]/20 rounded-md shadow-[0_2px_8px_rgba(85,64,147,0.04)] focus:outline-none focus:ring-2 focus:ring-[#554093] text-[13px] font-medium text-[#554093] bg-white">
                 <option value="">-- Choose Coordinator --</option>
                 {coordinators.map(v => (
-                  <option key={v.id} value={v.id}>{v.name} ({v.email})</option>
+                  <option key={v.id} value={v.id}>@{v.username || v.email.split('@')[0]}</option>
                 ))}
               </select>
             </div>
@@ -166,7 +168,7 @@ export default function CoordinatorManagement({ coordinators, duties }: { coordi
               duties.map((duty) => (
                 <tr key={duty.id} className="hover:bg-[#554093]/5 transition-colors">
                   <td className="px-4 py-3 whitespace-nowrap">
-                    <div className="text-[13px] font-bold text-[#554093]">{duty.assignedTo.name}</div>
+                    <div className="text-[13px] font-bold text-[#554093]">@{duty.assignedTo.username || duty.assignedTo.name.split(' ')[0]}</div>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-[13px] font-bold text-[#554093]">
                     {duty.title}
