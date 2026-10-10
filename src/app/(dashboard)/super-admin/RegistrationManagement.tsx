@@ -7,6 +7,7 @@ type Registration = {
   id: string;
   hackathon: { title: string };
   user: {
+    id: string;
     name: string;
     username?: string | null;
     phone: string | null;
@@ -15,6 +16,7 @@ type Registration = {
   team: {
     name: string;
     leader: {
+      id: string;
       name: string;
       username?: string | null;
       phone: string | null;
@@ -22,6 +24,7 @@ type Registration = {
     };
     members: {
       user: {
+        id: string;
         name: string;
         username?: string | null;
         phone: string | null;
@@ -171,7 +174,9 @@ export default function RegistrationManagement({ registrations }: { registration
                                 <p className="text-[11px] font-medium text-[#554093]/60 mb-0.5">{reg.team.leader.university?.name || 'Unknown University'}</p>
                                 <p className="text-[11px] font-medium text-[#554093]/80">📞 {reg.team.leader.phone || 'No phone'}</p>
                               </div>
-                              {reg.team.members.map((member, idx) => (
+                              {reg.team.members
+                                .filter((member) => member.user.id !== reg.team!.leader.id)
+                                .map((member, idx) => (
                                 <div key={idx} className="bg-white p-3 rounded-xl border border-[#554093]/10 shadow-[0_2px_8px_rgba(85,64,147,0.04)]">
                                   <div className="flex justify-between items-start mb-1">
                                     <p className="text-[13px] font-bold text-[#554093]">@{member.user.username || member.user.name}</p>
