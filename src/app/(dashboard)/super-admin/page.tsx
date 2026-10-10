@@ -4,6 +4,7 @@ import RoleManagement from "./RoleManagement";
 import HackathonManagement from "./HackathonManagement";
 import RegistrationManagement from "./RegistrationManagement";
 import CoordinatorManagement from "./CoordinatorManagement";
+import AutoRefresh from "@/components/AutoRefresh";
 
 export default async function SuperAdminDashboard() {
   const supabase = await createClient();
@@ -59,6 +60,7 @@ export default async function SuperAdminDashboard() {
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-6">
+      <AutoRefresh intervalMs={15000} />
       {/* Header Info */}
       <div>
         <h1 className="text-3xl font-bold text-[#554093] tracking-tight">Super Admin Dashboard</h1>

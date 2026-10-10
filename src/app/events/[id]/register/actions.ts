@@ -189,7 +189,6 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
     });
   }
 
-  revalidatePath(`/events/${hackathonId}`);
-  revalidatePath('/dashboard');
+  revalidatePath('/', 'layout');
   return { success: true };
 }

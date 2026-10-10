@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import VerificationQueue from "../super-admin/VerificationQueue";
+import AutoRefresh from "@/components/AutoRefresh";
 
 export default async function CoordinatorDashboard() {
   // Fetch pending and rejected ID proofs for Verification Queue
@@ -42,6 +43,7 @@ export default async function CoordinatorDashboard() {
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-6">
+      <AutoRefresh intervalMs={15000} />
       {/* Header Info */}
       <div>
         <h1 className="text-3xl font-bold text-[#554093] tracking-tight">Coordinator Dashboard</h1>

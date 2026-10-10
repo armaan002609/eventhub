@@ -23,7 +23,7 @@ export async function updateUserRole(userId: string, newRole: 'SUPER_ADMIN' | 'C
     data: { role: newRole }
   });
 
-  revalidatePath('/super-admin'); revalidatePath('/coordinator');
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
@@ -43,7 +43,7 @@ export async function updateIdProofStatus(registrationId: string, status: 'VERIF
     data: { idProofStatus: status }
   });
 
-  revalidatePath('/super-admin'); revalidatePath('/coordinator');
+  revalidatePath('/', 'layout');
   return { success: true };
 }
 
@@ -109,8 +109,7 @@ export async function createHackathon(formData: FormData) {
     }
   });
 
-  revalidatePath('/');
-  revalidatePath('/super-admin');
+  revalidatePath('/', 'layout');
 }
 
 export async function deleteHackathon(id: string) {
@@ -124,8 +123,7 @@ export async function deleteHackathon(id: string) {
   await prisma.hackathon.deleteMany({
     where: { id }
   });
-  revalidatePath('/');
-  revalidatePath('/super-admin');
+  revalidatePath('/', 'layout');
 }
 
 
@@ -150,8 +148,7 @@ export async function createCommittee(formData: FormData) {
     }
   });
 
-  revalidatePath('/super-admin');
-  revalidatePath('/committees');
+  revalidatePath('/', 'layout');
 }
 
 export async function updateCommittee(id: string, formData: FormData) {
@@ -175,8 +172,7 @@ export async function updateCommittee(id: string, formData: FormData) {
     }
   });
 
-  revalidatePath('/super-admin');
-  revalidatePath('/committees');
+  revalidatePath('/', 'layout');
 }
 
 export async function deleteCommittee(id: string) {
@@ -188,8 +184,7 @@ export async function deleteCommittee(id: string) {
   if (requester?.role !== 'SUPER_ADMIN') throw new Error('Not authorized');
 
   await prisma.committee.delete({ where: { id } });
-  revalidatePath('/super-admin');
-  revalidatePath('/committees');
+  revalidatePath('/', 'layout');
 }
 
 export async function updateHackathon(id: string, formData: FormData) {
@@ -252,8 +247,7 @@ export async function updateHackathon(id: string, formData: FormData) {
     }
   });
 
-  revalidatePath('/');
-  revalidatePath('/super-admin');
+  revalidatePath('/', 'layout');
 }
 
 export async function deleteRegistration(id: string) {
@@ -293,5 +287,5 @@ export async function deleteRegistration(id: string) {
     });
   }
 
-  revalidatePath('/super-admin');
+  revalidatePath('/', 'layout');
 }
