@@ -43,7 +43,7 @@ export default async function ParticipantDashboard() {
     orderBy: { createdAt: 'desc' }
   });
 
-  const allEventsCount = soloRegistrations.length + teamMemberships.filter(m => m.status === 'ACCEPTED').length;
+  const allEventsCount = soloRegistrations.length + teamMemberships.filter(m => m.status === 'ACCEPTED' && m.team.registration).length;
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-8">

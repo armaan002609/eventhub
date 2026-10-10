@@ -10,6 +10,15 @@ export default async function SuperAdminDashboard() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Clean up any ghost teams that lost their registration due to previous bugs
+  try {
+    await prisma.team.deleteMany({
+      where: { registration: null }
+    });
+  } catch (err) {
+    console.error('Failed to clean up ghost teams', err);
+  }
+
   // Fetch users for Role Management
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'desc' }
