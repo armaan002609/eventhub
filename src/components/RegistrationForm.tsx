@@ -138,19 +138,14 @@ export default function RegistrationForm({ hackathonId }: { hackathonId: string 
               <input type="checkbox" name="needsFood" value="true" checked={needsFood} onChange={e => setNeedsFood(e.target.checked)} className="w-5 h-5 text-[#554093] rounded border-[#554093]/20 focus:ring-[#554093]" />
               <span className="text-[13px] font-bold text-[#554093]">Food / Meals</span>
             </label>
-            {needsFood && (
+            {needsFood && registrationType === 'TEAM' && (
               <div className="animate-in fade-in slide-in-from-top-2 p-1 space-y-2">
-                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block">Meals per day (Max 4)</label>
-                <input name="mealsPerDay" type="number" min="1" max="4" defaultValue="3" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
-                
-                {registrationType === 'TEAM' && (
-                  <>
-                   <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mt-2">For how many members?</label>
-                   <input name="foodCount" type="number" min="1" max="10" defaultValue="1" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
-                  </>
-                )}
+                <label className="text-[11px] font-bold text-[#554093]/70 uppercase tracking-wider block mt-2">For how many members?</label>
+                <input name="foodCount" type="number" min="1" max="10" defaultValue="1" required className="w-full px-3 py-2 bg-white border border-[#554093]/20 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] text-[#554093]" />
               </div>
             )}
+
+
           </div>
         </div>
 

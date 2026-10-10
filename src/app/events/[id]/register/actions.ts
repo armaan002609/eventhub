@@ -60,7 +60,7 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
     const baseFee = hackathon.baseFee;
     const transportFee = needsTransport ? hackathon.transportFee : 0;
     const accommodationFee = needsAccommodation ? (hackathon.accommodationFee * accommodationDays) : 0;
-    const foodFee = needsFood ? (hackathon.foodFee * mealsPerDay * accommodationDays) : 0;
+    const foodFee = needsFood ? hackathon.foodFee : 0;
     const totalFee = baseFee + transportFee + accommodationFee + foodFee;
 
     await prisma.registration.create({
@@ -76,7 +76,7 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
         accommodationDays,
         accommodationFee,
         needsFood,
-        mealsPerDay,
+        mealsPerDay: 1, // Defaulting since it's no longer asked
         foodFee,
         totalFee
       }
@@ -143,7 +143,7 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
     const baseFee = hackathon.baseFee * totalTeamSize;
     const transportFee = needsTransport ? (hackathon.transportFee * transportCount) : 0;
     const accommodationFee = needsAccommodation ? (hackathon.accommodationFee * accommodationDays * accommodationCount) : 0;
-    const foodFee = needsFood ? (hackathon.foodFee * mealsPerDay * accommodationDays * foodCount) : 0;
+    const foodFee = needsFood ? (hackathon.foodFee * foodCount) : 0;
     const totalFee = baseFee + transportFee + accommodationFee + foodFee;
 
     // Create Team, Members, and Registration in a transaction
@@ -181,7 +181,7 @@ export async function registerParticipant(hackathonId: string, formData: FormDat
           accommodationDays,
           accommodationFee,
           needsFood,
-          mealsPerDay,
+          mealsPerDay: 1, // Defaulting since it's no longer asked
           foodFee,
           totalFee
         }
