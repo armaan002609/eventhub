@@ -1,11 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { updateProfile } from './actions';
 
 export default function ProfileSetupForm({ userId, initialData }: { userId: string, initialData?: any }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -17,10 +20,12 @@ export default function ProfileSetupForm({ userId, initialData }: { userId: stri
       const res = await updateProfile(userId, formData);
       if (res?.error) {
         setError(res.error);
+        setLoading(false);
+      } else {
+        router.push('/dashboard');
       }
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
-    } finally {
       setLoading(false);
     }
   }
