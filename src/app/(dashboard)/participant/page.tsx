@@ -113,6 +113,18 @@ export default async function ParticipantDashboard() {
                         <span className="text-[#554093]/60 font-semibold text-sm">Fees calculated after ID verification</span>
                       )}
                     </div>
+
+                    {isVerified && reg.totalFee > 0 && (
+                      <div className="mt-4 p-3 bg-[#554093]/[0.02] rounded-xl border border-[#554093]/5">
+                        <p className="text-xs font-bold text-[#554093] mb-2 uppercase tracking-wide">Fee Breakdown</p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs font-medium text-[#554093]/70">
+                          <div><span className="opacity-75">Base Fee:</span> ₹{reg.totalFee - reg.transportFee - reg.accommodationFee - reg.foodFee}</div>
+                          {reg.transportFee > 0 && <div><span className="opacity-75">Transport:</span> ₹{reg.transportFee}</div>}
+                          {reg.accommodationFee > 0 && <div><span className="opacity-75">Accommodation:</span> ₹{reg.accommodationFee}</div>}
+                          {reg.foodFee > 0 && <div><span className="opacity-75">Food:</span> ₹{reg.foodFee}</div>}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   
                   {isVerified && (
@@ -173,6 +185,18 @@ export default async function ParticipantDashboard() {
                         <span className="text-[#554093]/60 font-semibold text-sm">Fees calculated after ID verification</span>
                       )}
                     </div>
+
+                    {isVerified && reg.totalFee > 0 && (
+                      <div className="mt-4 p-3 bg-[#554093]/[0.02] rounded-xl border border-[#554093]/5">
+                        <p className="text-xs font-bold text-[#554093] mb-2 uppercase tracking-wide">Fee Breakdown</p>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs font-medium text-[#554093]/70">
+                          <div><span className="opacity-75">Team Base Fee:</span> ₹{reg.totalFee - reg.transportFee - reg.accommodationFee - reg.foodFee}</div>
+                          {reg.transportFee > 0 && <div><span className="opacity-75">Transport:</span> ₹{reg.transportFee}</div>}
+                          {reg.accommodationFee > 0 && <div><span className="opacity-75">Accommodation:</span> ₹{reg.accommodationFee}</div>}
+                          {reg.foodFee > 0 && <div><span className="opacity-75">Food:</span> ₹{reg.foodFee}</div>}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   
                   {isVerified && (
