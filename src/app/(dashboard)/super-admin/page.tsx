@@ -32,6 +32,13 @@ export default async function SuperAdminDashboard() {
         include: {
           leader: {
             include: { university: true }
+          },
+          members: {
+            include: {
+              user: {
+                include: { university: true }
+              }
+            }
           }
         }
       },

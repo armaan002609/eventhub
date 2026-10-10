@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { deleteRegistration } from './actions';
 
 type Registration = {
@@ -19,7 +19,15 @@ type Registration = {
       username?: string | null;
       phone: string | null;
       university: { name: string } | null;
-    }
+    };
+    members: {
+      user: {
+        name: string;
+        username?: string | null;
+        phone: string | null;
+        university: { name: string } | null;
+      }
+    }[];
   } | null;
   totalFee: number;
   paymentStatus: string;
@@ -28,6 +36,7 @@ type Registration = {
 export default function RegistrationManagement({ registrations }: { registrations: Registration[] }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [loadingId, setLoadingId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   async function handleDelete(id: string) {
     if (!confirm('Are you sure you want to delete this registration?')) return;
@@ -99,40 +108,85 @@ export default function RegistrationManagement({ registrations }: { registration
                 const phone = isSolo ? reg.user!.phone : reg.team!.leader.phone;
 
                 return (
-                  <tr key={reg.id} className="hover:bg-[#554093]/5 transition-colors">
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="text-[13px] font-bold text-[#554093]">@{name}</div>
-                      <div className="text-[11px] font-medium text-[#554093]/60">{uni || 'Unknown'}</div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
-                      {phone || 'N/A'}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-[13px] font-bold text-[#554093]">
-                      {reg.hackathon?.title}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
-                      {reg.team?.name || <span className="text-[#554093]/40 italic">Individual</span>}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                        reg.paymentStatus === 'PAID' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                      }`}>
-                        {reg.paymentStatus}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <button 
-                          onClick={() => handleDelete(reg.id)}
-                          disabled={loadingId === reg.id}
-                          className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors disabled:opacity-50 ml-1" 
-                          title="Delete Registration"
-                        >
-                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  <React.Fragment key={reg.id}>
+                    <tr 
+                      onClick={() => {
+                        if (!isSolo) {
+                          setExpandedId(expandedId === reg.id ? null : reg.id);
+                        }
+                      }}
+                      className={`hover:bg-[#554093]/5 transition-colors ${!isSolo ? 'cursor-pointer' : ''} ${expandedId === reg.id ? 'bg-[#554093]/5' : ''}`}
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="text-[13px] font-bold text-[#554093] flex items-center gap-2">
+                          @{name}
+                          {!isSolo && (
+                            <svg className={`w-4 h-4 text-[#554093]/40 transition-transform ${expandedId === reg.id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="text-[11px] font-medium text-[#554093]/60">{uni || 'Unknown'}</div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
+                        {phone || 'N/A'}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-[13px] font-bold text-[#554093]">
+                        {reg.hackathon?.title}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-[13px] font-medium text-[#554093]/80">
+                        {reg.team?.name || <span className="text-[#554093]/40 italic">Individual</span>}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                          reg.paymentStatus === 'PAID' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+                        }`}>
+                          {reg.paymentStatus}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleDelete(reg.id); }}
+                            disabled={loadingId === reg.id}
+                            className="p-1.5 text-rose-600 bg-rose-50 border border-rose-100 hover:bg-rose-100 rounded-md transition-colors disabled:opacity-50 ml-1" 
+                            title="Delete Registration"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    {expandedId === reg.id && !isSolo && reg.team && (
+                      <tr className="bg-[#554093]/[0.02]">
+                        <td colSpan={6} className="px-4 py-4 border-b border-[#554093]/10">
+                          <div className="pl-4 border-l-2 border-[#554093]/20 space-y-3">
+                            <h4 className="text-[12px] font-bold text-[#554093] uppercase tracking-wider">Team Members</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              <div className="bg-white p-3 rounded-xl border border-[#554093]/10 shadow-[0_2px_8px_rgba(85,64,147,0.04)]">
+                                <div className="flex justify-between items-start mb-1">
+                                  <p className="text-[13px] font-bold text-[#554093]">@{reg.team.leader.username || reg.team.leader.name}</p>
+                                  <span className="text-[9px] font-bold bg-[#554093]/10 text-[#554093] px-1.5 py-0.5 rounded uppercase tracking-wider">Leader</span>
+                                </div>
+                                <p className="text-[11px] font-medium text-[#554093]/60 mb-0.5">{reg.team.leader.university?.name || 'Unknown University'}</p>
+                                <p className="text-[11px] font-medium text-[#554093]/80">📞 {reg.team.leader.phone || 'No phone'}</p>
+                              </div>
+                              {reg.team.members.map((member, idx) => (
+                                <div key={idx} className="bg-white p-3 rounded-xl border border-[#554093]/10 shadow-[0_2px_8px_rgba(85,64,147,0.04)]">
+                                  <div className="flex justify-between items-start mb-1">
+                                    <p className="text-[13px] font-bold text-[#554093]">@{member.user.username || member.user.name}</p>
+                                    <span className="text-[9px] font-bold bg-[#554093]/5 text-[#554093]/60 px-1.5 py-0.5 rounded uppercase tracking-wider">Member</span>
+                                  </div>
+                                  <p className="text-[11px] font-medium text-[#554093]/60 mb-0.5">{member.user.university?.name || 'Unknown University'}</p>
+                                  <p className="text-[11px] font-medium text-[#554093]/80">📞 {member.user.phone || 'No phone'}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
                 );
               })
             )}
