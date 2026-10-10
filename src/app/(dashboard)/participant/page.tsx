@@ -175,15 +175,10 @@ export default async function ParticipantDashboard() {
                     </div>
                   </div>
                   
-                  {isVerified && reg.paymentStatus === 'PAID' && (
+                  {isVerified && (
                     <div className="flex flex-col items-center justify-center shrink-0 bg-[#554093]/5 p-4 rounded-2xl border border-[#554093]/10">
                       <QRCodeDisplay value={qrData} />
                       <span className="text-[10px] font-bold uppercase tracking-widest text-[#554093]/60 mt-3 text-center">Event Pass<br/>Scan to Check-in</span>
-                    </div>
-                  )}
-                  {isVerified && reg.paymentStatus !== 'PAID' && (
-                    <div className="flex items-center justify-center shrink-0 bg-rose-50/50 p-4 rounded-2xl border border-rose-100">
-                      <span className="text-xs font-bold text-rose-500 text-center">Awaiting<br/>Payment</span>
                     </div>
                   )}
                 </div>
