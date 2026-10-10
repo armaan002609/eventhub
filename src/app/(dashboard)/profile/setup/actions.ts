@@ -23,16 +23,25 @@ export async function updateProfile(userId: string, formData: FormData) {
   const universityName = formData.get('universityName') as string;
   const file = formData.get('idProof') as File;
 
-  if (!username || !phone || !fathersName || !rollNumber || !file || file.size === 0) {
+  if (!phone || !fathersName || !rollNumber || !file || file.size === 0) {
     return { error: 'Missing required fields' };
   }
 
+  const existingUser = await prisma.user.findUnique({ where: { id: userId } });
+  
+  // If username is already set on the user, ignore the submitted one
+  const finalUsername = existingUser?.username || username;
+
+  if (!finalUsername) {
+    return { error: 'Username is required' };
+  }
+
   // Check if username is taken
-  const existingUsername = await prisma.user.findUnique({
-    where: { username }
+  const existingUsernameCheck = await prisma.user.findUnique({
+    where: { username: finalUsername }
   });
 
-  if (existingUsername && existingUsername.id !== userId) {
+  if (existingUsernameCheck && existingUsernameCheck.id !== userId) {
     return { error: 'Username is already taken' };
   }
 
@@ -69,7 +78,7 @@ export async function updateProfile(userId: string, formData: FormData) {
   await prisma.user.update({
     where: { id: userId },
     data: {
-      username,
+      username: finalUsername,
       phone,
       fathersName,
       fathersPhone,

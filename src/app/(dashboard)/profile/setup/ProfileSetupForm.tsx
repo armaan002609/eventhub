@@ -44,8 +44,8 @@ export default function ProfileSetupForm({ userId, initialData }: { userId: stri
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-[13px] font-bold text-[#554093]">Choose a Username *</label>
-            <input name="username" required type="text" defaultValue={initialData?.username || ''} pattern="[a-zA-Z0-9_]+" className="w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093]" placeholder="e.g. janesmith_01" title="Only letters, numbers, and underscores are allowed" />
-            <p className="text-[11px] text-[#554093]/60 font-medium">This will be used to invite you to teams.</p>
+            <input name="username" required type="text" defaultValue={initialData?.username || ''} readOnly={!!initialData?.username} pattern="[a-zA-Z0-9_]+" className={`w-full px-4 py-3 bg-white border border-[#554093]/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#554093] transition-colors text-[#554093] ${initialData?.username ? 'opacity-70 cursor-not-allowed bg-gray-50' : ''}`} placeholder="e.g. janesmith_01" title="Only letters, numbers, and underscores are allowed" />
+            <p className="text-[11px] text-[#554093]/60 font-medium">{initialData?.username ? 'Username cannot be changed once set.' : 'This will be used to invite you to teams.'}</p>
           </div>
           
           <div className="space-y-2">
